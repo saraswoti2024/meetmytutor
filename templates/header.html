@@ -1,35 +1,36 @@
-<nav class="bg-white shadow-md sticky top-0 z-50">
-    <div class="container mx-auto px-4 py-2 flex justify-between items-center">
+<nav class="bg-yellow-custom shadow-xl sticky top-0 z-50">
+    <div class="container mx-auto px-4 py-3 flex justify-between items-center">
         <a class="flex items-center" href="index.html">
-            <img src="./MeetMyTutor.png" alt="MeetMyTutor Logo" class="h-24 -ml-6 lg:h-[100px] lg:-ml-[25px]"> </a>
+            <img src="./MeetMyTutor.png" alt="MeetMyTutor Logo" class="h-16 -ml-6">
+        </a>
 
-        <button class="lg:hidden text-gray-700 focus:outline-none" data-collapse-toggle="navbarNav" aria-controls="navbarNav" aria-expanded="false">
-            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <button class="lg:hidden text-gray-800 focus:outline-none" data-collapse-toggle="navbarNav" aria-controls="navbarNav" aria-expanded="false">
+            <svg class="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
             </svg>
         </button>
 
-        <div class="hidden lg:flex flex-grow justify-end items-center flex-col lg:flex-row space-y-3 lg:space-y-0 lg:space-x-6 absolute lg:static top-full left-0 w-full bg-white lg:bg-transparent shadow-lg lg:shadow-none py-4 lg:py-0" id="navbarNav">
-            <ul class="flex flex-col lg:flex-row items-center space-y-3 lg:space-y-0 lg:space-x-6">
-                <li><a class="text-gray-700 hover:text-yellow-custom font-semibold transition-colors duration-200" href="index.html">Home</a></li>
+        <div class="hidden lg:flex flex-grow justify-end items-center flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-8 absolute lg:static top-full left-0 w-full bg-yellow-custom lg:bg-transparent shadow-lg lg:shadow-none py-4 lg:py-0 rounded-b-lg lg:rounded-none" id="navbarNav">
+            <ul class="flex flex-col lg:flex-row items-center space-y-4 lg:space-y-0 lg:space-x-8">
+                <li><a class="text-gray-800 hover:text-white font-bold text-lg transition-colors duration-200" href="index.html">Home</a></li>
 
                 <li class="relative group">
-                    <button class="text-gray-700 hover:text-yellow-custom font-semibold inline-flex items-center transition-colors duration-200" data-dropdown-toggle="navbarDropdownFindTutors">
+                    <button class="text-gray-800 hover:text-white font-bold text-lg inline-flex items-center transition-colors duration-200" data-dropdown-toggle="navbarDropdownFindTutors">
                         Find Tutors
-                        <svg class="ml-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        <svg class="ml-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                     </button>
-                    <ul class="absolute hidden group-hover:block bg-white shadow-lg rounded-md mt-2 w-48 z-10 animate-fade-in-down transition-all duration-300 ease-out">
-                        <li><a class="block px-4 py-2 text-gray-800 hover:bg-yellow-custom hover:text-black transition-colors duration-200 rounded-t-md" href="tutors.html">All Tutors</a></li>
-                        <li><a class="block px-4 py-2 text-gray-800 hover:bg-yellow-custom hover:text-black transition-colors duration-200 rounded-b-md" href="find_tutors.html">Nearby Tutors</a></li>
+                    <ul class="absolute hidden group-hover:block bg-yellow-darker shadow-xl rounded-md mt-2 w-52 z-10 animate-fade-in-down transition-all duration-300 ease-out origin-top-right">
+                        <li><a class="block px-5 py-3 text-white hover:bg-yellow-600 transition-colors duration-200 rounded-t-md" href="tutors.html">All Tutors</a></li>
+                        <li><a class="block px-5 py-3 text-white hover:bg-yellow-600 transition-colors duration-200 rounded-b-md" href="find_tutors.html">Nearby Tutors</a></li>
                     </ul>
                 </li>
 
-                <li><a class="text-gray-700 hover:text-yellow-custom font-semibold transition-colors duration-200" href="contact.html">Contact</a></li>
+                <li><a class="text-gray-800 hover:text-white font-bold text-lg transition-colors duration-200" href="contact.html">Contact</a></li>
                 <li>
-                    <a class="px-6 py-2 border-2 border-yellow-custom text-yellow-custom rounded-full hover:bg-yellow-custom hover:text-black transition duration-300 ease-in-out font-bold" href="login.html">Login</a>
+                    <a class="px-8 py-2.5 border-2 border-gray-800 text-gray-800 rounded-full hover:bg-gray-800 hover:text-white transition duration-300 ease-in-out font-bold text-lg shadow-md" href="login.html">Login</a>
                 </li>
                 <li>
-                    <a class="px-6 py-2 bg-yellow-custom text-black rounded-full hover:bg-yellow-darker transition duration-300 ease-in-out font-bold" href="registerOption.html">Register</a>
+                    <a class="px-8 py-2.5 bg-gray-800 text-white rounded-full hover:bg-gray-900 transition duration-300 ease-in-out font-bold text-lg shadow-md" href="{% url 'register' %}">Register</a>
                 </li>
             </ul>
         </div>

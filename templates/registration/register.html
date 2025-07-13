@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register - MeetMyTutor</title>
+    <!-- Link to Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <style>
+        /* Custom font for a modern look */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+
+<body class="bg-gradient-to-br from-yellow-400 to-orange-500 min-h-screen flex flex-col items-center justify-center p-4">
+
+    <!-- Navigation Bar (Simple) -->
+    <nav class="w-full max-w-xl bg-white bg-opacity-90 backdrop-blur-sm rounded-xl shadow-lg p-4 mb-6 flex justify-between items-center">
+        <a href="#" class="text-2xl font-bold text-gray-800">MeetMyTutor</a>
+        <button onclick="history.back()"
+            class="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold py-2 px-5 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105">
+            Back
+        </button>
+    </nav>
+
+    <!-- Registration Form Container -->
+    <div class="bg-white bg-opacity-95 backdrop-blur-md p-8 rounded-2xl shadow-2xl w-full max-w-md transform transition-all duration-300 ease-in-out hover:scale-[1.01]">
+        <h2 class="text-3xl font-extrabold text-center text-gray-800 mb-4">Join MeetMyTutor</h2>
+        <p class="text-center text-gray-600 mb-6 text-sm">Sign up to connect with the best tutors or students!</p>
+
+        <form method="post" novalidate class="space-y-4">
+            {% csrf_token %}
+
+            <!-- First Name and Last Name -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label for="firstName" class="block text-gray-700 text-sm font-semibold mb-1">First Name</label>
+                    <input type="text" id="firstName" name="firstname" placeholder="John"
+                        class="w-full p-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition duration-200"
+                        required />
+                </div>
+                <div>
+                    <label for="lastName" class="block text-gray-700 text-sm font-semibold mb-1">Last Name</label>
+                    <input type="text" id="lastname" name="lastname" placeholder="Doe"
+                        class="w-full p-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition duration-200"
+                        required />
+                    <!-- Django error placeholder: {% if form.lastName.errors %}<p class="text-red-500 text-xs italic mt-1">{{ form.lastName.errors.0 }}</p>{% endif %} -->
+                </div>
+            </div>
+
+            <!-- Username -->
+            <div>
+                <label for="username" class="block text-gray-700 text-sm font-semibold mb-1">Username</label>
+                <input type="text" id="username" name="username" placeholder="johndoe123"
+                    class="w-full p-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition duration-200"
+                        required />
+                <!-- Django error placeholder: {% if form.username.errors %}<p class="text-red-500 text-xs italic mt-1">{{ form.username.errors.0 }}</p>{% endif %} -->
+            </div>
+
+            <!-- Email -->
+            <div>
+                <label for="email" class="block text-gray-700 text-sm font-semibold mb-1">Email Address</label>
+                <input type="email" id="email" name="email" placeholder="john.doe@gmail.com"
+                    class="w-full p-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition duration-200"
+                    required />
+            </div>
+
+            <!-- Password -->
+            <div>
+                <label for="password" class="block text-gray-700 text-sm font-semibold mb-1">Password</label>
+                <input type="password" id="password" name="password" placeholder="••••••••"
+                    class="w-full p-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition duration-200"
+                    required />
+            </div>
+
+            <!-- Confirm Password -->
+            <div>
+                <label for="confirmPassword" class="block text-gray-700 text-sm font-semibold mb-1">Confirm Password</label>
+                <input type="password" id="confirmPassword" name="confirmpassword" placeholder="••••••••"
+                    class="w-full p-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition duration-200"
+                    required />
+                <!-- Django error placeholder: {% if form.confirmPassword.errors %}<p class="text-red-500 text-xs italic mt-1">{{ form.confirmPassword.errors.0 }}</p>{% endif %} -->
+            </div>
+
+            <!-- User Type Selection -->
+            <div class="pt-2">
+                <label class="block text-gray-700 text-sm font-semibold mb-2">I am a:</label>
+                <div class="flex space-x-6 justify-center">
+                    <label class="inline-flex items-center cursor-pointer">
+                        <input type="radio" name="usertype" value="student" class="form-radio h-5 w-5 text-yellow-600" checked>
+                        <span class="ml-2 text-gray-800 font-medium">Student</span>
+                    </label>
+                    <label class="inline-flex items-center cursor-pointer">
+                        <input type="radio" name="usertype" value="tutor" class="form-radio h-5 w-5 text-yellow-600">
+                        <span class="ml-2 text-gray-800 font-medium">Tutor</span>
+                    </label>
+                </div>
+                <!-- Django error placeholder: {% if form.userType.errors %}<p class="text-red-500 text-xs italic mt-1">{{ form.userType.errors.0 }}</p>{% endif %} -->
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit"
+                class="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-2.5 px-6 rounded-lg shadow-xl transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-yellow-300 mt-4">
+                Register Now
+            </button>
+        </form>
+    </div>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    {% if messages %}
+<script>
+    {% for message in messages %}
+        Toastify({
+            text: "{{ message|escapejs }}",
+            duration: 4000,
+            close: true,
+            gravity: "top", // top or bottom
+            position: "center", // left, center or right
+            backgroundColor: "{% if 'error' in message.tags %}#e53935{% elif 'success' in message.tags %}#43a047{% else %}#2196f3{% endif %}",
+            stopOnFocus: true, // prevent dismiss on hover
+        }).showToast();
+    {% endfor %}
+</script>
+{% endif %}
+
+
+</body>
+
+</html>

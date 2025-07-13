@@ -1,35 +1,81 @@
 {% extends "base.html" %}
 {% block content %}
-  {% load static %}
-  <section class="bg-cover bg-center text-white py-24 md:py-32 text-center relative overflow-hidden" style="background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1596495577886-d920f1fb7238');">
-    <div class="absolute inset-0 bg-black opacity-40"></div> <div class="container mx-auto px-4 relative z-10">
-        <h1 class="text-4xl md:text-6xl font-extrabold mb-4 leading-tight animate-fade-in-up">Find the Right Tutor Near You</h1>
-        <p class="text-lg md:text-xl mb-8 opacity-90 animate-fade-in-up delay-200">Connect online. Learn offline with trusted tutors in your city.</p>
-        <a href="find_tutors.html" class="bg-yellow-custom text-black font-bold py-4 px-10 rounded-full text-lg md:text-xl hover:bg-yellow-darker transition duration-300 ease-in-out transform hover:scale-105 inline-block animate-fade-in-up delay-400 shadow-lg">Find Tutors</a>
+{% load static %}
+<head>
+    <!-- Link to Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Link to Bootstrap Icons for the icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+    <style>
+        /* Custom font for a modern look, if not already in base.html */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+
+<!-- Hero Section -->
+<section class="bg-cover bg-center text-white py-24 md:py-32 text-center relative overflow-hidden"
+    style="background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1596495577886-d920f1fb7238');">
+    <div class="absolute inset-0 bg-black opacity-40"></div>
+    <div class="container mx-auto px-4 relative z-10">
+        <h1 class="text-4xl md:text-6xl font-extrabold mb-4 leading-tight animate-fade-in-up">Find the Right Tutor Near
+            You</h1>
+        <p class="text-lg md:text-xl mb-8 opacity-90 animate-fade-in-up delay-200">Connect online. Learn offline with
+            trusted tutors in your city.</p>
+
+        <!-- The original "Find Tutors" button now acts as a primary CTA for the search section -->
+        <a href="#search-section"
+            class="bg-yellow-custom text-black font-bold py-4 px-10 rounded-full text-lg md:text-xl hover:bg-yellow-darker transition duration-300 ease-in-out transform hover:scale-105 inline-block animate-fade-in-up delay-400 shadow-lg mt-8">
+            Start Your Search
+        </a>
     </div>
 </section>
 
-<section class="py-16 bg-gradient-to-br from-blue-50 to-white">
+<!-- Dedicated Search Bar Section -->
+<section id="search-section" class="py-16 bg-gradient-to-br from-yellow-100 to-white text-center">
+    <div class="container mx-auto px-4">
+        <h2 class="text-3xl md:text-4xl font-bold mb-8 text-gray-800">Ready to Learn? Find Your Perfect Tutor!</h2>
+        <div class="max-w-2xl mx-auto flex flex-col sm:flex-row items-center justify-center gap-4 p-6 bg-white rounded-full shadow-xl transition duration-300 ease-in-out hover:shadow-2xl">
+            <div class="relative flex-grow w-full sm:w-auto">
+                <input type="text" placeholder="Search by subject, city, or name..."
+                    class="w-full pl-12 pr-4 py-3 rounded-full shadow-inner focus:outline-none focus:ring-4 focus:ring-yellow-300 text-gray-800 text-lg transition duration-300 ease-in-out border border-gray-200" />
+                <i class="bi bi-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-xl"></i>
+            </div>
+            <button
+                class="bg-yellow-custom text-black font-bold py-3 px-8 rounded-full text-lg md:text-xl hover:bg-yellow-darker transition duration-300 ease-in-out transform hover:scale-105 shadow-lg flex items-center justify-center gap-2 w-full sm:w-auto">
+                <i class="bi bi-arrow-right-circle-fill text-xl"></i> Search
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- Levels We Offer Section -->
+<section class="py-16 bg-gradient-to-br from-yellow-50 to-white">
     <div class="container mx-auto px-4 text-center">
         <h2 class="text-3xl md:text-4xl font-bold mb-12 text-gray-800">Levels We Offer</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div class="p-6 bg-white shadow-xl rounded-xl border border-blue-100 transform transition-all duration-300 ease-in-out hover:-translate-y-2 hover:shadow-2xl h-full flex flex-col justify-between items-center">
-                <i class="bi bi-book text-blue-600 text-6xl mb-4"></i>
+            <div
+                class="p-6 bg-white shadow-xl rounded-xl border border-yellow-100 transform transition-all duration-300 ease-in-out hover:-translate-y-2 hover:shadow-2xl h-full flex flex-col justify-between items-center">
+                <i class="bi bi-book text-yellow-600 text-6xl mb-4"></i>
                 <h5 class="text-2xl font-semibold mb-2 text-gray-800">Basic (Grade 1-5)</h5>
                 <p class="text-gray-600">Foundational learning support for early grades.</p>
             </div>
-            <div class="p-6 bg-white shadow-xl rounded-xl border border-green-100 transform transition-all duration-300 ease-in-out hover:-translate-y-2 hover:shadow-2xl h-full flex flex-col justify-between items-center">
-                <i class="bi bi-pencil-square text-green-600 text-6xl mb-4"></i>
+            <div
+                class="p-6 bg-white shadow-xl rounded-xl border border-orange-100 transform transition-all duration-300 ease-in-out hover:-translate-y-2 hover:shadow-2xl h-full flex flex-col justify-between items-center">
+                <i class="bi bi-pencil-square text-orange-600 text-6xl mb-4"></i>
                 <h5 class="text-2xl font-semibold mb-2 text-gray-800">Basic (Grade 6-8)</h5>
                 <p class="text-gray-600">Concept building and exam preparation.</p>
             </div>
-            <div class="p-6 bg-white shadow-xl rounded-xl border border-yellow-100 transform transition-all duration-300 ease-in-out hover:-translate-y-2 hover:shadow-2xl h-full flex flex-col justify-between items-center">
-                <i class="bi bi-mortarboard text-yellow-600 text-6xl mb-4"></i>
+            <div
+                class="p-6 bg-white shadow-xl rounded-xl border border-amber-100 transform transition-all duration-300 ease-in-out hover:-translate-y-2 hover:shadow-2xl h-full flex flex-col justify-between items-center">
+                <i class="bi bi-mortarboard text-amber-600 text-6xl mb-4"></i>
                 <h5 class="text-2xl font-semibold mb-2 text-gray-800">Secondary (Grade 9-10)</h5>
                 <p class="text-gray-600">Focused tuition for SEE and school exams.</p>
             </div>
-            <div class="p-6 bg-white shadow-xl rounded-xl border border-red-100 transform transition-all duration-300 ease-in-out hover:-translate-y-2 hover:shadow-2xl h-full flex flex-col justify-between items-center">
-                <i class="bi bi-journal-richtext text-red-600 text-6xl mb-4"></i>
+            <div
+                class="p-6 bg-white shadow-xl rounded-xl border border-rose-100 transform transition-all duration-300 ease-in-out hover:-translate-y-2 hover:shadow-2xl h-full flex flex-col justify-between items-center">
+                <i class="bi bi-journal-richtext text-rose-600 text-6xl mb-4"></i>
                 <h5 class="text-2xl font-semibold mb-2 text-gray-800">Secondary (Grade 11-12)</h5>
                 <p class="text-gray-600">Specialized tutoring for NEB and entrance exams.</p>
             </div>
@@ -37,27 +83,31 @@
     </div>
 </section>
 
-<section class="bg-gray-50 py-16">
+<!-- How It Works Section -->
+<section class="bg-yellow-50 py-16">
     <div class="container mx-auto px-4 text-center">
         <h2 class="text-3xl md:text-4xl font-bold mb-12 text-gray-800">How It Works</h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div class="p-6 bg-white shadow-lg rounded-lg border border-gray-200 transform transition-all duration-300 ease-in-out hover:-translate-y-1 hover:shadow-xl flex flex-col justify-between items-center">
-                <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4">
-                    <i class="bi bi-search text-blue-600 text-3xl"></i>
+            <div
+                class="p-6 bg-white shadow-lg rounded-lg border border-gray-200 transform transition-all duration-300 ease-in-out hover:-translate-y-1 hover:shadow-xl flex flex-col justify-between items-center">
+                <div class="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mb-4">
+                    <i class="bi bi-search text-yellow-600 text-3xl"></i>
                 </div>
                 <h5 class="text-xl font-semibold mb-2 text-gray-800">1. Search Tutors</h5>
                 <p class="text-gray-600">Browse profiles based on subject, location, and availability.</p>
             </div>
-            <div class="p-6 bg-white shadow-lg rounded-lg border border-gray-200 transform transition-all duration-300 ease-in-out hover:-translate-y-1 hover:shadow-xl flex flex-col justify-between items-center">
-                <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
-                    <i class="bi bi-chat-dots text-green-600 text-3xl"></i>
+            <div
+                class="p-6 bg-white shadow-lg rounded-lg border border-gray-200 transform transition-all duration-300 ease-in-out hover:-translate-y-1 hover:shadow-xl flex flex-col justify-between items-center">
+                <div class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mb-4">
+                    <i class="bi bi-chat-dots text-orange-600 text-3xl"></i>
                 </div>
                 <h5 class="text-xl font-semibold mb-2 text-gray-800">2. Contact Them</h5>
                 <p class="text-gray-600">Connect with tutors online to finalize availability and fit.</p>
             </div>
-            <div class="p-6 bg-white shadow-lg rounded-lg border border-gray-200 transform transition-all duration-300 ease-in-out hover:-translate-y-1 hover:shadow-xl flex flex-col justify-between items-center">
-                <div class="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mb-4">
-                    <i class="bi bi-person-check text-yellow-600 text-3xl"></i>
+            <div
+                class="p-6 bg-white shadow-lg rounded-lg border border-gray-200 transform transition-all duration-300 ease-in-out hover:-translate-y-1 hover:shadow-xl flex flex-col justify-between items-center">
+                <div class="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mb-4">
+                    <i class="bi bi-person-check text-amber-600 text-3xl"></i>
                 </div>
                 <h5 class="text-xl font-semibold mb-2 text-gray-800">3. Learn Offline</h5>
                 <p class="text-gray-600">Meet your tutor in person and start learning at your pace.</p>
@@ -66,22 +116,26 @@
     </div>
 </section>
 
-<section class="bg-gradient-to-bl from-indigo-50 to-white py-16">
+<!-- What Our System Offers Section -->
+<section class="bg-gradient-to-bl from-orange-50 to-white py-16">
     <div class="container mx-auto px-4 text-center">
         <h2 class="text-3xl md:text-4xl font-bold mb-12 text-gray-800">What Our System Offers</h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div class="p-6 bg-white shadow-xl rounded-xl border border-indigo-100 transform transition-all duration-300 ease-in-out hover:-translate-y-2 hover:shadow-2xl h-full flex flex-col justify-between items-center">
-                <i class="bi bi-compass text-indigo-600 text-6xl mb-4"></i>
+            <div
+                class="p-6 bg-white shadow-xl rounded-xl border border-yellow-100 transform transition-all duration-300 ease-in-out hover:-translate-y-2 hover:shadow-2xl h-full flex flex-col justify-between items-center">
+                <i class="bi bi-compass text-yellow-600 text-6xl mb-4"></i>
                 <h5 class="text-2xl font-semibold mb-2 text-gray-800">Nearest Search</h5>
                 <p class="text-gray-600">Find tutors by nearest location, subject, and academic level.</p>
             </div>
-            <div class="p-6 bg-white shadow-xl rounded-xl border border-purple-100 transform transition-all duration-300 ease-in-out hover:-translate-y-2 hover:shadow-2xl h-full flex flex-col justify-between items-center">
-                <i class="bi bi-currency-dollar text-purple-600 text-6xl mb-4"></i>
+            <div
+                class="p-6 bg-white shadow-xl rounded-xl border border-orange-100 transform transition-all duration-300 ease-in-out hover:-translate-y-2 hover:shadow-2xl h-full flex flex-col justify-between items-center">
+                <i class="bi bi-currency-dollar text-orange-600 text-6xl mb-4"></i>
                 <h5 class="text-2xl font-semibold mb-2 text-gray-800">Price Negotiation</h5>
                 <p class="text-gray-600">Our system allows you to negotiate prices directly with tutors.</p>
             </div>
-            <div class="p-6 bg-white shadow-xl rounded-xl border border-pink-100 transform transition-all duration-300 ease-in-out hover:-translate-y-2 hover:shadow-2xl h-full flex flex-col justify-between items-center">
-                <i class="bi bi-calendar-check text-pink-600 text-6xl mb-4"></i>
+            <div
+                class="p-6 bg-white shadow-xl rounded-xl border border-rose-100 transform transition-all duration-300 ease-in-out hover:-translate-y-2 hover:shadow-2xl h-full flex flex-col justify-between items-center">
+                <i class="bi bi-calendar-check text-rose-600 text-6xl mb-4"></i>
                 <h5 class="text-2xl font-semibold mb-2 text-gray-800">Attendance Tracking</h5>
                 <p class="text-gray-600">Both tutors and students can mark and track attendance easily.</p>
             </div>
@@ -89,48 +143,6 @@
     </div>
 </section>
 
-<section class="py-16 bg-white">
-    <div class="container mx-auto px-4">
-        <h2 class="text-3xl md:text-4xl font-bold mb-12 text-center text-gray-800">Search by Subject</h2>
-        <div class="flex flex-col md:flex-row justify-center items-start gap-6">
-            <div class="w-full md:w-3/4 lg:w-1/2 relative">
-                <label for="subject-search" class="block text-gray-700 text-lg font-semibold mb-3">Select Subjects:</label>
-                <div id="subjectSearchBar" class="relative border border-gray-300 rounded-lg px-4 py-3 min-h-[56px] flex flex-wrap gap-2 items-center justify-start cursor-pointer bg-white transition-all duration-200 ease-in-out focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-200">
-                    <div id="selectedSubjects" class="flex flex-wrap gap-2">
-                        </div>
-                    <span class="text-gray-500 italic text-base transition-opacity duration-200" id="selectPlaceholder">Click to select subjects</span>
-                </div>
-
-                <div id="subjectSelectDropdown" class="absolute hidden bg-white border border-gray-300 rounded-lg shadow-xl z-50 w-full max-h-64 overflow-y-auto mt-2 animate-fade-in-down">
-                    <label class="block px-4 py-3 cursor-pointer hover:bg-gray-100 transition duration-200 text-gray-800">
-                        <input type="checkbox" value="Mathematics" class="mr-3 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"> Mathematics
-                    </label>
-                    <label class="block px-4 py-3 cursor-pointer hover:bg-gray-100 transition duration-200 text-gray-800">
-                        <input type="checkbox" value="Science" class="mr-3 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"> Science
-                    </label>
-                    <label class="block px-4 py-3 cursor-pointer hover:bg-gray-100 transition duration-200 text-gray-800">
-                        <input type="checkbox" value="Physics" class="mr-3 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"> Physics
-                    </label>
-                    <label class="block px-4 py-3 cursor-pointer hover:bg-gray-100 transition duration-200 text-gray-800">
-                        <input type="checkbox" value="Chemistry" class="mr-3 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"> Chemistry
-                    </label>
-                    <label class="block px-4 py-3 cursor-pointer hover:bg-gray-100 transition duration-200 text-gray-800">
-                        <input type="checkbox" value="Biology" class="mr-3 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"> Biology
-                    </label>
-                    <label class="block px-4 py-3 cursor-pointer hover:bg-gray-100 transition duration-200 text-gray-800">
-                        <input type="checkbox" value="English" class="mr-3 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"> English
-                    </label>
-                    <label class="block px-4 py-3 cursor-pointer hover:bg-gray-100 transition duration-200 text-gray-800">
-                        <input type="checkbox" value="Nepali" class="mr-3 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"> Nepali
-                    </label>
-                    <label class="block px-4 py-3 cursor-pointer hover:bg-gray-100 transition duration-200 text-gray-800">
-                        <input type="checkbox" value="Computer Science" class="mr-3 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"> Computer Science
-                    </label>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
 <script>
     // Tailwind configuration for custom colors, placed here for CDN usage.
     // For production, this would typically be in a tailwind.config.js file.
@@ -141,6 +153,12 @@
                     'yellow-custom': '#ffc107', // Your specific yellow
                     'yellow-darker': '#e0a800', // Slightly darker yellow for hover
                     'dark-gray-bg': '#434649', // Your footer background color
+                    'yellow-50': '#fffef0', /* Custom: very light yellow */
+                    'orange-50': '#fff8f0', /* Custom: very light orange */
+                    'amber-100': '#fffbd5', /* Custom: light amber for icons */
+                    'rose-100': '#ffe4e6', /* Custom: light rose for icons */
+                    'rose-600': '#e11d48', /* Custom: a vibrant rose for icons */
+                    'yellow-100': '#fffacd', /* Custom: slightly darker yellow for search section background */
                 },
                 height: {
                     'navbar': '56px', // Bootstrap default navbar height for logo alignment
@@ -173,91 +191,11 @@
 
             // Optional: Close dropdown if clicked outside
             document.addEventListener('click', (event) => {
-                if (!toggle.contains(event.target) && !toggle.nextElementSibling.contains(event.target)) {
+                if (!toggle.contains(event.target) && toggle.nextElementSibling && !toggle.nextElementSibling.contains(event.target)) {
                     toggle.nextElementSibling.classList.add('hidden');
                 }
             });
         });
-
-        // JavaScript for the custom subject search/dropdown functionality
-        const subjectSearchBar = document.getElementById('subjectSearchBar');
-        const selectedSubjectsContainer = document.getElementById('selectedSubjects');
-        const subjectSelectDropdown = document.getElementById('subjectSelectDropdown');
-        const subjectCheckboxes = subjectSelectDropdown ? subjectSelectDropdown.querySelectorAll('input[type="checkbox"]') : [];
-        const selectPlaceholder = document.getElementById('selectPlaceholder');
-
-        // Function to update selected subjects display
-        function updateSelectedSubjects() {
-            if (!selectedSubjectsContainer) return;
-            selectedSubjectsContainer.innerHTML = ''; // Clear existing tags
-            let hasSelections = false;
-
-            subjectCheckboxes.forEach(checkbox => {
-                if (checkbox.checked) {
-                    hasSelections = true;
-                    const subjectName = checkbox.value;
-                    const tag = document.createElement('span');
-                    tag.className = 'flex items-center bg-blue-100 text-blue-800 px-2 py-1 rounded-md text-sm';
-                    tag.innerHTML = `
-                        <span>${subjectName}</span>
-                        <span class="ml-1 font-bold cursor-pointer text-blue-800 hover:text-blue-900 remove-tag" data-subject="${subjectName}">&times;</span>
-                    `;
-                    selectedSubjectsContainer.appendChild(tag);
-                }
-            });
-
-            if (selectPlaceholder) {
-                selectPlaceholder.classList.toggle('hidden', hasSelections);
-            }
-
-            if (!hasSelections && subjectSearchBar) {
-                subjectSearchBar.classList.remove('justify-start', 'items-start');
-                subjectSearchBar.classList.add('justify-center', 'items-center');
-            } else if (subjectSearchBar) {
-                 subjectSearchBar.classList.remove('justify-center', 'items-center');
-                 subjectSearchBar.classList.add('justify-start', 'items-start');
-            }
-        }
-
-        // Event listener for opening/closing the dropdown and removing tags
-        if (subjectSearchBar) {
-            subjectSearchBar.addEventListener('click', (event) => {
-                if (event.target.classList.contains('remove-tag')) {
-                    // Handle removal of tag
-                    const subjectToRemove = event.target.dataset.subject;
-                    subjectCheckboxes.forEach(checkbox => {
-                        if (checkbox.value === subjectToRemove) {
-                            checkbox.checked = false;
-                        }
-                    });
-                    updateSelectedSubjects();
-                } else if (subjectSelectDropdown) {
-                    // Toggle dropdown visibility
-                    subjectSelectDropdown.classList.toggle('hidden');
-                    subjectSearchBar.classList.toggle('border-blue-500');
-                    subjectSearchBar.classList.toggle('ring-2'); // Changed from ring-4 for subtler focus
-                    subjectSearchBar.classList.toggle('ring-blue-200'); // Lighter ring color
-                }
-            });
-        }
-
-        // Event listener for checkbox changes
-        subjectCheckboxes.forEach(checkbox => {
-            checkbox.addEventListener('change', updateSelectedSubjects);
-        });
-
-        // Close dropdown if clicked outside
-        document.addEventListener('click', (event) => {
-            if (subjectSearchBar && subjectSelectDropdown && !subjectSearchBar.contains(event.target) && !subjectSelectDropdown.contains(event.target)) {
-                subjectSelectDropdown.classList.add('hidden');
-                subjectSearchBar.classList.remove('border-blue-500');
-                subjectSearchBar.classList.remove('ring-2');
-                subjectSearchBar.classList.remove('ring-blue-200');
-            }
-        });
-
-        // Initial update for selected subjects (in case of pre-checked items)
-        updateSelectedSubjects();
     });
 </script>
 {% endblock content %}
