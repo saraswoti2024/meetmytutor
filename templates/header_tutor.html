@@ -1,0 +1,96 @@
+{% load static %}
+<nav class="bg-yellow-custom sticky top-0 z-50">
+  <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+    <a class="flex items-center" href="{% url 'home' %}">
+      <img
+        src="{% static 'images/MeetMyTutor.png' %}"
+        alt="MeetMyTutor Logo"
+        class="h-16 -ml-6"
+      />
+    </a>
+    <div
+      class="hidden lg:flex flex-grow justify-end items-center flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-8 absolute lg:static top-full left-0 w-full bg-yellow-custom lg:bg-transparent shadow-lg lg:shadow-none py-4 lg:py-0 rounded-b-lg lg:rounded-none"
+      id="navbarNav"
+    >
+      <ul
+        class="flex flex-col lg:flex-row items-center space-y-1 lg:space-y-0 lg:space-x-7"
+      >
+        <li>
+          <a
+            class="text-gray-800 hover:text-white font-bold text-lg transition-colors duration-200"
+            href="{% url 'home' %}"
+            >Home</a
+          >
+        </li>
+        <li>
+          <a
+            class="text-gray-800 hover:text-white font-bold text-lg transition-colors duration-200"
+            href="{% url 'home' %}"
+            >Students</a
+          >
+        </li>
+        <li>
+          <a
+            class="text-gray-800 hover:text-white font-bold text-lg transition-colors duration-200"
+            href="{% url 'home' %}"
+            >Requests</a
+          >
+        </li>
+        <li>
+          <a
+            class="text-gray-800 hover:text-white font-bold text-lg transition-colors duration-200"
+            href="{% url 'home' %}"
+            >sessions</a
+          >
+        </li>
+        <li>
+          <a
+            class="text-gray-800 hover:text-white font-bold text-lg transition-colors duration-200"
+            href="{% url 'home' %}"
+            >Attendance</a
+          >
+        </li>
+        <li>
+          <a
+            class="text-gray-800 hover:text-white font-bold text-lg transition-colors duration-200"
+            href="{% url 'home' %}"
+            >Earnings</a
+          >
+        </li>
+
+        <li class="relative group">
+          <a href="#" class="flex items-center space-x-2 cursor-pointer">
+            {% if request.user.profile.image %}
+              <img src="#" alt="Profile"
+                class="rounded-full w-9 h-9 object-cover ring-2 ring-blue-400 ring-offset-2 transition duration-300" />
+            {% else %}
+              <img src="#" alt="Default Profile"
+                class="rounded-full w-9 h-9 object-cover ring-2 ring-blue-400 ring-offset-2 transition duration-300" />
+            {% endif %}
+            <svg class="w-4 h-4 text-gray-600 group-hover:text-blue-500 transition-transform duration-200 transform group-hover:rotate-180" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.583l3.71-4.353a.75.75 0 111.14.976l-4.25 5a.75.75 0 01-1.14 0l-4.25-5a.75.75 0 01.02-1.06z" clip-rule="evenodd" /></svg>
+          </a>
+        
+          <!-- Dropdown -->
+          <ul class="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg ring-1 ring-blue-100 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+            <li>
+              <a href="#" class="block px-4 py-2 text-sm text-gray-800 hover:bg-blue-50 transition">Profile</a>
+            </li>
+            <li>
+              <hr class="border-t border-gray-200 my-1" />
+            </li>
+            <li>
+              <a href="{% url 'log_out' %}" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition">Logout</a>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a
+            class="text-gray-800 hover:text-white font-bold text-lg transition-colors duration-200"
+            href="{% url 'contact' %}"
+            >Contact</a
+          >
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

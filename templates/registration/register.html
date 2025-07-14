@@ -9,6 +9,9 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- CSS -->
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    
+     <!-- font awesome -->
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         /* Custom font for a modern look */
         body {
@@ -17,117 +20,124 @@
     </style>
 </head>
 
-<body class="bg-gradient-to-br from-yellow-400 to-orange-500 min-h-screen flex flex-col items-center justify-center p-4">
-
-    <!-- Navigation Bar (Simple) -->
-    <nav class="w-full max-w-xl bg-white bg-opacity-90 backdrop-blur-sm rounded-xl shadow-lg p-4 mb-6 flex justify-between items-center">
-        <a href="#" class="text-2xl font-bold text-gray-800">MeetMyTutor</a>
-        <button onclick="history.back()"
-            class="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold py-2 px-5 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105">
-            Back
-        </button>
-    </nav>
+<body class="bg-gradient-to-br from-yellow-100 via-white to-yellow-50 min-h-screen flex flex-col items-center justify-center py-10 px-4">
 
     <!-- Registration Form Container -->
-    <div class="bg-white bg-opacity-95 backdrop-blur-md p-8 rounded-2xl shadow-2xl w-full max-w-md transform transition-all duration-300 ease-in-out hover:scale-[1.01]">
-        <h2 class="text-3xl font-extrabold text-center text-gray-800 mb-4">Join MeetMyTutor</h2>
-        <p class="text-center text-gray-600 mb-6 text-sm">Sign up to connect with the best tutors or students!</p>
-
-        <form method="post" novalidate class="space-y-4">
-            {% csrf_token %}
-
-            <!-- First Name and Last Name -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                    <label for="firstName" class="block text-gray-700 text-sm font-semibold mb-1">First Name</label>
-                    <input type="text" id="firstName" name="firstname" placeholder="John"
-                        class="w-full p-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition duration-200"
-                        required />
-                </div>
-                <div>
-                    <label for="lastName" class="block text-gray-700 text-sm font-semibold mb-1">Last Name</label>
-                    <input type="text" id="lastname" name="lastname" placeholder="Doe"
-                        class="w-full p-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition duration-200"
-                        required />
-                    <!-- Django error placeholder: {% if form.lastName.errors %}<p class="text-red-500 text-xs italic mt-1">{{ form.lastName.errors.0 }}</p>{% endif %} -->
-                </div>
-            </div>
-
-            <!-- Username -->
-            <div>
-                <label for="username" class="block text-gray-700 text-sm font-semibold mb-1">Username</label>
-                <input type="text" id="username" name="username" placeholder="johndoe123"
-                    class="w-full p-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition duration-200"
-                        required />
-                <!-- Django error placeholder: {% if form.username.errors %}<p class="text-red-500 text-xs italic mt-1">{{ form.username.errors.0 }}</p>{% endif %} -->
-            </div>
-
-            <!-- Email -->
-            <div>
-                <label for="email" class="block text-gray-700 text-sm font-semibold mb-1">Email Address</label>
-                <input type="email" id="email" name="email" placeholder="john.doe@gmail.com"
-                    class="w-full p-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition duration-200"
-                    required />
-            </div>
-
-            <!-- Password -->
-            <div>
-                <label for="password" class="block text-gray-700 text-sm font-semibold mb-1">Password</label>
-                <input type="password" id="password" name="password" placeholder="••••••••"
-                    class="w-full p-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition duration-200"
-                    required />
-            </div>
-
-            <!-- Confirm Password -->
-            <div>
-                <label for="confirmPassword" class="block text-gray-700 text-sm font-semibold mb-1">Confirm Password</label>
-                <input type="password" id="confirmPassword" name="confirmpassword" placeholder="••••••••"
-                    class="w-full p-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition duration-200"
-                    required />
-                <!-- Django error placeholder: {% if form.confirmPassword.errors %}<p class="text-red-500 text-xs italic mt-1">{{ form.confirmPassword.errors.0 }}</p>{% endif %} -->
-            </div>
-
-            <!-- User Type Selection -->
-            <div class="pt-2">
-                <label class="block text-gray-700 text-sm font-semibold mb-2">I am a:</label>
-                <div class="flex space-x-6 justify-center">
-                    <label class="inline-flex items-center cursor-pointer">
-                        <input type="radio" name="usertype" value="student" class="form-radio h-5 w-5 text-yellow-600" checked>
-                        <span class="ml-2 text-gray-800 font-medium">Student</span>
-                    </label>
-                    <label class="inline-flex items-center cursor-pointer">
-                        <input type="radio" name="usertype" value="tutor" class="form-radio h-5 w-5 text-yellow-600">
-                        <span class="ml-2 text-gray-800 font-medium">Tutor</span>
-                    </label>
-                </div>
-                <!-- Django error placeholder: {% if form.userType.errors %}<p class="text-red-500 text-xs italic mt-1">{{ form.userType.errors.0 }}</p>{% endif %} -->
-            </div>
-
-            <!-- Submit Button -->
-            <button type="submit"
-                class="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-2.5 px-6 rounded-lg shadow-xl transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-yellow-300 mt-4">
-                Register Now
-            </button>
-        </form>
+    <div class="w-full max-w-xl bg-white shadow-2xl rounded-3xl p-8 md:p-10">
+      <h2 class="text-4xl font-extrabold text-center text-gray-800 mb-3">Join <span class="text-yellow-500">MeetMyTutor</span></h2>
+      <p class="text-center text-gray-600 mb-8 text-sm">Sign up to connect with the best tutors or students!</p>
+  
+      <form method="post" novalidate class="space-y-5">
+        {% csrf_token %}
+  
+        <!-- First Name and Last Name -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label for="firstName" class="block text-sm font-semibold text-gray-700 mb-1">First Name</label>
+            <input type="text" id="firstName" name="firstname" placeholder="John"
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-yellow-400 focus:outline-none" required />
+          </div>
+          <div>
+            <label for="lastName" class="block text-sm font-semibold text-gray-700 mb-1">Last Name</label>
+            <input type="text" id="lastname" name="lastname" placeholder="Doe"
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-yellow-400 focus:outline-none" required />
+          </div>
+        </div>
+  
+        <!-- Username -->
+        <div>
+          <label for="username" class="block text-sm font-semibold text-gray-700 mb-1">Username</label>
+          <input type="text" id="username" name="username" placeholder="johndoe123"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-yellow-400 focus:outline-none" required />
+        </div>
+  
+        <!-- Email -->
+        <div>
+          <label for="email" class="block text-sm font-semibold text-gray-700 mb-1">Email Address</label>
+          <input type="email" id="email" name="email" placeholder="john.doe@gmail.com"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-yellow-400 focus:outline-none" required />
+        </div>
+  
+        <!-- Password -->
+        <div>
+          <label for="password" class="block text-sm font-semibold text-gray-700 mb-1">Password</label>
+          <div class="relative">
+            <input type="password" id="password" name="password" placeholder="••••••••"
+              class="w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-yellow-400 focus:outline-none" required />
+            <i class="far fa-eye absolute right-3 top-3 text-gray-500 cursor-pointer text-lg"
+              id="togglePassword" onclick="toggleVisibility('password', 'togglePassword')"></i>
+          </div>
+        </div>
+  
+        <!-- Confirm Password -->
+        <div>
+          <label for="confirmPassword" class="block text-sm font-semibold text-gray-700 mb-1">Confirm Password</label>
+          <div class="relative">
+            <input type="password" id="confirmPassword" name="confirmpassword" placeholder="••••••••"
+              class="w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-yellow-400 focus:outline-none" required />
+            <i class="far fa-eye absolute right-3 top-3 text-gray-500 cursor-pointer text-lg"
+              id="toggleConfirm" onclick="toggleVisibility('confirmPassword', 'toggleConfirm')"></i>
+          </div>
+        </div>
+  
+        <!-- User Type -->
+        <div class="pt-2">
+          <label class="block text-sm font-semibold text-gray-700 mb-2">I am a:</label>
+          <div class="flex justify-center gap-8">
+            <label class="inline-flex items-center">
+              <input type="radio" name="usertype" value="student" class="form-radio text-yellow-500 focus:ring-yellow-500" checked>
+              <span class="ml-2 text-gray-800">Student</span>
+            </label>
+            <label class="inline-flex items-center">
+              <input type="radio" name="usertype" value="tutor" class="form-radio text-yellow-500 focus:ring-yellow-500">
+              <span class="ml-2 text-gray-800">Tutor</span>
+            </label>
+          </div>
+        </div>
+  
+        <!-- Submit Button -->
+        <button type="submit"
+          class="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-semibold py-3 rounded-lg shadow-md transition duration-300 hover:scale-105 focus:ring-2 focus:ring-yellow-300">
+          Register Now
+        </button>
+      </form>
     </div>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+  
+    <!-- Toastify and Eye Toggle -->
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     {% if messages %}
-<script>
-    {% for message in messages %}
-        Toastify({
-            text: "{{ message|escapejs }}",
-            duration: 4000,
-            close: true,
-            gravity: "top", // top or bottom
-            position: "center", // left, center or right
-            backgroundColor: "{% if 'error' in message.tags %}#e53935{% elif 'success' in message.tags %}#43a047{% else %}#2196f3{% endif %}",
-            stopOnFocus: true, // prevent dismiss on hover
-        }).showToast();
-    {% endfor %}
-</script>
-{% endif %}
-
-
-</body>
+    <script>
+      {% for message in messages %}
+      Toastify({
+        text: "{{ message|escapejs }}",
+        duration: 4000,
+        close: true,
+        gravity: "top",
+        position: "center",
+        backgroundColor: "{% if 'error' in message.tags %}#e53935{% elif 'success' in message.tags %}#43a047{% else %}#2196f3{% endif %}",
+        stopOnFocus: true,
+      }).showToast();
+      {% endfor %}
+    </script>
+    {% endif %}
+  
+    <script>
+      function toggleVisibility(inputId, iconId) {
+        const input = document.getElementById(inputId);
+        const icon = document.getElementById(iconId);
+  
+        if (input.type === "password") {
+          input.type = "text";
+          icon.classList.remove("fa-eye");
+          icon.classList.add("fa-eye-slash");
+        } else {
+          input.type = "password";
+          icon.classList.remove("fa-eye-slash");
+          icon.classList.add("fa-eye");
+        }
+      }
+    </script>
+  </body>
+  
 
 </html>

@@ -10,6 +10,8 @@
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
   <!-- Google Fonts - Inter -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+   <!-- font awesome -->
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
     /* Custom font-family for Inter */
     body {
@@ -20,71 +22,91 @@
     }
   </style>
 </head>
+<body class="bg-gradient-to-br from-yellow-100 via-white to-yellow-50 min-h-screen flex flex-col items-center justify-center py-10 px-4">
 
-<body class="bg-gray-100 min-h-screen flex flex-col">
+  <!-- Login Form -->
+  <div class="w-full max-w-md mt-8 bg-white rounded-3xl shadow-2xl p-8 md:p-10">
+    <h3 class="text-3xl font-extrabold text-center text-gray-800 mb-6">Login to Your Account</h3>
 
-  <!-- Navbar with logo -->
-  <nav class="bg-white shadow-md py-3">
-    <div class="container mx-auto px-4 flex justify-between items-center">
-      <a class="flex items-center" href="index.html">
-        <!-- Placeholder image for MeetMyTutor Logo -->
-        <img src="https://placehold.co/150x50/FACC15/000?text=MeetMyTutor" alt="MeetMyTutor Logo" class="h-12 md:h-14 lg:h-16 rounded-lg shadow-sm" />
-      </a>
-      <button onclick="history.back()" class="bg-yellow-400 hover:bg-yellow-500 text-black font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105">
-        Back
-      </button>
-    </div>
-  </nav>
+    <form method="post" class="space-y-6">
+      {% csrf_token %}
+      <!-- Username/Email -->
+      <div>
+        <label for="username" class="block text-gray-700 text-sm font-semibold mb-1">Username or Email</label>
+        <input type="text" id="username" name="username" placeholder="Enter your username or email" required
+          class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-yellow-400 focus:outline-none transition duration-200" />
+      </div>
 
-  <!-- Login Form Container -->
-  <div class="flex-grow flex items-center justify-center py-8 px-4">
-    <div class="w-full max-w-md bg-white rounded-xl shadow-lg p-6 md:p-8">
-      <h3 class="text-center text-2xl md:text-3xl font-bold text-gray-800 mb-6">Login to Your Account</h3>
-      <form method="post">
-        {% csrf_token %}
-        <div class="mb-4">
-          <label for="username" class="block text-gray-700 text-sm font-medium mb-2">Username or Email</label>
-          <input type="text" id="username" name="username"  placeholder="Enter your username or email" required
-            class="shadow-sm appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition duration-200" />
-        </div>
-        <div class="mb-6">
-          <label for="password" class="block text-gray-700 text-sm font-medium mb-2">Password</label>
+      <!-- Password -->
+      <div>
+        <label for="password" class="block text-gray-700 text-sm font-semibold mb-1">Password</label>
+        <div class="relative">
           <input type="password" id="password" name="password" placeholder="Enter your password" required
-            class="shadow-sm appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition duration-200" />
+            class="w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-yellow-400 focus:outline-none transition duration-200" />
+          <i class="far fa-eye absolute top-3 right-3 text-gray-500 cursor-pointer text-lg"
+            id="togglePassword" onclick="toggleVisibility('password', 'togglePassword')"></i>
         </div>
-        <div class="mb-6 flex items-center">
-          <input type="checkbox" id="rememberMe"  name="rememberme" class="form-checkbox h-4 w-4 text-yellow-500 rounded border-gray-300 focus:ring-yellow-400 transition duration-200" />
-          <label class="ml-2 text-gray-700 text-sm" for="rememberMe">Remember Me</label>
-        </div>
-        <!-- Yellow login button -->
-        <button type="submit"
-          class="bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-2.5 px-4 rounded-lg w-full shadow-md transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-opacity-75">
-          Login
-        </button>
-        <div class="mt-4 text-center">
-          <small class="text-gray-600">Don't have an account?
-            <a href="{% url 'register' %}" class="text-yellow-600 hover:text-yellow-700 font-semibold hover:underline transition duration-200">Register here</a>
-          </small>
-        </div>
-      </form>
-    </div>
+      </div>
+
+      <!-- Remember Me -->
+      <div class="flex items-center">
+        <input type="checkbox" id="rememberMe" name="rememberme"
+          class="form-checkbox h-4 w-4 text-yellow-500 border-gray-300 focus:ring-yellow-400 transition duration-200" />
+        <label for="rememberMe" class="ml-2 text-gray-700 text-sm">Remember Me</label>
+      </div>
+
+      <!-- Submit -->
+      <button type="submit"
+        class="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-3 rounded-lg shadow-md transition duration-300 transform hover:scale-105 focus:ring-2 focus:ring-yellow-300 focus:outline-none">
+        Login
+      </button>
+
+      <!-- Register Redirect -->
+      <div class="text-center mt-4">
+        <small class="text-gray-600">Don't have an account?
+          <a href="{% url 'register' %}"
+            class="text-yellow-600 hover:text-yellow-700 font-semibold hover:underline transition duration-200">Register here</a>
+        </small>
+      </div>
+    </form>
   </div>
-  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+  <!-- Toastify & FontAwesome JS -->
+  <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
   {% if messages %}
-<script>
-  {% for message in messages %}
-      Toastify({
-          text: "{{ message|escapejs }}",
-          duration: 4000,
-          close: true,
-          gravity: "top", // top or bottom
-          position: "center", // left, center or right
-          backgroundColor: "{% if 'error' in message.tags %}#e53935{% elif 'success' in message.tags %}#43a047{% else %}#2196f3{% endif %}",
-          stopOnFocus: true, // prevent dismiss on hover
-      }).showToast();
-  {% endfor %}
-</script>
-{% endif %}
+  <script>
+    {% for message in messages %}
+    Toastify({
+      text: "{{ message|escapejs }}",
+      duration: 4000,
+      close: true,
+      gravity: "top",
+      position: "center",
+      backgroundColor: "{% if 'error' in message.tags %}#e53935{% elif 'success' in message.tags %}#43a047{% else %}#2196f3{% endif %}",
+      stopOnFocus: true,
+    }).showToast();
+    {% endfor %}
+  </script>
+  {% endif %}
+
+  <!-- Password Visibility Toggle -->
+  <script>
+    function toggleVisibility(inputId, iconId) {
+      const input = document.getElementById(inputId);
+      const icon = document.getElementById(iconId);
+
+      if (input.type === "password") {
+        input.type = "text";
+        icon.classList.remove("fa-eye");
+        icon.classList.add("fa-eye-slash");
+      } else {
+        input.type = "password";
+        icon.classList.remove("fa-eye-slash");
+        icon.classList.add("fa-eye");
+      }
+    }
+  </script>
 </body>
+
 
 </html>

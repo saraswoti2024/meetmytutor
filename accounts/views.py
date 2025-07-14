@@ -47,17 +47,10 @@ class Register(View):
             else:
                 messages.error(request,'password and confirm password didn\'t match!')
                 return redirect('register')
-            
-        except ValidationError as e:
-            email_errors = e.message_dict.get('email')
-            if email_errors:
-                messages.error(request, email_errors[0])
-            else:
-                messages.error(request, 'Please correct the form fields.')
-            return redirect('register')
         
         except Exception as e:
-            messages.error(request,f'{str(e)}')
+            for m in e:
+              messages.error(request,f'{str(m)}')
             return redirect('register')
 
 class Log_in(View):
@@ -119,4 +112,4 @@ class Log_in(View):
 def log_out(request):
     # ActivityLog.objects.create(user=request.user,action =f'logged out')
     logout(request)
-    return redirect('log_in')
+    return redirect('home')

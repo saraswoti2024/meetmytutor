@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tutor Profile - MeetMyTutor</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        body {
+            background-color: #f8f9fa;
+            overscroll-behavior: none;
+            overflow-x: hidden;
+        }
+
+        .navbar-brand {
+            height: 56px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-brand .logo-img {
+            height: 100px;
+            margin-left: -25px;
+        }
+
+      
+
+        .content-section {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+            padding: 25px;
+            margin-top: 30px;
+            margin-bottom: 30px;
+        }
+
+        .profile-avatar {
+            width: 250px;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 4px solid #FFD700;
+            margin-bottom: 20px;
+        }
+
+        .btn-yellow {
+            background-color: #ffc107;
+            border-color: #ffc107;
+            color: black;
+            transition: all 0.3s ease;
+        }
+
+        .btn-yellow:hover {
+            background-color: #e0a800;
+            border-color: #e0a800;
+            color: white;
+        }
+
+        .list-group-item {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-start;
+        }
+
+        .list-group-item strong {
+            min-width: 150px;
+            display: inline-block;
+            flex-shrink: 0;
+        }
+
+        .list-group-item i {
+            margin-right: 10px;
+            color: #e0a800;
+        }
+
+        .list-group-item span {
+            flex: 1;
+            display: block;
+        }
+
+        #profileEditForm {
+            display: none;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .cancel-photo-btn {
+            position: absolute;
+            right: 10px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #dc3545;
+            cursor: pointer;
+            display: none;
+            z-index: 10;
+        }
+
+        .cancel-photo-btn:hover {
+            color: #c82333;
+        }
+
+        .form-row {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            position: relative;
+        }
+
+        .remove-row {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            color: #dc3545;
+        }
+
+        .subject-checkboxes {
+            margin-top: 10px;
+            border-top: 1px dashed #eee;
+            padding-top: 10px;
+        }
+
+        #map {
+            height: 0;
+            width: 0;
+            visibility: hidden;
+            position: absolute;
+        }
+
+        .location-section {
+            margin-top: 20px;
+        }
+
+        .footer-heading {
+            color: #ffc107;
+        }
+
+        .footer-link {
+            color: white;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .footer-link:hover {
+            color: #ffc107;
+            text-decoration: underline;
+        }
+
+        footer i {
+            color: white;
+            margin-right: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg bg-light shadow-sm">
+        <div class="container">
+            <a class="navbar-brand" href="tutor_dashboard.html">
+                <img src="./MeetMyTutor.png" alt="MeetMyTutor Logo" class="logo-img">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#tutorNavbar"
+                aria-controls="tutorNavbar" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="tutorNavbar">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link" href="tutor_students.html">My Students</a></li>
+                    <li class="nav-item"><a class="nav-link" href="tutor_requests.html">My Requests</a></li>
+                    <li class="nav-item"><a class="nav-link" href="tutor_sessions.html">Sessions</a></li>
+                    <li class="nav-item"><a class="nav-link" href="tutor_attendance.html">Attendance</a></li>
+                    <li class="nav-item"><a class="nav-link" href="tutor_messages.html">Messages</a></li>
+                    <li class="nav-item"><a class="nav-link" href="tutor_earnings.html">Earnings</a></li>
+                    <li class="nav-item"><a class="nav-link active" aria-current="page" href="tutor_profile.html">Profile</a></li>
+                    <li class="nav-item"><a class="btn btn-outline-danger ms-lg-3 mt-2 mt-lg-0" href="logout.html">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <main class="container">
+        <div class="content-section">
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <img id="profileAvatarDisplay" src="https://via.placeholder.com/180?text=Avatar" alt="Tutor Avatar"
+                        class="profile-avatar img-fluid">
+                    <h4 id="profileNameDisplay"></h4>
+                    <div class="d-flex justify-content-center align-items-center mb-2">
+                        <span id="ratingDisplay" class="me-2"></span>
+                        <span id="ratingValue" class="text-muted"></span>
+                    </div>
+                    <p class="text-muted">Tutor</p>
+                    <button class="btn btn-yellow mb-3" id="editProfileBtn"><i class="bi bi-pencil-square me-2"></i>Edit
+                        Profile</button>
+                    <a href="tutor_changePassword.html" class="btn btn-outline-secondary mb-3"><i
+                            class="bi bi-key me-2"></i>Change Password</a>
+                </div>
+                <div class="col-md-8">
+                    <div id="profileDisplaySection">
+                        <h5>Personal Information</h5>
+                        <ul class="list-group list-group-flush mb-4">
+                            <li class="list-group-item"><i class="bi bi-person"></i><strong>Full Name:</strong> <span
+                                    id="fullNameDisplay"></span></li>
+                            <li class="list-group-item"><i class="bi bi-envelope"></i><strong>Email:</strong> <span
+                                    id="emailDisplay"></span></li>
+                            <li class="list-group-item"><i class="bi bi-person-bounding-box"></i><strong>Age:</strong>
+                                <span id="ageDisplay"></span>
+                            </li>
+                            <li class="list-group-item"><i class="bi bi-gender-ambiguous"></i><strong>Gender:</strong>
+                                <span id="genderDisplay"></span>
+                            </li>
+                            <li class="list-group-item"><i class="bi bi-award"></i><strong>Qualification:</strong> <span
+                                    id="qualificationDisplay"></span></li>
+                            <li class="list-group-item"><i class="bi bi-currency-exchange"></i><strong>Session
+                                    Price:</strong> <span id="priceDisplay"></span></li>
+                            <li class="list-group-item"><i class="bi bi-book"></i><strong>Education Levels &
+                                    Subjects:</strong> <span id="educationDisplay"></span></li>
+                            <li class="list-group-item"><i
+                                    class="bi bi-file-earmark-text"></i><strong>CV/Documents:</strong> <span
+                                    id="documentsDisplay"></span></li>
+                            <li class="list-group-item"><i class="bi bi-info-circle"></i><strong>Description:</strong>
+                                <span id="descriptionDisplay"></span>
+                            </li>
+                        </ul>
+                        <h5>Location Details</h5>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><i class="bi bi-building"></i><strong>District:</strong> <span
+                                    id="districtDisplay"></span></li>
+                            <li class="list-group-item"><i class="bi bi-map"></i><strong>Address:</strong> <span
+                                    id="addressDisplay"></span></li>
+                            <li class="list-group-item"><i class="bi bi-geo-alt"></i><strong>Location Access:</strong>
+                                <span id="locationStatusDisplay"></span>
+                            </li>
+                        </ul>
+                    </div>
+                    <form id="profileEditForm" novalidate enctype="multipart/form-data">
+                        <h5>Edit Profile Details</h5>
+                        <div class="mb-3">
+                            <label for="profilePictureInput" class="form-label">Profile Picture (Optional)</label>
+                            <div class="file-input-wrapper">
+                                <input type="file" class="form-control" id="profilePictureInput" accept="image/*">
+                                <button type="button" class="cancel-photo-btn" id="cancelPhotoBtn"
+                                    title="Clear photo selection">
+                                    <i class="bi bi-x-circle-fill"></i>
+                                </button>
+                            </div>
+                            <div class="form-text">Accepted formats: JPG, PNG. Max size: 2MB.</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="firstNameInput" class="form-label">First Name*</label>
+                                <input type="text" class="form-control" id="firstNameInput" required>
+                                <div class="invalid-feedback" id="firstNameError"></div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="lastNameInput" class="form-label">Last Name*</label>
+                                <input type="text" class="form-control" id="lastNameInput" required>
+                                <div class="invalid-feedback" id="lastNameError"></div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="emailInput" class="form-label">Email*</label>
+                            <input type="email" class="form-control" id="emailInput" required>
+                            <div class="invalid-feedback" id="emailError"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="ageInput" class="form-label">Age*</label>
+                            <input type="number" class="form-control" id="ageInput" required min="18" max="50">
+                            <div class="invalid-feedback" id="ageError"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="genderInput" class="form-label">Gender*</label>
+                            <select class="form-select" id="genderInput" required>
+                                <option value="" disabled selected>Select Gender</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                            </select>
+                            <div class="invalid-feedback" id="genderError"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="qualificationInput" class="form-label">Qualification*</label>
+                            <select class="form-select" id="qualificationInput" required>
+                                <option value="" disabled selected>Select your highest qualification</option>
+                                <option value="SEE / SLC">SEE / SLC</option>
+                                <option value="+2 / A-Levels / High School">+2 / A-Levels / High School</option>
+                                <option value="Bachelor's Degree">Bachelor's Degree</option>
+                                <option value="Master’s Degree">Master’s Degree</option>
+                                <option value="MPhil">MPhil</option>
+                                <option value="PhD">PhD</option>
+                                <option value="Diploma / Professional Certification">Diploma / Professional
+                                    Certification</option>
+                            </select>
+                            <div class="invalid-feedback" id="qualificationError"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="priceInput" class="form-label">Session Price (per hour) in Rs.*</label>
+                            <input type="number" class="form-control" id="priceInput" required min="100" max="5000"
+                                step influenzato da: step="1">
+                            <div class="invalid-feedback" id="priceError"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Education Levels & Subjects You Can Teach*</label>
+                            <div id="education-fields-container"></div>
+                            <button type="button" class="btn btn-yellow mt-3" id="add-education-level">
+                                <i class="fas fa-plus"></i> Add Another Education Level
+                            </button>
+                            <div id="educationError" class="invalid-feedback"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="documentsInput" class="form-label">CV & Certificates*</label>
+                            <input type="file" class="form-control" id="documentsInput" multiple
+                                accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" required>
+                            <div class="form-text">Upload your CV and relevant certificates (e.g., academic
+                                transcripts). Accepted formats: PDF, DOCX, Images.</div>
+                            <div class="invalid-feedback" id="documentsError"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="districtInput" class="form-label">Location (District of Nepal)*</label>
+                            <select class="form-select" id="districtInput" required>
+                                <option value="" disabled selected>Select District</option>
+                                <option value="Achham">Achham</option>
+                                <option value="Arghakhanchi">Arghakhanchi</option>
+                                <option value="Baglung">Baglung</option>
+                                <option value="Baitadi">Baitadi</option>
+                                <option value="Bajhang">Bajhang</option>
+                                <option value="Bajura">Bajura</option>
+                                <option value="Banke">Banke</option>
+                                <option value="Bara">Bara</option>
+                                <option value="Bardiya">Bardiya</option>
+                                <option value="Bhaktapur">Bhaktapur</option>
+                                <option value="Bhojpur">Bhojpur</option>
+                                <option value="Chitwan">Chitwan</option>
+                                <option value="Dadeldhura">Dadeldhura</option>
+                                <option value="Dailekh">Dailekh</option>
+                                <option value="Dang">Dang</option>
+                                <option value="Darchula">Darchula</option>
+                                <option value="Dhading">Dhading</option>
+                                <option value="Dhankuta">Dhankuta</option>
+                                <option value="Dhanusha">Dhanusha</option>
+                                <option value="Dolakha">Dolakha</option>
+                                <option value="Dolpa">Dolpa</option>
+                                <option value="Doti">Doti</option>
+                                <option value="Gorkha">Gorkha</option>
+                                <option value="Gulmi">Gulmi</option>
+                                <option value="Humla">Humla</option>
+                                <option value="Ilam">Ilam</option>
+                                <option value="Jajarkot">Jajarkot</option>
+                                <option value="Jhapa">Jhapa</option>
+                                <option value="Jumla">Jumla</option>
+                                <option value="Kailali">Kailali</option>
+                                <option value="Kalikot">Kalikot</option>
+                                <option value="Kanchanpur">Kanchanpur</option>
+                                <option value="Kapilvastu">Kapilvastu</option>
+                                <option value="Kaski">Kaski</option>
+                                <option value="Kathmandu">Kathmandu</option>
+                                <option value="Kavrepalanchok">Kavrepalanchok</option>
+                                <option value="Khotang">Khotang</option>
+                                <option value="Lalitpur">Lalitpur</option>
+                                <option value="Lamjung">Lamjung</option>
+                                <option value="Mahottari">Mahottari</option>
+                                <option value="Makwanpur">Makwanpur</option>
+                                <option value="Manang">Manang</option>
+                                <option value="Morang">Morang</option>
+                                <option value="Mugu">Mugu</option>
+                                <option value="Mustang">Mustang</option>
+                                <option value="Myagdi">Myagdi</option>
+                                <option value="Nawalpur">Nawalpur</option>
+                                <option value="Nuwakot">Nuwakot</option>
+                                <option value="Palpa">Palpa</option>
+                                <option value="Panchthar">Panchthar</option>
+                                <option value="Parasi">Parasi</option>
+                                <option value="Parbat">Parbat</option>
+                                <option value="Parsa">Parsa</option>
+                                <option value="Pyuthan">Pyuthan</option>
+                                <option value="Ramechhap">Ramechhap</option>
+                                <option value="Rasuwa">Rasuwa</option>
+                                <option value="Rautahat">Rautahat</option>
+                                <option value="Rolpa">Rolpa</option>
+                                <option value="Rupandehi">Rupandehi</option>
+                                <option value="Salyan">Salyan</option>
+                                <option value="Sankhuwasabha">Sankhuwasabha</option>
+                                <option value="Saptari">Saptari</option>
+                                <option value="Sarlahi">Sarlahi</option>
+                                <option value="Sindhuli">Sindhuli</option>
+                                <option value="Sindhupalchok">Sindhupalchok</option>
+                                <option value="Siraha">Siraha</option>
+                                <option value="Solukhumbu">Solukhumbu</option>
+                                <option value="Sunsari">Sunsari</option>
+                                <option value="Surkhet">Surkhet</option>
+                                <option value="Syangja">Syangja</option>
+                                <option value="Tanahun">Tanahun</option>
+                                <option value="Taplejung">Taplejung</option>
+                                <option value="Terhathum">Terhathum</option>
+                                <option value="Udayapur">Udayapur</option>
+                            </select>
+                            <div class="invalid-feedback" id="districtError"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="addressInput" class="form-label">Full Address (Optional)</label>
+                            <input type="text" class="form-control" id="addressInput"
+                                placeholder="e.g., Baneshwor, Kathmandu-10">
+                        </div>
+                        <div class="mb-3 location-section">
+                            <h4 class="mb-3">Tutor Location Access</h4>
+                            <div class="d-flex align-items-center mb-3">
+                                <button type="button" id="getLocationBtn" class="btn btn-success me-2">Give Location
+                                    Access</button>
+                                <button type="button" id="denyLocationBtn" class="btn btn-outline-danger">Don't Allow
+                                    Location Access</button>
+                                <span class="ms-2" data-bs-toggle="tooltip"
+                                    title="Sharing your location helps students find you nearby.">
+                                    <i class="bi bi-question-circle text-primary fs-5"></i>
+                                </span>
+                            </div>
+                            <div id="locationStatus" class="fw-semibold mt-2"></div>
+                            <input type="hidden" id="latitudeInput" name="latitude">
+                            <input type="hidden" id="longitudeInput" name="longitude">
+                        </div>
+                        <div id="map"></div>
+
+                        <div class="mb-3">
+                            <label for="descriptionInput" class="form-label">Short Description (Optional)</label>
+                            <textarea class="form-control" id="descriptionInput" name="description" rows="4"
+                                maxlength="500"
+                                placeholder="Describe yourself (e.g., teaching style, experience, expertise). Max 500 characters."></textarea>
+                            <div class="form-text">Provide a brief description of yourself (max 500 characters).</div>
+                            <div class="invalid-feedback" id="descriptionError"></div>
+                        </div>
+
+                        <div class="mt-4">
+                            <button type="submit" class="btn btn-success me-2"><i
+                                    class="bi bi-check-circle me-2"></i>Save Changes</button>
+                            <button type="button" class="btn btn-secondary" id="cancelEditBtn"><i
+                                    class="bi bi-x-circle me-2"></i>Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer style="background-color: #434649; color: white;">
+        <div class="container py-5">
+            <div class="row justify-content-between">
+                <div class="col-md-5 mb-4">
+                    <h5 class="fw-bold footer-heading">MeetMyTutor</h5>
+                    <p>
+                        MeetMyTutor is an easy-to-use platform connecting students with local tutors for offline
+                        learning.
+                        Whether you're looking for academic help or exam preparation, we’ve got you covered.
+                    </p>
+                </div>
+                <div class="col-md-10 col-lg-5 offset-lg-2 mb-4 text-start ps-lg-5">
+                    <h5 class="fw-bold footer-heading">Contact Us</h5>
+                    <ul class="list-unstyled ps-2">
+                        <li><i class="bi bi-envelope me-2"></i> info@meetmytutor.com</li>
+                        <li><i class="bi bi-telephone me-2"></i> +977-9800000000</li>
+                        <li><i class="bi bi-whatsapp me-2"></i> +977-9800000000</li>
+                        <li>
+                            <i class="bi bi-facebook me-2"></i>
+                            <a href="https://facebook.com/MeetMyTutor" target="_blank" class="footer-link">
+                                facebook.com/MeetMyTutor
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <hr style="border-color: rgba(255, 255, 255, 0.3);" />
+                <p class="text-center mb-0">© 2025 MeetMyTutor. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        // Simulated profile data (in a real app, this would come from a backend)
+        let profileData = {
+            profilePictureUrl: "https://randomuser.me/api/portraits/men/32.jpg",
+            firstName: "Ram",
+            lastName: "Sharma",
+            email: "ram.sharma@gmail.com",
+            age: 30,
+            gender: "Male",
+            qualification: "Master’s Degree",
+            price: 1000,
+            educationLevels: [
+                { level: "secondary_9_10", subjects: ["Mathematics", "Science"] },
+                { level: "secondary_11_12", subjects: ["Physics", "Chemistry"] }
+            ],
+            documents: ["cv.pdf", "certificate.jpg"],
+            district: "Kathmandu",
+            address: "New Baneshwor",
+            latitude: "27.700000",
+            longitude: "85.300000",
+            locationStatus: "✅ Location Access Granted",
+            description: "Experienced tutor specializing in Mathematics and Physics with a student-centered teaching approach."
+        };
+
+        // DOM elements
+        const profileDisplaySection = document.getElementById('profileDisplaySection');
+        const profileEditForm = document.getElementById('profileEditForm');
+        const editProfileBtn = document.getElementById('editProfileBtn');
+        const cancelEditBtn = document.getElementById('cancelEditBtn');
+        const profileAvatarDisplay = document.getElementById('profileAvatarDisplay');
+        const profileNameDisplay = document.getElementById('profileNameDisplay');
+        const fullNameDisplay = document.getElementById('fullNameDisplay');
+        const emailDisplay = document.getElementById('emailDisplay');
+        const ageDisplay = document.getElementById('ageDisplay');
+        const genderDisplay = document.getElementById('genderDisplay');
+        const qualificationDisplay = document.getElementById('qualificationDisplay');
+        const priceDisplay = document.getElementById('priceDisplay');
+        const educationDisplay = document.getElementById('educationDisplay');
+        const documentsDisplay = document.getElementById('documentsDisplay');
+        const districtDisplay = document.getElementById('districtDisplay');
+        const addressDisplay = document.getElementById('addressDisplay');
+        const locationStatusDisplay = document.getElementById('locationStatusDisplay');
+        const profilePictureInput = document.getElementById('profilePictureInput');
+        const cancelPhotoBtn = document.getElementById('cancelPhotoBtn');
+        const firstNameInput = document.getElementById('firstNameInput');
+        const lastNameInput = document.getElementById('lastNameInput');
+        const emailInput = document.getElementById('emailInput');
+        const ageInput = document.getElementById('ageInput');
+        const genderInput = document.getElementById('genderInput');
+        const qualificationInput = document.getElementById('qualificationInput');
+        const priceInput = document.getElementById('priceInput');
+        const educationFieldsContainer = document.getElementById('education-fields-container');
+        const addEducationLevelBtn = document.getElementById('add-education-level');
+        const documentsInput = document.getElementById('documentsInput');
+        const districtInput = document.getElementById('districtInput');
+        const addressInput = document.getElementById('addressInput');
+        const getLocationBtn = document.getElementById('getLocationBtn');
+        const denyLocationBtn = document.getElementById('denyLocationBtn');
+        const locationStatus = document.getElementById('locationStatus');
+        const latitudeInput = document.getElementById('latitudeInput');
+        const longitudeInput = document.getElementById('longitudeInput');
+        const firstNameError = document.getElementById('firstNameError');
+        const lastNameError = document.getElementById('lastNameError');
+        const emailError = document.getElementById('emailError');
+        const ageError = document.getElementById('ageError');
+        const genderError = document.getElementById('genderError');
+        const qualificationError = document.getElementById('qualificationError');
+        const priceError = document.getElementById('priceError');
+        const educationError = document.getElementById('educationError');
+        const documentsError = document.getElementById('documentsError');
+        const districtError = document.getElementById('districtError');
+        const descriptionInput = document.getElementById('descriptionInput');
+        const descriptionError = document.getElementById('descriptionError');
+
+        // Initialize Leaflet map (invisible)
+        const map = L.map('map').setView([27.7, 85.3], 13);
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
+
+        // Initialize Bootstrap tooltips
+        const tooltips = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltips.forEach(el => new bootstrap.Tooltip(el));
+
+        // Education levels and subjects
+        const subjectsByLevel = {
+            "basic_1_5": ["Nepali", "English", "Mathematics", "Science", "Social Studies", "Creative Arts", "Local Subject"],
+            "basic_6_8": ["Nepali", "English", "Mathematics", "Science", "Social Studies", "Health, Population, and Environment Education (HPE)", "Optional First Subject"],
+            "secondary_9_10": ["Nepali", "English", "Mathematics", "Science", "Social Studies", "Health, Population & Environment Education (HPE)", "Occupation, Business and Technology Education (OBTE)", "Optional Mathematics", "Computer Science", "Accountancy", "Economics", "Business Studies"],
+            "secondary_11_12": ["Mathematics", "Social Studies and Life Skills Education", "Nepali", "English", "Physics", "Chemistry", "Biology", "Computer Science", "Applied Mathematics", "Environment Science", "Accountancy", "Economics", "Business Studies", "Marketing", "Finance", "Hotel Management", "Business Mathematics", "Sociology", "Psychology", "History", "Geography", "Political Science", "Journalism / Mass Communication", "Philosophy", "Culture", "Fine Arts", "Dance", "Music"]
+        };
+
+        const educationLevels = [
+            { value: "basic_1_5", text: "Basic Education (Grade 1-5)" },
+            { value: "basic_6_8", text: "Basic Education (Grade 6-8)" },
+            { value: "secondary_9_10", text: "Secondary Education (Grade 9-10)" },
+            { value: "secondary_11_12", text: "Secondary Education (Grade 11-12)" }
+        ];
+
+        let selectedGradeLevels = new Set();
+        let fieldCounter = 0;
+
+        // Function to update dropdown options to prevent duplicate education levels
+        function updateDropdownOptions() {
+            const allSelects = document.querySelectorAll('.education-level-select');
+            selectedGradeLevels.clear();
+            allSelects.forEach(select => {
+                if (select.value) {
+                    selectedGradeLevels.add(select.value);
+                }
+            });
+            allSelects.forEach(select => {
+                const currentValue = select.value;
+                select.innerHTML = '<option value="" disabled selected>Select Grade Level</option>';
+                educationLevels.forEach(level => {
+                    const option = document.createElement('option');
+                    option.value = level.value;
+                    option.textContent = level.text;
+                    if (selectedGradeLevels.has(level.value) && level.value !== currentValue) {
+                        option.disabled = true;
+                    }
+                    select.appendChild(option);
+                });
+                select.value = currentValue;
+            });
+        }
+
+        // Function to add education level field
+        function addEducationLevelField(level = '', subjects = []) {
+            const formRow = document.createElement('div');
+            formRow.classList.add('form-row');
+            formRow.dataset.id = fieldCounter++;
+            formRow.innerHTML = `
+                <button type="button" class="btn-close remove-row" aria-label="Close"></button>
+                <div class="mb-3">
+                    <label for="educationLevel_${formRow.dataset.id}" class="form-label">Education Level*</label>
+                    <select class="form-select education-level-select" id="educationLevel_${formRow.dataset.id}" name="educationLevels[${formRow.dataset.id}][level]" required>
+                        <option value="" disabled selected>Select Grade Level</option>
+                    </select>
+                </div>
+                <div class="subject-checkboxes" id="subjects_${formRow.dataset.id}"></div>
+            `;
+            educationFieldsContainer.appendChild(formRow);
+            updateDropdownOptions();
+            const selectElement = formRow.querySelector('.education-level-select');
+            selectElement.value = level;
+            renderSubjects(formRow.querySelector('.subject-checkboxes'), level, formRow.dataset.id, subjects);
+            selectElement.addEventListener('change', function () {
+                updateDropdownOptions();
+                renderSubjects(formRow.querySelector('.subject-checkboxes'), this.value, formRow.dataset.id);
+            });
+            formRow.querySelector('.remove-row').addEventListener('click', function () {
+                formRow.remove();
+                updateDropdownOptions();
+            });
+        }
+
+        // Function to render subjects for an education level
+        function renderSubjects(container, level, fieldId, selectedSubjects = []) {
+            container.innerHTML = '';
+            if (subjectsByLevel[level]) {
+                const heading = document.createElement('h6');
+                heading.textContent = 'Subjects:';
+                container.appendChild(heading);
+                subjectsByLevel[level].forEach(subject => {
+                    const div = document.createElement('div');
+                    div.classList.add('form-check', 'form-check-inline');
+                    const inputId = `subject_${fieldId}_${subject.replace(/\s/g, '_').replace(/[^a-zA-Z0-9_]/g, '')}`;
+                    div.innerHTML = `
+                        <input class="form-check-input" type="checkbox" value="${subject}" id="${inputId}" name="educationLevels[${fieldId}][subjects][]" ${selectedSubjects.includes(subject) ? 'checked' : ''}>
+                        <label class="form-check-label" for="${inputId}">${subject}</label>
+                    `;
+                    container.appendChild(div);
+                });
+            }
+        }
+
+        // Populate form fields with current profile data
+        function populateEditForm() {
+            profilePictureInput.value = '';
+            cancelPhotoBtn.style.display = 'none';
+            firstNameInput.value = profileData.firstName;
+            lastNameInput.value = profileData.lastName;
+            emailInput.value = profileData.email;
+            ageInput.value = profileData.age;
+            genderInput.value = profileData.gender;
+            qualificationInput.value = profileData.qualification;
+            priceInput.value = profileData.price;
+            educationFieldsContainer.innerHTML = '';
+            profileData.educationLevels.forEach(edu => addEducationLevelField(edu.level, edu.subjects));
+            documentsInput.value = '';
+            districtInput.value = profileData.district;
+            addressInput.value = profileData.address || '';
+            latitudeInput.value = profileData.latitude || '';
+            longitudeInput.value = profileData.longitude || '';
+            locationStatus.innerHTML = profileData.locationStatus || '<span class="text-warning">⚠️ You chose not to share your location.</span>';
+            descriptionInput.value = profileData.description || '';
+        }
+
+        // Update display elements with current profile data
+        function updateDisplay() {
+            profileAvatarDisplay.src = profileData.profilePictureUrl || "https://via.placeholder.com/180?text=Avatar";
+            profileNameDisplay.textContent = `${profileData.firstName} ${profileData.lastName}`;
+            const rating = 4.5;
+            const fullStars = Math.floor(rating);
+            const halfStar = rating % 1 >= 0.5 ? 1 : 0;
+            const emptyStars = 5 - fullStars - halfStar;
+            let ratingHTML = '';
+            for (let i = 0; i < fullStars; i++) ratingHTML += '<i class="bi bi-star-fill text-warning"></i>';
+            if (halfStar) ratingHTML += '<i class="bi bi-star-half text-warning"></i>';
+            for (let i = 0; i < emptyStars; i++) ratingHTML += '<i class="bi bi-star text-warning"></i>';
+            ratingDisplay.innerHTML = ratingHTML;
+            ratingValue.textContent = `(${rating.toFixed(1)})`;
+            fullNameDisplay.textContent = `${profileData.firstName} ${profileData.lastName}`;
+            emailDisplay.textContent = profileData.email;
+            ageDisplay.textContent = profileData.age;
+            genderDisplay.textContent = profileData.gender;
+            qualificationDisplay.textContent = profileData.qualification;
+            priceDisplay.textContent = `Rs. ${profileData.price} per hour`;
+            educationDisplay.innerHTML = profileData.educationLevels.map(edu =>
+                `${educationLevels.find(l => l.value === edu.level).text}: ${edu.subjects.join(', ')}`
+            ).join('<br>');
+            documentsDisplay.textContent = profileData.documents.length > 0 ? profileData.documents.join(', ') : 'None';
+            districtDisplay.textContent = profileData.district;
+            addressDisplay.textContent = profileData.address || 'N/A';
+            locationStatusDisplay.innerHTML = profileData.locationStatus || '<span class="text-warning">⚠️ You chose not to share your location.</span>';
+            descriptionDisplay.textContent = profileData.description || 'No description provided.';
+        }
+
+        // Toggle between view and edit mode
+        function toggleEditMode(isEditing) {
+            if (isEditing) {
+                profileDisplaySection.style.display = 'none';
+                profileEditForm.style.display = 'block';
+                populateEditForm();
+            } else {
+                profileDisplaySection.style.display = 'block';
+                profileEditForm.style.display = 'none';
+                updateDisplay();
+            }
+        }
+
+        // Validation functions
+        function validateFirstName() {
+            const name = firstNameInput.value.trim();
+            const nameRegex = /^[a-zA-Z]+( [a-zA-Z]+)*$/;
+            if (!name) {
+                firstNameError.textContent = "First name is required.";
+                firstNameInput.classList.add("is-invalid");
+                firstNameInput.classList.remove("is-valid");
+                return false;
+            } else if (!nameRegex.test(name)) {
+                firstNameError.textContent = "First name must contain only letters and single spaces.";
+                firstNameInput.classList.add("is-invalid");
+                firstNameInput.classList.remove("is-valid");
+                return false;
+            } else {
+                firstNameError.textContent = "";
+                firstNameInput.classList.remove("is-invalid");
+                firstNameInput.classList.add("is-valid");
+                return true;
+            }
+        }
+
+        function validateLastName() {
+            const name = lastNameInput.value.trim();
+            const nameRegex = /^[a-zA-Z]+( [a-zA-Z]+)*$/;
+            if (!name) {
+                lastNameError.textContent = "Last name is required.";
+                lastNameInput.classList.add("is-invalid");
+                lastNameInput.classList.remove("is-valid");
+                return false;
+            } else if (!nameRegex.test(name)) {
+                lastNameError.textContent = "Last name must contain only letters and single spaces.";
+                lastNameInput.classList.add("is-invalid");
+                lastNameInput.classList.remove("is-valid");
+                return false;
+            } else {
+                lastNameError.textContent = "";
+                lastNameInput.classList.remove("is-invalid");
+                lastNameInput.classList.add("is-valid");
+                return true;
+            }
+        }
+
+        function validateEmail() {
+            const email = emailInput.value.trim();
+            const emailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+            if (!email) {
+                emailError.textContent = "Email is required.";
+                emailInput.classList.add("is-invalid");
+                emailInput.classList.remove("is-valid");
+                return false;
+            } else if (!emailRegex.test(email)) {
+                emailError.textContent = "Email must be a valid Gmail address (e.g., example@gmail.com).";
+                emailInput.classList.add("is-invalid");
+                emailInput.classList.remove("is-valid");
+                return false;
+            } else {
+                emailError.textContent = "";
+                emailInput.classList.remove("is-invalid");
+                emailInput.classList.add("is-valid");
+                return true;
+            }
+        }
+
+        function validateAge() {
+            const age = parseInt(ageInput.value);
+            if (!ageInput.value) {
+                ageError.textContent = "Age is required.";
+                ageInput.classList.add("is-invalid");
+                ageInput.classList.remove("is-valid");
+                return false;
+            } else if (age < 18) {
+                ageError.textContent = "Age must be at least 18.";
+                ageInput.classList.add("is-invalid");
+                ageInput.classList.remove("is-valid");
+                return false;
+            } else if (age > 50) {
+                ageError.textContent = "Age must not exceed 50.";
+                ageInput.classList.add("is-invalid");
+                ageInput.classList.remove("is-valid");
+                return false;
+            } else {
+                ageError.textContent = "";
+                ageInput.classList.remove("is-invalid");
+                ageInput.classList.add("is-valid");
+                return true;
+            }
+        }
+
+        function validatePrice() {
+            const priceValue = priceInput.value;
+            const price = parseFloat(priceValue);
+            const minPrice = 100;
+            const maxPrice = 5000;
+            if (priceValue === "") {
+                priceError.textContent = "Price is required.";
+                priceInput.classList.add("is-invalid");
+                priceInput.classList.remove("is-valid");
+                return false;
+            } else if (!Number.isInteger(price)) {
+                priceError.textContent = "Price must be an integer (no decimal values).";
+                priceInput.classList.add("is-invalid");
+                priceInput.classList.remove("is-valid");
+                return false;
+            } else if (price < minPrice) {
+                priceError.textContent = `Price must be at least Rs. ${minPrice}.`;
+                priceInput.classList.add("is-invalid");
+                priceInput.classList.remove("is-valid");
+                return false;
+            } else if (price > maxPrice) {
+                priceError.textContent = `Price must not exceed Rs. ${maxPrice}.`;
+                priceInput.classList.add("is-invalid");
+                priceInput.classList.remove("is-valid");
+                return false;
+            } else {
+                priceError.textContent = "";
+                priceInput.classList.remove("is-invalid");
+                priceInput.classList.add("is-valid");
+                return true;
+            }
+        }
+
+        function validateDocuments() {
+            if (documentsInput.files.length === 0) {
+                documentsError.textContent = 'Please upload your CV and certificates.';
+                documentsError.style.display = 'block';
+                documentsInput.classList.add("is-invalid");
+                documentsInput.classList.remove("is-valid");
+                return false;
+            } else {
+                documentsError.textContent = '';
+                documentsError.style.display = 'none';
+                documentsInput.classList.remove("is-invalid");
+                documentsInput.classList.add("is-valid");
+                return true;
+            }
+        }
+
+        function validateEducationLevelsAndSubjects() {
+            const educationLevelContainers = document.querySelectorAll('#education-fields-container .form-row');
+            let isValid = true;
+            let hasSubjectSelected = false;
+            educationLevelContainers.forEach(container => {
+                const levelSelect = container.querySelector('.education-level-select');
+                const subjects = container.querySelectorAll('.subject-checkboxes input[type="checkbox"]:checked');
+                if (!levelSelect.value) {
+                    levelSelect.classList.add("is-invalid");
+                    isValid = false;
+                } else {
+                    levelSelect.classList.remove("is-invalid");
+                    levelSelect.classList.add("is-valid");
+                }
+                if (subjects.length > 0) {
+                    hasSubjectSelected = true;
+                }
+            });
+            if (educationLevelContainers.length === 0) {
+                educationError.textContent = 'Please add at least one education level.';
+                educationError.style.display = 'block';
+                return false;
+            }
+            if (!hasSubjectSelected) {
+                educationError.textContent = 'Please select at least one subject for any education level.';
+                educationError.style.display = 'block';
+                return false;
+            }
+            educationError.textContent = '';
+            educationError.style.display = 'none';
+            return isValid;
+        }
+
+        function validateDescription() {
+            const description = descriptionInput.value.trim();
+            if (description.length > 500) {
+                descriptionError.textContent = 'Description cannot exceed 500 characters.';
+                descriptionInput.classList.add('is-invalid');
+                descriptionInput.classList.remove('is-valid');
+                return false;
+            } else {
+                descriptionError.textContent = '';
+                descriptionInput.classList.remove('is-invalid');
+                descriptionInput.classList.add('is-valid');
+                return true;
+            }
+        }
+
+        // Event listeners
+        editProfileBtn.addEventListener('click', () => toggleEditMode(true));
+        cancelEditBtn.addEventListener('click', () => toggleEditMode(false));
+
+        profilePictureInput.addEventListener('change', function () {
+            if (this.files.length > 0) {
+                cancelPhotoBtn.style.display = 'block';
+            } else {
+                cancelPhotoBtn.style.display = 'none';
+            }
+        });
+
+        cancelPhotoBtn.addEventListener('click', function () {
+            profilePictureInput.value = '';
+            this.style.display = 'none';
+        });
+
+        firstNameInput.addEventListener('input', validateFirstName);
+        lastNameInput.addEventListener('input', validateLastName);
+        emailInput.addEventListener('input', validateEmail);
+        ageInput.addEventListener('input', validateAge);
+        priceInput.addEventListener('input', validatePrice);
+        documentsInput.addEventListener('change', validateDocuments);
+        descriptionInput.addEventListener('input', validateDescription);
+
+        addEducationLevelBtn.addEventListener('click', () => addEducationLevelField());
+
+        getLocationBtn.addEventListener('click', () => {
+            getLocationBtn.disabled = true;
+            denyLocationBtn.disabled = false;
+            map.locate({ setView: false, maxZoom: 16 });
+            map.on('locationfound', (e) => {
+                const lat = e.latlng.lat;
+                const lng = e.latlng.lng;
+                console.log(`Latitude: ${lat.toFixed(6)}, Longitude: ${lng.toFixed(6)}`);
+                latitudeInput.value = lat.toFixed(6);
+                longitudeInput.value = lng.toFixed(6);
+                locationStatus.innerHTML = '<span class="text-success">✅ Location Access Granted</span>';
+                map.off('locationfound');
+                map.off('locationerror');
+            });
+            map.on('locationerror', (e) => {
+                console.log('Location error:', e.message);
+                locationStatus.innerHTML = '<span class="text-danger">❌ Unable to retrieve location.</span>';
+                latitudeInput.value = '';
+                longitudeInput.value = '';
+                map.off('locationfound');
+                map.off('locationerror');
+            });
+        });
+
+        denyLocationBtn.addEventListener('click', () => {
+            denyLocationBtn.disabled = true;
+            getLocationBtn.disabled = false;
+            latitudeInput.value = '';
+            longitudeInput.value = '';
+            locationStatus.innerHTML = '<span class="text-warning">⚠️ You chose not to share your location.</span>';
+            console.clear();
+            console.log('Location access denied. Coordinates cleared.');
+            map.off('locationfound');
+            map.off('locationerror');
+        });
+
+        profileEditForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+            let isValid = true;
+            let firstInvalidField = null;
+            document.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
+            document.querySelectorAll('.is-valid').forEach(el => el.classList.remove('is-valid'));
+            documentsError.style.display = 'none';
+            educationError.style.display = 'none';
+            descriptionError.style.display = 'none';
+
+            if (!validateFirstName()) {
+                isValid = false;
+                firstInvalidField = firstInvalidField || firstNameInput;
+            }
+            if (!validateLastName()) {
+                isValid = false;
+                firstInvalidField = firstInvalidField || lastNameInput;
+            }
+            if (!validateEmail()) {
+                isValid = false;
+                firstInvalidField = firstInvalidField || emailInput;
+            }
+            if (!validateAge()) {
+                isValid = false;
+                firstInvalidField = firstInvalidField || ageInput;
+            }
+            if (!validatePrice()) {
+                isValid = false;
+                firstInvalidField = firstInvalidField || priceInput;
+            }
+            if (!validateDocuments()) {
+                isValid = false;
+                firstInvalidField = firstInvalidField || documentsInput;
+            }
+            if (!validateEducationLevelsAndSubjects()) {
+                isValid = false;
+                firstInvalidField = firstInvalidField || document.querySelector('.education-level-select');
+            }
+            if (!validateDescription()) {
+                isValid = false;
+                firstInvalidField = firstInvalidField || descriptionInput;
+            }
+
+            const requiredFields = profileEditForm.querySelectorAll('input[required]:not([type="file"]), select[required]');
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    field.classList.add("is-invalid");
+                    isValid = false;
+                    firstInvalidField = firstInvalidField || field;
+                } else {
+                    field.classList.add("is-valid");
+                }
+            });
+
+            if (!isValid) {
+                if (firstInvalidField) {
+                    firstInvalidField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    firstInvalidField.focus();
+                }
+                return;
+            }
+
+            // Handle profile picture upload (simulated)
+            if (profilePictureInput.files.length > 0) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    profileData.profilePictureUrl = e.target.result;
+                };
+                reader.readAsDataURL(profilePictureInput.files[0]);
+            }
+
+            // Update education levels and subjects
+            const educationLevelContainers = document.querySelectorAll('#education-fields-container .form-row');
+            const newEducationLevels = [];
+            educationLevelContainers.forEach(container => {
+                const level = container.querySelector('.education-level-select').value;
+                const subjects = Array.from(container.querySelectorAll('.subject-checkboxes input[type="checkbox"]:checked')).map(input => input.value);
+                if (level && subjects.length > 0) {
+                    newEducationLevels.push({ level, subjects });
+                }
+            });
+
+            // Update documents (simulated)
+            const newDocuments = Array.from(documentsInput.files).map(file => file.name);
+
+            // Update profile data
+            profileData.firstName = firstNameInput.value;
+            profileData.lastName = lastNameInput.value;
+            profileData.email = emailInput.value;
+            profileData.age = parseInt(ageInput.value);
+            profileData.gender = genderInput.value;
+            profileData.qualification = qualificationInput.value;
+            profileData.price = parseInt(priceInput.value);
+            profileData.educationLevels = newEducationLevels;
+            profileData.documents = newDocuments;
+            profileData.district = districtInput.value;
+            profileData.address = addressInput.value;
+            profileData.latitude = latitudeInput.value;
+            profileData.longitude = longitudeInput.value;
+            profileData.locationStatus = locationStatus.innerHTML;
+            profileData.description = descriptionInput.value;
+
+            alert('Profile updated successfully (simulated)!');
+            console.log('Updated Profile Data:', profileData);
+            toggleEditMode(false);
+        });
+
+        // Initial setup
+        document.addEventListener('DOMContentLoaded', function () {
+            updateDisplay();
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('edit') === 'true') {
+                console.log('Detected ?edit=true in URL. Switching to edit mode.');
+                toggleEditMode(true);
+            }
+        });
+    </script>
+</body>
+
+</html>
