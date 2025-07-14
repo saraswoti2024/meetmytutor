@@ -4,6 +4,7 @@ from .models import CustomUser
 from django.contrib import messages
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
+from django.contrib.auth import authenticate, login, get_user_model,logout
 
 
 # Create your views here.
@@ -58,4 +59,64 @@ class Register(View):
         except Exception as e:
             messages.error(request,f'{str(e)}')
             return redirect('register')
-        
+
+class Log_in(View):
+    def post(self,request):
+       CustomUser = get_user_model()
+
+class Log_in(View):
+    def post(self, request):
+        CustomUser = get_user_model()
+        try:
+            username_or_email = request.POST.get('username')
+            password = request.POST.get('password')
+
+            if not username_or_email or not password:
+                messages.error(request, 'Please enter both username/email and password.')
+                return redirect('log_in')
+
+            user_obj = None
+            if '@' in username_or_email:
+                try:
+                    user_obj = CustomUser.objects.get(email=username_or_email)
+                except CustomUser.DoesNotExist:
+                    pass 
+            
+            if not user_obj:
+                try:
+                    user_obj = CustomUser.objects.get(username=username_or_email)
+                except CustomUser.DoesNotExist:
+                    pass 
+
+            if not user_obj:
+                messages.error(request, 'Invalid credentials.')
+                return redirect('log_in')
+
+            authenticated_user = authenticate(request, username=user_obj.username, password=password)
+
+            if authenticated_user is not None:
+                login(request, authenticated_user)
+                if authenticated_user.is_superuser or authenticated_user.is_staff:
+                    return redirect('/admin/')
+                elif authenticated_user.usertype in ['tutor', 'student']:
+                    return redirect('home')
+                else:
+                  
+                    messages.info(request, 'Login successful. Redirecting to default dashboard.')
+                    return redirect('some_default_dashboard') 
+            else:
+                messages.error(request, 'Invalid credentials.')
+                return redirect('log_in')
+
+        except Exception as e:
+            messages.error(request, f'An unexpected error occurred: {str(e)}')
+            return redirect('log_in')
+
+    
+    def get(self,request):
+         return render(request,'login/login.html')
+
+def log_out(request):
+    # ActivityLog.objects.create(user=request.user,action =f'logged out')
+    logout(request)
+    return redirect('log_in')

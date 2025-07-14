@@ -1,7 +1,8 @@
+{% load static %}
 <nav class="bg-yellow-custom shadow-xl sticky top-0 z-50">
     <div class="container mx-auto px-4 py-3 flex justify-between items-center">
         <a class="flex items-center" href="index.html">
-            <img src="./MeetMyTutor.png" alt="MeetMyTutor Logo" class="h-16 -ml-6">
+            <img src="{% static 'images/MeetMyTutor.png' %}" alt="MeetMyTutor Logo" class="h-16 -ml-6">
         </a>
 
         <button class="lg:hidden text-gray-800 focus:outline-none" data-collapse-toggle="navbarNav" aria-controls="navbarNav" aria-expanded="false">
@@ -25,9 +26,9 @@
                     </ul>
                 </li>
 
-                <li><a class="text-gray-800 hover:text-white font-bold text-lg transition-colors duration-200" href="contact.html">Contact</a></li>
+                <li><a class="text-gray-800 hover:text-white font-bold text-lg transition-colors duration-200" href="{% url 'contact' %}">Contact</a></li>
                 <li>
-                    <a class="px-8 py-2.5 border-2 border-gray-800 text-gray-800 rounded-full hover:bg-gray-800 hover:text-white transition duration-300 ease-in-out font-bold text-lg shadow-md" href="login.html">Login</a>
+                    <a class="px-8 py-2.5 border-2 border-gray-800 text-gray-800 rounded-full hover:bg-gray-800 hover:text-white transition duration-300 ease-in-out font-bold text-lg shadow-md" href="{% url 'log_in' %}">Login</a>
                 </li>
                 <li>
                     <a class="px-8 py-2.5 bg-gray-800 text-white rounded-full hover:bg-gray-900 transition duration-300 ease-in-out font-bold text-lg shadow-md" href="{% url 'register' %}">Register</a>
