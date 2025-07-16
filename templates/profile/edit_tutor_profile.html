@@ -1,0 +1,606 @@
+{% extends "base.html" %}
+{% block content %}
+{% load static %}
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<style>
+    .cancel-photo-btn {
+        position: absolute;
+        right: 12px;
+        font-size: 1.75rem;
+        color: #dc3545;
+        cursor: pointer;
+        z-index: 10;
+        display: none;
+    }
+
+    .cancel-photo-btn:hover {
+        color: #c82333;
+    }
+
+    .form-row {
+        position: relative;
+        border: 1px solid #ddd;
+        padding: 20px;
+        margin-bottom: 20px;
+        border-radius: 6px;
+    }
+
+    .remove-row {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        cursor: pointer;
+        color: #dc3545;
+        font-size: 1.5rem;
+    }
+
+    .subject-checkboxes {
+        margin-top: 12px;
+        border-top: 1px dashed #eee;
+        padding-top: 12px;
+    }
+
+    #map {
+        height: 0;
+        width: 0;
+        visibility: hidden;
+        position: absolute;
+    }
+</style>
+<main class="container mx-auto px-6">
+    <div class="bg-white rounded-xl shadow-xl p-8 mt-10 mb-10">
+        <div class="flex justify-center">
+            <div class="w-full md:w-3/4">
+                <form id="profileEditForm" novalidate enctype="multipart/form-data" method="post">
+                    {% csrf_token %}
+                    <h5 class="text-xl font-semibold mb-6">Edit Profile Details</h5>
+                    <div class="mb-6">
+                        <label for="profilePictureInput" class="block text-base font-medium text-gray-700">Profile Picture (Optional)</label>
+                        <div class="relative flex items-center space-x-4">
+                            <input type="file" name="profile_img" 
+                                class="mt-2 block w-full border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-base py-3 px-4"
+                                id="profilePictureInput" accept="image/*">
+                            {% if request.user.profile.profile_img %}
+                              <img src="{{ request.user.profile.profile_img.url }}" alt="Current Profile Picture" class="w-20 h-20 object-cover rounded-md border border-gray-300">
+                            {% endif %}
+                            <button type="button" class="cancel-photo-btn" id="cancelPhotoBtn" title="Clear photo selection">
+                                <i class="bi bi-x-circle-fill"></i>
+                            </button>
+                        </div>
+                        <p class="mt-2 text-sm text-gray-500">Accepted formats: JPG, PNG. Max size: 2MB.</p>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <label for="ageInput" class="block text-base font-medium text-gray-700">Age*</label>
+                        <input type="number"
+                            value="{% if request.user.profile.age %}{{ request.user.profile.age }}{% endif %}"
+                            name="age"
+                            class="mt-2 block w-full border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-base py-3 px-4"
+                            id="ageInput" required min="18" max="50">
+                        <div class="text-red-600 text-sm mt-2" id="ageError"></div>
+                    </div>
+                    <div class="mb-6">
+                        <label for="genderInput" class="block text-base font-medium text-gray-700">Gender*</label>
+                        <select
+                            class="mt-2 block w-full border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-base py-3 px-4"
+                            id="genderInput" name="gender" required>
+                            <option value="" disabled {% if not request.user.profile.gender %}selected{% endif %}>Select
+                                Gender</option>
+                            <option value="Male" {% if request.user.profile.gender == "Male" %}selected{% endif %}>Male
+                            </option>
+                            <option value="Female" {% if request.user.profile.gender == "Female" %}selected{% endif %}>
+                                Female</option>
+                            <option value="Other" {% if request.user.profile.gender == "Other" %}selected{% endif %}>Other
+                            </option>
+                        </select>
+                        <div class="text-red-600 text-sm mt-2" id="genderError"></div>
+                    </div>
+                    <div class="mb-6">
+                        <label for="qualificationInput"
+                            class="block text-base font-medium text-gray-700">Qualification*</label>
+                        <select
+                            class="mt-2 block w-full border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-base py-3 px-4"
+                            id="qualificationInput" name="qualification" required>
+                            <option value="" disabled {% if not request.user.profile.qualification %}selected{% endif
+                                %}>Select your highest qualification</option>
+                            <option value="SEE / SLC" {% if request.user.profile.qualification == "SEE / SLC" %}selected{%
+                                endif %}>SEE / SLC</option>
+                            <option value="+2 / A-Levels / High School" {% if
+                                request.user.profile.qualification == "+2 / A-Levels / High School" %}selected{% endif %}>
+                                +2 / A-Levels / High School</option>
+                            <option value="Bachelor's Degree" {% if
+                                request.user.profile.qualification == "Bachelor's Degree" %}selected{% endif %}>Bachelor's
+                                Degree</option>
+                            <option value="Master’s Degree" {% if request.user.profile.qualification == "Master’s Degree"%} selected {% endif %}>Master's Degree</option>
+                            <option value="MPhil" {% if request.user.profile.qualification == "MPhil" %}selected{% endif
+                                %}>MPhil</option>
+                            <option value="PhD" {% if request.user.profile.qualification == "PhD" %}selected{% endif %}>
+                                PhD</option>
+                            <option value="Diploma / Professional Certification" {% if
+                                request.user.profile.qualification == "Diploma / Professional Certification" %}selected{% endif %}>Diploma / Professional Certification</option>
+                        </select>
+                        <div class="text-red-600 text-sm mt-2" id="qualificationError"></div>
+                    </div>
+                    <div class="mb-6">
+                        <label for="priceInput" class="block text-base font-medium text-gray-700">Session Price (per
+                            hour) in Rs.*</label>
+                        <input type="number" 
+                        value="{% if request.user.profile.session_price %}{{request.user.profile.session_price}}{% endif %}" 
+                        name="session_price"
+                            class="mt-2 block w-full border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-base py-3 px-4"
+                            id="priceInput" required min="100" max="5000" step="1">
+                        <div class="text-red-600 text-sm mt-2" id="priceError"></div>
+                    </div>
+
+                    <!-- education level -->
+                    <div class="mb-6">
+                        <label class="block text-base font-medium text-gray-700">Education Levels & Subjects You Can Teach*</label>
+                        <div id="education-fields-container"></div>
+                        <button type="button"
+                            class="mt-4 inline-flex items-center px-5 py-3 bg-yellow-400 border border-yellow-400 text-black rounded-lg hover:bg-yellow-500 hover:text-white transition duration-300 text-base"
+                            id="add-education-level">
+                            <i class="fas fa-plus mr-2"></i> Add Another Education Level
+                        </button>
+                        <div class="text-red-600 text-sm mt-2" id="educationError"></div>
+                    </div>
+                    
+                    <script>
+                        const subjectsByLevel = {
+                            "basic_1_5": ["Nepali", "English", "Mathematics", "Science", "Social Studies", "Creative Arts", "Local Subject"],
+                            "basic_6_8": ["Nepali", "English", "Mathematics", "Science", "Social Studies", "Health, Population, and Environment Education (HPE)", "Optional First Subject"],
+                            "secondary_9_10": ["Nepali", "English", "Mathematics", "Science", "Social Studies", "Health, Population & Environment Education (HPE)", "Occupation, Business and Technology Education (OBTE)", "Optional Mathematics", "Computer Science", "Accountancy", "Economics", "Business Studies"],
+                            "secondary_11_12": ["Mathematics", "Social Studies and Life Skills Education", "Nepali", "English", "Physics", "Chemistry", "Biology", "Computer Science", "Applied Mathematics", "Environment Science", "Accountancy", "Economics", "Business Studies", "Marketing", "Finance", "Hotel Management", "Business Mathematics", "Sociology", "Psychology", "History", "Geography", "Political Science", "Journalism / Mass Communication", "Philosophy", "Culture", "Fine Arts", "Dance", "Music"]
+                        };
+                    
+                        const educationLevels = [
+                            { value: "basic_1_5", text: "Basic Education (Grade 1-5)" },
+                            { value: "basic_6_8", text: "Basic Education (Grade 6-8)" },
+                            { value: "secondary_9_10", text: "Secondary Education (Grade 9-10)" },
+                            { value: "secondary_11_12", text: "Secondary Education (Grade 11-12)" }
+                        ];
+                    
+                        let selectedGradeLevels = new Set();
+                        let fieldCounter = 0;
+                    
+                        function updateDropdownOptions() {
+                            const allSelects = document.querySelectorAll('.education-level-select');
+                            selectedGradeLevels.clear();
+                            allSelects.forEach(select => {
+                                if (select.value) {
+                                    selectedGradeLevels.add(select.value);
+                                }
+                            });
+                            allSelects.forEach(select => {
+                                const currentValue = select.value;
+                                select.innerHTML = '<option value="" disabled>Select Grade Level</option>';
+                                educationLevels.forEach(level => {
+                                    const option = document.createElement('option');
+                                    option.value = level.value;
+                                    option.textContent = level.text;
+                                    if (selectedGradeLevels.has(level.value) && level.value !== currentValue) {
+                                        option.disabled = true;
+                                    }
+                                    select.appendChild(option);
+                                });
+                                select.value = currentValue;
+                            });
+                        }
+                    
+                        function addEducationLevelField(level = '', subjects = []) {
+                            const educationFieldsContainer = document.getElementById('education-fields-container');
+                            const formRow = document.createElement('div');
+                            formRow.classList.add('form-row');
+                            formRow.dataset.id = fieldCounter++;
+                            formRow.innerHTML = `
+                                <button type="button" class="remove-row" aria-label="Close"><i class="bi bi-x-circle-fill"></i></button>
+                                <div class="mb-6">
+                                    <label for="educationLevel_${formRow.dataset.id}" class="block text-base font-medium text-gray-700">Education Level*</label>
+                                    <select class="mt-2 block w-full border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-base py-3 px-4 education-level-select" id="educationLevel_${formRow.dataset.id}" name="educationLevels[${formRow.dataset.id}][level]" required>
+                                        <option value="" disabled>Select Grade Level</option>
+                                    </select>
+                                </div>
+                                <div class="subject-checkboxes" id="subjects_${formRow.dataset.id}"></div>
+                            `;
+                            educationFieldsContainer.appendChild(formRow);
+                    
+                            updateDropdownOptions();
+                    
+                            const selectElement = formRow.querySelector('.education-level-select');
+                            selectElement.value = level;
+                    
+                            renderSubjects(formRow.querySelector('.subject-checkboxes'), level, formRow.dataset.id, subjects);
+                    
+                            selectElement.addEventListener('change', function () {
+                                updateDropdownOptions();
+                                renderSubjects(formRow.querySelector('.subject-checkboxes'), this.value, formRow.dataset.id);
+                            });
+                    
+                            formRow.querySelector('.remove-row').addEventListener('click', function () {
+                                formRow.remove();
+                                updateDropdownOptions();
+                            });
+                        }
+                    
+                        function renderSubjects(container, level, fieldId, selectedSubjects = []) {
+                            container.innerHTML = '';
+                            if (subjectsByLevel[level]) {
+                                const heading = document.createElement('h6');
+                                heading.textContent = 'Subjects:';
+                                heading.className = 'text-base font-medium text-gray-700';
+                                container.appendChild(heading);
+                    
+                                subjectsByLevel[level].forEach(subject => {
+                                    const div = document.createElement('div');
+                                    div.className = 'inline-flex items-center mr-6 mb-2';
+                                    const inputId = `subject_${fieldId}_${subject.replace(/\s/g, '_').replace(/[^a-zA-Z0-9_]/g, '')}`;
+                                    div.innerHTML = `
+                                        <input class="mr-2 h-5 w-5 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" type="checkbox" value="${subject}" id="${inputId}" name="educationLevels[${fieldId}][subjects][]" ${selectedSubjects.includes(subject) ? 'checked' : ''}>
+                                        <label class="text-base text-gray-700" for="${inputId}">${subject}</label>
+                                    `;
+                                    container.appendChild(div);
+                                });
+                            }
+                        }
+                    
+                        // --- THIS IS THE MAGIC: get education data from Django context ---
+                        const preloadedEducationData = {{ education_data_json|safe }};
+                    
+                        // Populate fields on page load
+                        document.addEventListener('DOMContentLoaded', () => {
+                            const educationFieldsContainer = document.getElementById('education-fields-container');
+                            educationFieldsContainer.innerHTML = ''; // clear any existing fields
+                            if (preloadedEducationData.length > 0) {
+                                preloadedEducationData.forEach(item => {
+                                    addEducationLevelField(item.level, item.subjects);
+                                });
+                            } else {
+                                addEducationLevelField(); // no data, show one empty field
+                            }
+                    
+                            // Add button listener for adding new empty education level field
+                            document.getElementById('add-education-level').addEventListener('click', () => {
+                                addEducationLevelField();
+                            });
+                        });
+                    </script>
+                    
+                     <!-- education level ends -->
+     
+                    <div class="mb-6">
+                        <label for="documentsInput" class="block text-base font-medium text-gray-700">CV & Certificates*</label>
+                    
+                        {% if request.user.profile.cv %}
+                            <p class="mb-2 text-blue-600">
+                                Current file: <a href="{{ request.user.profile.cv.url }}" target="_blank" class="underline">View CV</a>
+                            </p>
+                        {% endif %}
+                    
+                        <input type="file" name="cv"
+                               class="mt-2 block w-full border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-base py-3 px-4"
+                               id="documentsInput" multiple accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
+                    
+                        <p class="mt-2 text-sm text-gray-500">Upload your CV or relevant certificates (e.g., academic transcripts). Accepted formats: PDF, DOCX, Images.</p>
+                        <div class="text-red-600 text-sm mt-2" id="documentsError"></div>
+                    </div>
+                    <div class="mb-6">
+                        <label for="districtInput" class="block text-base font-medium text-gray-700">Location (District
+                            of Nepal)*</label>
+                        <select
+                            class="mt-2 block w-full border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-base py-3 px-4"
+                            id="districtInput" name="district" required>
+                            <option value="" disabled {% if not request.user.profile.district %}selected{% endif %}>
+                                Select District</option>
+                            {% for i in district %}
+                            <option value="{{ i.name }}" {% if request.user.profile.district == i.name %}selected{% endif %}> {{ i.name }} </option>
+                            {% endfor %}
+                        </select>
+                        <div class="text-red-600 text-sm mt-2" id="districtError"></div>
+                    </div>
+                    <div class="mb-6">
+                        <label for="addressInput" class="block text-base font-medium text-gray-700">Full Address
+                            (Optional)</label>
+                        <input type="text" 
+                        value="{% if request.user.profile.address %}{{request.user.profile.address}}{% endif %}" name="address"
+                            class="mt-2 block w-full border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-base py-3 px-4"
+                            id="addressInput" placeholder="e.g., Baneshwor, Kathmandu-10">
+                    </div>
+                    <div class="mb-6">
+                        <h4 class="text-lg font-semibold mb-4">Tutor Location Access</h4>
+                        <div class="flex items-center mb-4 space-x-3">
+                            <button type="button" id="getLocationBtn"
+                                class="inline-flex items-center px-5 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition duration-300 text-base">Give
+                                Location Access</button>
+                            <button type="button" id="denyLocationBtn"
+                                class="inline-flex items-center px-5 py-3 border border-red-600 text-red-600 rounded-lg hover:bg-red-50 transition duration-300 text-base">Don't
+                                Allow Location Access</button>
+                            <div class="relative group">
+                                <i class="bi bi-question-circle text-blue-600 text-2xl"></i>
+                                <span
+                                    class="absolute hidden group-hover:block bg-gray-800 text-white text-sm rounded py-2 px-3 -mt-10 ml-3">Sharing
+                                    your location helps students find you nearby.</span>
+                            </div>
+                        </div>
+                        <div id="locationStatus" class="font-semibold mt-2 text-base"></div>
+                        <input type="hidden" id="latitudeInput" name="latitude">
+                        <input type="hidden" id="longitudeInput" name="longitude">
+                    </div>
+                    <div id="map"></div>
+                    <div class="mb-6">
+                        <label for="descriptionInput" class="block text-base font-medium text-gray-700">Short
+                            Description (Optional)</label>
+                        <textarea
+                            class="mt-2 block w-full border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-base py-3 px-4"
+                            id="descriptionInput"
+                              name="description"
+                               rows="5" 
+                               maxlength="500"
+                            placeholder="Describe yourself (e.g., teaching style, experience, expertise). Max 500 characters.">{% if request.user.profile.desc %}{{ request.user.profile.desc }}{% endif %}
+                        </textarea>
+                        <p class="mt-2 text-sm text-gray-500">Provide a brief description of yourself (max 500
+                            characters).</p>
+                        <div class="text-red-600 text-sm mt-2" id="descriptionError"></div>
+                    </div>
+                    <div class="mt-6 flex space-x-3">
+                        <button type="submit"
+                            class="inline-flex items-center px-5 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition duration-300 text-base"><i
+                                class="bi bi-check-circle mr-2"></i>Save Changes</button>
+                        <button type="button"
+                            class="inline-flex items-center px-5 py-3 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition duration-300 text-base"
+                            id="cancelEditBtn"><i class="bi bi-x-circle mr-2"></i>Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script>
+
+    // DOM elements
+    const profileEditForm = document.getElementById('profileEditForm');
+    const profilePictureInput = document.getElementById('profilePictureInput');
+    const cancelPhotoBtn = document.getElementById('cancelPhotoBtn');
+    const ageInput = document.getElementById('ageInput');
+    const genderInput = document.getElementById('genderInput');
+    const qualificationInput = document.getElementById('qualificationInput');
+    const priceInput = document.getElementById('priceInput');
+    const educationFieldsContainer = document.getElementById('education-fields-container');
+    const addEducationLevelBtn = document.getElementById('add-education-level');
+    const documentsInput = document.getElementById('documentsInput');
+    const districtInput = document.getElementById('districtInput');
+    const addressInput = document.getElementById('addressInput');
+    const getLocationBtn = document.getElementById('getLocationBtn');
+    const denyLocationBtn = document.getElementById('denyLocationBtn');
+    const locationStatus = document.getElementById('locationStatus');
+    const latitudeInput = document.getElementById('latitudeInput');
+    const longitudeInput = document.getElementById('longitudeInput');
+    const ageError = document.getElementById('ageError');
+    const genderError = document.getElementById('genderError');
+    const qualificationError = document.getElementById('qualificationError');
+    const priceError = document.getElementById('priceError');
+    const educationError = document.getElementById('educationError');
+    const documentsError = document.getElementById('documentsError');
+    const districtError = document.getElementById('districtError');
+    const descriptionInput = document.getElementById('descriptionInput');
+    const descriptionError = document.getElementById('descriptionError');
+    const cancelEditBtn = document.getElementById('cancelEditBtn');
+
+    // Initialize Leaflet map (invisible)
+    const map = L.map('map').setView([27.7, 85.3], 13);
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
+
+    // Validation functions
+
+    function validateAge() {
+        const age = parseInt(ageInput.value);
+        if (!ageInput.value) {
+            ageError.textContent = "Age is required.";
+            ageInput.classList.add("border-red-600");
+            ageInput.classList.remove("border-green-600");
+            return false;
+        } else if (age < 18) {
+            ageError.textContent = "Age must be at least 18.";
+            ageInput.classList.add("border-red-600");
+            ageInput.classList.remove("border-green-600");
+            return false;
+        } else if (age > 50) {
+            ageError.textContent = "Age must not exceed 50.";
+            ageInput.classList.add("border-red-600");
+            ageInput.classList.remove("border-green-600");
+            return false;
+        } else {
+            ageError.textContent = "";
+            ageInput.classList.remove("border-red-600");
+            ageInput.classList.add("border-green-600");
+            return true;
+        }
+    }
+
+    function validatePrice() {
+        const priceValue = priceInput.value;
+        const price = parseFloat(priceValue);
+        const minPrice = 100;
+        const maxPrice = 5000;
+        if (priceValue === "") {
+            priceError.textContent = "Price is required.";
+            priceInput.classList.add("border-red-600");
+            priceInput.classList.remove("border-green-600");
+            return false;
+        } else if (!Number.isInteger(price)) {
+            priceError.textContent = "Price must be an integer (no decimal values).";
+            priceInput.classList.add("border-red-600");
+            priceInput.classList.remove("border-green-600");
+            return false;
+        } else if (price < minPrice) {
+            priceError.textContent = `Price must be at least Rs. ${minPrice}.`;
+            priceInput.classList.add("border-red-600");
+            priceInput.classList.remove("border-green-600");
+            return false;
+        } else if (price > maxPrice) {
+            priceError.textContent = `Price must not exceed Rs. ${maxPrice}.`;
+            priceInput.classList.add("border-red-600");
+            priceInput.classList.remove("border-green-600");
+            return false;
+        } else {
+            priceError.textContent = "";
+            priceInput.classList.remove("border-red-600");
+            priceInput.classList.add("border-green-600");
+            return true;
+        }
+    }
+
+    function validateDocuments() {
+        if (documentsInput.files.length === 0) {
+            documentsError.textContent = 'Please upload your CV and certificates.';
+            documentsError.style.display = 'block';
+            documentsInput.classList.add("border-red-600");
+            documentsInput.classList.remove("border-green-600");
+            return false;
+        } else {
+            documentsError.textContent = '';
+            documentsError.style.display = 'none';
+            documentsInput.classList.remove("border-red-600");
+            documentsInput.classList.add("border-green-600");
+            return true;
+        }
+    }
+
+    function validateEducationLevelsAndSubjects() {
+        const educationLevelContainers = document.querySelectorAll('#education-fields-container .form-row');
+        let isValid = true;
+        let hasSubjectSelected = false;
+        educationLevelContainers.forEach(container => {
+            const levelSelect = container.querySelector('.education-level-select');
+            const subjects = container.querySelectorAll('.subject-checkboxes input[type="checkbox"]:checked');
+            if (!levelSelect.value) {
+                levelSelect.classList.add("border-red-600");
+                isValid = false;
+            } else {
+                levelSelect.classList.remove("border-red-600");
+                levelSelect.classList.add("border-green-600");
+            }
+            if (subjects.length > 0) {
+                hasSubjectSelected = true;
+            }
+        });
+        if (educationLevelContainers.length === 0) {
+            educationError.textContent = 'Please add at least one education level.';
+            educationError.style.display = 'block';
+            return false;
+        }
+        if (!hasSubjectSelected) {
+            educationError.textContent = 'Please select at least one subject for any education level.';
+            educationError.style.display = 'block';
+            return false;
+        }
+        educationError.textContent = '';
+        educationError.style.display = 'none';
+        return isValid;
+    }
+
+    function validateDescription() {
+        const description = descriptionInput.value.trim();
+        if (description.length > 500) {
+            descriptionError.textContent = 'Description cannot exceed 500 characters.';
+            descriptionInput.classList.add('border-red-600');
+            descriptionInput.classList.remove('border-green-600');
+            return false;
+        } else {
+            descriptionError.textContent = '';
+            descriptionInput.classList.remove('border-red-600');
+            descriptionInput.classList.add('border-green-600');
+            return true;
+        }
+    }
+
+    // Event listeners
+    profilePictureInput.addEventListener('change', function () {
+        if (this.files.length > 0) {
+            cancelPhotoBtn.style.display = 'block';
+        } else {
+            cancelPhotoBtn.style.display = 'none';
+        }
+    });
+
+    cancelPhotoBtn.addEventListener('click', function () {
+        profilePictureInput.value = '';
+        this.style.display = 'none';
+    });
+
+    ageInput.addEventListener('input', validateAge);
+    priceInput.addEventListener('input', validatePrice);
+    documentsInput.addEventListener('change', validateDocuments);
+    descriptionInput.addEventListener('input', validateDescription);
+    addEducationLevelBtn.addEventListener('click', () => addEducationLevelField());
+
+    getLocationBtn.addEventListener('click', () => {
+        getLocationBtn.disabled = true;
+        denyLocationBtn.disabled = false;
+        map.locate({ setView: false, maxZoom: 16 });
+        map.on('locationfound', (e) => {
+            const lat = e.latlng.lat;
+            const lng = e.latlng.lng;
+            console.log(`Latitude: ${lat.toFixed(6)}, Longitude: ${lng.toFixed(6)}`);
+            latitudeInput.value = lat.toFixed(6);
+            longitudeInput.value = lng.toFixed(6);
+            locationStatus.innerHTML = '<span class="text-green-600">✅ Location Access Granted</span>';
+            map.off('locationfound');
+            map.off('locationerror');
+        });
+        map.on('locationerror', (e) => {
+            console.log('Location error:', e.message);
+            locationStatus.innerHTML = '<span class="text-red-600">❌ Unable to retrieve location.</span>';
+            latitudeInput.value = '';
+            longitudeInput.value = '';
+            map.off('locationfound');
+            map.off('locationerror');
+        });
+    });
+
+    denyLocationBtn.addEventListener('click', () => {
+        denyLocationBtn.disabled = true;
+        getLocationBtn.disabled = false;
+        latitudeInput.value = '';
+        longitudeInput.value = '';
+        locationStatus.innerHTML = '<span class="text-yellow-600">⚠️ You chose not to share your location.</span>';
+        console.clear();
+        console.log('Location access denied. Coordinates cleared.');
+        map.off('locationfound');
+        map.off('locationerror');
+    });
+
+    cancelEditBtn.addEventListener('click', () => {
+        window.location.href = 'tutor_profile.html';
+    });
+
+    // Initial setup
+    document.addEventListener('DOMContentLoaded', function () {
+        populateEditForm();
+    });
+    const profileData = {
+  latitude: "{{ request.user.profile.latitude|default:'' }}",
+  longitude: "{{ request.user.profile.longitude|default:'' }}",
+        };
+function populateEditForm() {
+  // Other pre-fill logic...
+
+  // Location fields
+  latitudeInput.value = profileData.latitude || '';
+  longitudeInput.value = profileData.longitude || '';
+
+  if (profileData.latitude && profileData.longitude) {
+      locationStatus.innerHTML = '<span class="text-green-600">✅ Location Access Previously Granted</span>';
+      getLocationBtn.disabled = true;
+      denyLocationBtn.disabled = false;
+  } else {
+      locationStatus.innerHTML = '<span class="text-yellow-600">⚠️ You chose not to share your location.</span>';
+      getLocationBtn.disabled = false;
+      denyLocationBtn.disabled = true;
+  }
+}
+</script>
+</body>
+
+</html>
+{% endblock content %}

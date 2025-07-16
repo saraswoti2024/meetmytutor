@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+{% block content %}
+  {% load static %}
+    <main class="min-h-screen bg-gray-100 py-10 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden md:flex">
+          <div class="md:w-1/3 p-8 bg-blue-700 text-white flex flex-col items-center justify-center space-y-6">
+            {% if request.user.profile.profile_img %}
+            <img id="profileAvatarDisplay" src="{{request.user.profile.profile_img.url}}" alt="Tutor Avatar"
+            class="w-48 h-48 rounded-full object-cover border-4 border-blue-300 shadow-xl">
+              {% else %}
+            <img id="profileAvatarDisplay" src="{% static 'images/default.jpg' %}" alt="Tutor Avatar"
+              class="w-48 h-48 rounded-full object-cover border-4 border-blue-300 shadow-xl">
+              {% endif %}
+            <h4 id="profileNameDisplay" class="text-3xl font-extrabold mt-4">{{request.user.first_name}}  {{request.user.last_name}}</h4>
+            <div class="flex items-center text-xl space-x-2">
+              <span id="ratingDisplay" class="text-yellow-400">★★★★☆</span>
+              <span id="ratingValue" class="text-blue-200">(4.5)</span>
+            </div>
+            <p class="text-blue-200 text-lg">{{request.user.usertype}}</p>
+                
+            <a href="{% url 'edit_tutor_profile' %}"><button class="w-full max-w-xs bg-yellow-400 hover:bg-yellow-500 text-blue-900 font-bold py-3 px-6 rounded-lg flex items-center justify-center gap-2 transition duration-300 ease-in-out transform hover:scale-105 shadow-md"
+              id="editProfileBtn">
+              <i class="bi bi-pencil-square text-xl"></i>Edit Profile
+            </button></a>
+            <a href="tutor_changePassword.html"
+              class="w-full max-w-xs border border-blue-300 hover:border-blue-400 text-blue-100 hover:text-white font-semibold py-3 px-6 rounded-lg flex items-center justify-center gap-2 transition duration-300 ease-in-out transform hover:scale-105 shadow-md">
+              <i class="bi bi-key text-xl"></i>Change Password
+            </a>
+          </div>
+      
+          <div class="md:w-2/3 p-8 space-y-10">
+            <div id="profileDisplaySection" class="space-y-6">
+              <h5 class="text-3xl font-bold text-gray-800 border-b-2 pb-3 mb-6 border-blue-500">Personal Information</h5>
+              <ul class="space-y-4">
+                
+                <li class="flex items-center text-lg text-gray-700"><i class="bi bi-person text-blue-500 mr-3 text-xl"></i><strong class="font-semibold text-gray-800">Full Name:</strong> <span
+                    id="fullNameDisplay" class="ml-2">{{request.user.first_name}} {{request.user.last_name}}</span></li>
+
+                <li class="flex items-center text-lg text-gray-700"><i class="bi bi-envelope text-blue-500 mr-3 text-xl"></i><strong class="font-semibold text-gray-800">Email:</strong> <span
+                    id="emailDisplay" class="ml-2">{{request.user.email}}</span></li>
+
+                <li class="flex items-center text-lg text-gray-700"><i class="bi bi-person-bounding-box text-blue-500 mr-3 text-xl"></i><strong class="font-semibold text-gray-800">Age:</strong>
+                  <span id="ageDisplay" class="ml-2">{{request.user.profile.age}}</span>
+                </li>
+
+                <li class="flex items-center text-lg text-gray-700"><i class="bi bi-gender-ambiguous text-blue-500 mr-3 text-xl"></i><strong class="font-semibold text-gray-800">Gender:</strong>
+                  <span id="genderDisplay" class="ml-2">{{request.user.profile.gender}}</span>
+                </li>
+
+                <li class="flex items-center text-lg text-gray-700"><i class="bi bi-award text-blue-500 mr-3 text-xl"></i><strong class="font-semibold text-gray-800">Qualification:</strong> <span
+                    id="qualificationDisplay" class="ml-2">{{request.user.profile.qualification}}</span></li>
+
+                <li class="flex items-center text-lg text-gray-700"><i class="bi bi-currency-exchange text-blue-500 mr-3 text-xl"></i><strong class="font-semibold text-gray-800">Session
+                    Price:</strong> <span id="priceDisplay" class="ml-2">Rs. {{request.user.profile.session_price}}hour</span></li>
+
+                <li class="flex items-start text-lg text-gray-700"><i class="bi bi-book text-blue-500 mr-3 text-xl mt-1"></i><strong class="font-semibold text-gray-800">Education Levels &
+                    Subjects:</strong> <span id="educationDisplay" class="ml-2">High School (Math, Physics), Bachelor's (Calculus)</span></li>
+
+                    <li class="flex items-center text-lg text-gray-700">
+                      <i class="bi bi-file-earmark-text text-blue-500 mr-3 text-xl"></i>
+                      <strong class="font-semibold text-gray-800">CV/Documents:</strong> 
+                      {% if request.user.profile.cv %}
+                        <a href="{{ request.user.profile.cv.url }}" target="_blank" class="ml-2 text-blue-600 hover:underline cursor-pointer">
+                          View / Download
+                        </a>
+                      {% else %}
+                        <span class="ml-2 text-gray-500">No CV uploaded</span>
+                      {% endif %}
+                    </li>
+                    
+
+                <li class="flex items-start text-lg text-gray-700"><i class="bi bi-info-circle text-blue-500 mr-3 text-xl mt-1"></i><strong class="font-semibold text-gray-800">Description:</strong>
+                  <span id="descriptionDisplay" class="ml-2">{{request.user.profile.desc}}</span>
+                </li>
+              </ul>
+      
+              <h5 class="text-3xl font-bold text-gray-800 border-b-2 pb-3 mb-6 border-blue-500 mt-8">Location Details</h5>
+              <ul class="space-y-4">
+                <li class="flex items-center text-lg text-gray-700"><i class="bi bi-building text-blue-500 mr-3 text-xl"></i><strong class="font-semibold text-gray-800">District:</strong> <span
+                    id="districtDisplay" class="ml-2">{{request.user.profile.district}}</span></li>
+                <li class="flex items-center text-lg text-gray-700"><i class="bi bi-map text-blue-500 mr-3 text-xl"></i><strong class="font-semibold text-gray-800">Address:</strong> <span
+                    id="addressDisplay" class="ml-2">{{request.user.profile.address}}</span></li>
+
+                    <li class="flex items-center text-lg text-gray-700">
+                      <i class="bi bi-geo-alt text-blue-500 mr-3 text-xl"></i>
+                      <strong class="font-semibold text-gray-800">Location Access:</strong>
+                      <span id="locationStatusDisplay" class="ml-2"></span>
+                    </li>
+
+              </ul>
+            </div>
+            
+          </div>
+        </div>
+      </main>
+      <script>
+        document.addEventListener('DOMContentLoaded', () => {
+          const statusSpan = document.getElementById('locationStatusDisplay');
+      
+          if (!navigator.geolocation) {
+            statusSpan.textContent = 'Geolocation not supported by your browser';
+            statusSpan.classList.add('text-red-500');
+            return;
+          }
+      
+          if (navigator.permissions) {
+            navigator.permissions.query({ name: 'geolocation' }).then(function(permissionStatus) {
+              if (permissionStatus.state === 'granted') {
+                statusSpan.textContent = 'Allowed';
+                statusSpan.classList.add('text-green-600');
+              } else if (permissionStatus.state === 'prompt') {
+                statusSpan.textContent = 'Prompt (Ask user)';
+                statusSpan.classList.add('text-yellow-500');
+              } else if (permissionStatus.state === 'denied') {
+                statusSpan.textContent = 'Denied';
+                statusSpan.classList.add('text-red-600');
+              }
+            });
+          } else {
+            navigator.geolocation.getCurrentPosition(
+              () => {
+                statusSpan.textContent = 'Allowed';
+                statusSpan.classList.add('text-green-600');
+              },
+              () => {
+                statusSpan.textContent = 'Denied';
+                statusSpan.classList.add('text-red-600');
+              }
+            );
+          }
+        });
+      </script>
+ 
+    {% endblock content %}

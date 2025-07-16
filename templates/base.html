@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -32,6 +33,9 @@
 {% block content %}
   
 {% endblock content %}
+
+<div><h1>chatbot</h1></div>
+
 {% include "footer.html" %}
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 {% if messages %}

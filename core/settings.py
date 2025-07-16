@@ -42,7 +42,10 @@ INSTALLED_APPS = [
 EXTERNAL_APPS = [
     'accounts',
     'home',
-    'contactapp'
+    'contactapp',
+    'profileapp',
+    'categories',
+    'chatbot',
 ]
 INSTALLED_APPS.extend(EXTERNAL_APPS)
 
