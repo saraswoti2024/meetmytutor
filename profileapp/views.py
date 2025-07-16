@@ -25,21 +25,29 @@ def edit_tutor_profile(request):
                 if data is None:
                     data = Profile_Tutor(user=request.user)
                 data.age = request.POST.get('age')
-                data.profile_img = request.FILES.get('profile_img')
                 data.qualification = request.POST.get('qualification')
                 data.session_price = request.POST.get('session_price')
                 data.district = request.POST.get('district')
                 data.address = request.POST.get('address')
                 data.gender = request.POST.get('gender')
-                if data.longitude:
-                     data.longitude = request.POST.get('longitude')
-                if data.latitude:
-                     data.latitude = request.POST.get('latitude')
+                data.longitude = request.POST.get('longitude') or None
+                data.latitude = request.POST.get('latitude') or None
+                if data.longitude is None: 
+                    data.location_access = False
+                else:
+                    data.location_access = True
                 data.cv = request.FILES.get('cv')or data.cv
                 if not data.cv:
                     messages.error(request, 'CV is required.')
                     return redirect('edit_tutor_profile')
                 data.desc = request.POST.get('description')
+                if request.POST.get('remove_profile_img') == 'on':
+                     if data.profile_img:
+                        data.profile_img.delete(save=False)  # delete file from storage
+                data.profile_img = None
+
+                if request.FILES.get('profile_img'):
+                    data.profile_img = request.FILES['profile_img']
                 education_levels = []
                 i = 0
                 while True:

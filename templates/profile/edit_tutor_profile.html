@@ -55,21 +55,52 @@
                 <form id="profileEditForm" novalidate enctype="multipart/form-data" method="post">
                     {% csrf_token %}
                     <h5 class="text-xl font-semibold mb-6">Edit Profile Details</h5>
+                  
                     <div class="mb-6">
-                        <label for="profilePictureInput" class="block text-base font-medium text-gray-700">Profile Picture (Optional)</label>
-                        <div class="relative flex items-center space-x-4">
-                            <input type="file" name="profile_img" 
-                                class="mt-2 block w-full border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-base py-3 px-4"
-                                id="profilePictureInput" accept="image/*">
-                            {% if request.user.profile.profile_img %}
-                              <img src="{{ request.user.profile.profile_img.url }}" alt="Current Profile Picture" class="w-20 h-20 object-cover rounded-md border border-gray-300">
-                            {% endif %}
-                            <button type="button" class="cancel-photo-btn" id="cancelPhotoBtn" title="Clear photo selection">
-                                <i class="bi bi-x-circle-fill"></i>
-                            </button>
+                        <label for="profilePictureInput" class="block text-base font-medium text-gray-700">
+                          Profile Picture (Optional)
+                        </label>
+                        <div class="relative flex items-center space-x-4 mt-2">
+                          <!-- File Input -->
+                          <input
+                            type="file"
+                            name="profile_img"
+                            id="profilePictureInput"
+                            accept="image/*"
+                            class="block w-full border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-base py-3 px-4"
+                          >
+                    
+                          <!-- Current Image Preview -->
+                          {% if request.user.profile.profile_img %}
+                          <img
+                            src="{{ request.user.profile.profile_img.url }}"
+                            alt="Current Profile Picture"
+                            id="currentProfileImg"
+                            class="w-20 h-20 object-cover rounded-md border border-gray-300"
+                          >
+                          {% endif %}
+                    
+                          <!-- Clear selection button -->
+                          <button
+                            type="button"
+                            id="cancelPhotoBtn"
+                            title="Clear photo selection"
+                            class="text-gray-500 hover:text-red-600 transition"
+                          >
+                            <i class="bi bi-x-circle-fill text-2xl"></i>
+                          </button>
                         </div>
+                    
+                        <!-- Checkbox to remove existing photo -->
+                        <label class="inline-flex items-center space-x-2 mt-2 cursor-pointer hidden">
+                          <input type="checkbox" name="remove_profile_img" id="removeProfileImg" class="form-checkbox text-red-600">
+                          <span class="text-gray-700">Remove current profile picture</span>
+                        </label>
+                    
                         <p class="mt-2 text-sm text-gray-500">Accepted formats: JPG, PNG. Max size: 2MB.</p>
-                    </div>
+                      </div>
+                    
+                      
                     
                     <div class="mb-6">
                         <label for="ageInput" class="block text-base font-medium text-gray-700">Age*</label>
@@ -142,7 +173,6 @@
                             id="add-education-level">
                             <i class="fas fa-plus mr-2"></i> Add Another Education Level
                         </button>
-                        <div class="text-red-600 text-sm mt-2" id="educationError"></div>
                     </div>
                     
                     <script>
@@ -266,23 +296,31 @@
                     </script>
                     
                      <!-- education level ends -->
-     
-                    <div class="mb-6">
+                     <div class="mb-6">
                         <label for="documentsInput" class="block text-base font-medium text-gray-700">CV & Certificates*</label>
-                    
+                      
                         {% if request.user.profile.cv %}
-                            <p class="mb-2 text-blue-600">
-                                Current file: <a href="{{ request.user.profile.cv.url }}" target="_blank" class="underline">View CV</a>
-                            </p>
+                          <p class="mb-2 text-blue-600">
+                            Current file: <a href="{{ request.user.profile.cv.url }}" target="_blank" class="underline">View CV</a>
+                          </p>
                         {% endif %}
-                    
-                        <input type="file" name="cv"
-                               class="mt-2 block w-full border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-base py-3 px-4"
-                               id="documentsInput" multiple accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
-                    
-                        <p class="mt-2 text-sm text-gray-500">Upload your CV or relevant certificates (e.g., academic transcripts). Accepted formats: PDF, DOCX, Images.</p>
+                      
+                        <input
+                          type="file"
+                          name="cv"
+                          class="mt-2 block w-full border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-base py-3 px-4"
+                          id="documentsInput"
+                          accept=".pdf,.doc,.docx"
+                        >
+                      
+                        <p class="mt-2 text-sm text-gray-500">
+                          Upload your CV or certificates. Accepted formats: PDF, DOC, DOCX.
+                        </p>
                         <div class="text-red-600 text-sm mt-2" id="documentsError"></div>
-                    </div>
+                      </div>
+                       
+            
+
                     <div class="mb-6">
                         <label for="districtInput" class="block text-base font-medium text-gray-700">Location (District
                             of Nepal)*</label>
@@ -306,7 +344,7 @@
                             id="addressInput" placeholder="e.g., Baneshwor, Kathmandu-10">
                     </div>
                     <div class="mb-6">
-                        <h4 class="text-lg font-semibold mb-4">Tutor Location Access</h4>
+                        <h4 class="text-lg font-semibold mb-4">Turn on Location Access(for nearby search)</h4>
                         <div class="flex items-center mb-4 space-x-3">
                             <button type="button" id="getLocationBtn"
                                 class="inline-flex items-center px-5 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition duration-300 text-base">Give
@@ -337,9 +375,8 @@
                                maxlength="500"
                             placeholder="Describe yourself (e.g., teaching style, experience, expertise). Max 500 characters.">{% if request.user.profile.desc %}{{ request.user.profile.desc }}{% endif %}
                         </textarea>
-                        <p class="mt-2 text-sm text-gray-500">Provide a brief description of yourself (max 500
+                        <p class="mt-2 text-sm text-gray-500">Provide a brief description of yourself (max 200
                             characters).</p>
-                        <div class="text-red-600 text-sm mt-2" id="descriptionError"></div>
                     </div>
                     <div class="mt-6 flex space-x-3">
                         <button type="submit"
@@ -358,113 +395,20 @@
 <script>
 
     // DOM elements
-    const profileEditForm = document.getElementById('profileEditForm');
-    const profilePictureInput = document.getElementById('profilePictureInput');
-    const cancelPhotoBtn = document.getElementById('cancelPhotoBtn');
-    const ageInput = document.getElementById('ageInput');
-    const genderInput = document.getElementById('genderInput');
-    const qualificationInput = document.getElementById('qualificationInput');
-    const priceInput = document.getElementById('priceInput');
     const educationFieldsContainer = document.getElementById('education-fields-container');
     const addEducationLevelBtn = document.getElementById('add-education-level');
-    const documentsInput = document.getElementById('documentsInput');
-    const districtInput = document.getElementById('districtInput');
-    const addressInput = document.getElementById('addressInput');
     const getLocationBtn = document.getElementById('getLocationBtn');
     const denyLocationBtn = document.getElementById('denyLocationBtn');
     const locationStatus = document.getElementById('locationStatus');
     const latitudeInput = document.getElementById('latitudeInput');
     const longitudeInput = document.getElementById('longitudeInput');
-    const ageError = document.getElementById('ageError');
-    const genderError = document.getElementById('genderError');
-    const qualificationError = document.getElementById('qualificationError');
-    const priceError = document.getElementById('priceError');
     const educationError = document.getElementById('educationError');
-    const documentsError = document.getElementById('documentsError');
-    const districtError = document.getElementById('districtError');
-    const descriptionInput = document.getElementById('descriptionInput');
-    const descriptionError = document.getElementById('descriptionError');
     const cancelEditBtn = document.getElementById('cancelEditBtn');
 
     // Initialize Leaflet map (invisible)
     const map = L.map('map').setView([27.7, 85.3], 13);
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
 
-    // Validation functions
-
-    function validateAge() {
-        const age = parseInt(ageInput.value);
-        if (!ageInput.value) {
-            ageError.textContent = "Age is required.";
-            ageInput.classList.add("border-red-600");
-            ageInput.classList.remove("border-green-600");
-            return false;
-        } else if (age < 18) {
-            ageError.textContent = "Age must be at least 18.";
-            ageInput.classList.add("border-red-600");
-            ageInput.classList.remove("border-green-600");
-            return false;
-        } else if (age > 50) {
-            ageError.textContent = "Age must not exceed 50.";
-            ageInput.classList.add("border-red-600");
-            ageInput.classList.remove("border-green-600");
-            return false;
-        } else {
-            ageError.textContent = "";
-            ageInput.classList.remove("border-red-600");
-            ageInput.classList.add("border-green-600");
-            return true;
-        }
-    }
-
-    function validatePrice() {
-        const priceValue = priceInput.value;
-        const price = parseFloat(priceValue);
-        const minPrice = 100;
-        const maxPrice = 5000;
-        if (priceValue === "") {
-            priceError.textContent = "Price is required.";
-            priceInput.classList.add("border-red-600");
-            priceInput.classList.remove("border-green-600");
-            return false;
-        } else if (!Number.isInteger(price)) {
-            priceError.textContent = "Price must be an integer (no decimal values).";
-            priceInput.classList.add("border-red-600");
-            priceInput.classList.remove("border-green-600");
-            return false;
-        } else if (price < minPrice) {
-            priceError.textContent = `Price must be at least Rs. ${minPrice}.`;
-            priceInput.classList.add("border-red-600");
-            priceInput.classList.remove("border-green-600");
-            return false;
-        } else if (price > maxPrice) {
-            priceError.textContent = `Price must not exceed Rs. ${maxPrice}.`;
-            priceInput.classList.add("border-red-600");
-            priceInput.classList.remove("border-green-600");
-            return false;
-        } else {
-            priceError.textContent = "";
-            priceInput.classList.remove("border-red-600");
-            priceInput.classList.add("border-green-600");
-            return true;
-        }
-    }
-
-    function validateDocuments() {
-        if (documentsInput.files.length === 0) {
-            documentsError.textContent = 'Please upload your CV and certificates.';
-            documentsError.style.display = 'block';
-            documentsInput.classList.add("border-red-600");
-            documentsInput.classList.remove("border-green-600");
-            return false;
-        } else {
-            documentsError.textContent = '';
-            documentsError.style.display = 'none';
-            documentsInput.classList.remove("border-red-600");
-            documentsInput.classList.add("border-green-600");
-            return true;
-        }
-    }
 
     function validateEducationLevelsAndSubjects() {
         const educationLevelContainers = document.querySelectorAll('#education-fields-container .form-row');
@@ -499,22 +443,27 @@
         return isValid;
     }
 
-    function validateDescription() {
-        const description = descriptionInput.value.trim();
-        if (description.length > 500) {
-            descriptionError.textContent = 'Description cannot exceed 500 characters.';
-            descriptionInput.classList.add('border-red-600');
-            descriptionInput.classList.remove('border-green-600');
-            return false;
-        } else {
-            descriptionError.textContent = '';
-            descriptionInput.classList.remove('border-red-600');
-            descriptionInput.classList.add('border-green-600');
-            return true;
-        }
+    //image
+    document.getElementById('cancelPhotoBtn').addEventListener('click', () => {
+    const fileInput = document.getElementById('profilePictureInput');
+    const removeCheckbox = document.getElementById('removeProfileImg');
+    const imgPreview = document.getElementById('currentProfileImg');
+
+    // Clear file input
+    fileInput.value = '';
+
+    // Check remove checkbox to tell backend to delete image
+    if (removeCheckbox) {
+      removeCheckbox.checked = true;
     }
 
-    // Event listeners
+    // Hide image preview
+    if (imgPreview) {
+      imgPreview.style.display = 'none';
+    }
+  });
+
+
     profilePictureInput.addEventListener('change', function () {
         if (this.files.length > 0) {
             cancelPhotoBtn.style.display = 'block';
@@ -528,11 +477,6 @@
         this.style.display = 'none';
     });
 
-    ageInput.addEventListener('input', validateAge);
-    priceInput.addEventListener('input', validatePrice);
-    documentsInput.addEventListener('change', validateDocuments);
-    descriptionInput.addEventListener('input', validateDescription);
-    addEducationLevelBtn.addEventListener('click', () => addEducationLevelField());
 
     getLocationBtn.addEventListener('click', () => {
         getLocationBtn.disabled = true;
@@ -568,10 +512,6 @@
         console.log('Location access denied. Coordinates cleared.');
         map.off('locationfound');
         map.off('locationerror');
-    });
-
-    cancelEditBtn.addEventListener('click', () => {
-        window.location.href = 'tutor_profile.html';
     });
 
     // Initial setup
