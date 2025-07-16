@@ -60,11 +60,11 @@
 
         <li class="relative group">
           <a href="#" class="flex items-center space-x-2 cursor-pointer">
-            {% if request.user.profile.image %}
-              <img src="#" alt="Profile"
+            {% if request.user.profile.profile_img %}
+              <img src="{{ request.user.profile.profile_img.url}}" alt="Profile"
                 class="rounded-full w-9 h-9 object-cover ring-2 ring-blue-400 ring-offset-2 transition duration-300" />
             {% else %}
-              <img src="#" alt="Default Profile"
+              <img src="{% static 'images/default.jpg' %}" alt="Default Profile"
                 class="rounded-full w-9 h-9 object-cover ring-2 ring-blue-400 ring-offset-2 transition duration-300" />
             {% endif %}
             <svg class="w-4 h-4 text-gray-600 group-hover:text-blue-500 transition-transform duration-200 transform group-hover:rotate-180" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.583l3.71-4.353a.75.75 0 111.14.976l-4.25 5a.75.75 0 01-1.14 0l-4.25-5a.75.75 0 01.02-1.06z" clip-rule="evenodd" /></svg>

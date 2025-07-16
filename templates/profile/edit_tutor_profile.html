@@ -1,53 +1,68 @@
-{% extends "base.html" %}
-{% block content %}
 {% load static %}
-<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-<style>
-    .cancel-photo-btn {
-        position: absolute;
-        right: 12px;
-        font-size: 1.75rem;
-        color: #dc3545;
-        cursor: pointer;
-        z-index: 10;
-        display: none;
-    }
+<!DOCTYPE html>
+<html lang="en">
 
-    .cancel-photo-btn:hover {
-        color: #c82333;
-    }
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MeetMyTutor</title>
 
-    .form-row {
-        position: relative;
-        border: 1px solid #ddd;
-        padding: 20px;
-        margin-bottom: 20px;
-        border-radius: 6px;
-    }
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <!-- toastify -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <!-- font awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
-    .remove-row {
-        position: absolute;
-        top: 12px;
-        right: 12px;
-        cursor: pointer;
-        color: #dc3545;
-        font-size: 1.5rem;
-    }
+    <style>
+        .cancel-photo-btn {
+            position: absolute;
+            right: 12px;
+            font-size: 1.75rem;
+            color: #dc3545;
+            cursor: pointer;
+            z-index: 10;
+            display: none;
+        }
+    
+        .cancel-photo-btn:hover {
+            color: #c82333;
+        }
+    
+        .form-row {
+            position: relative;
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 6px;
+        }
+    
+        .remove-row {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            cursor: pointer;
+            color: #dc3545;
+            font-size: 1.5rem;
+        }
+    
+        .subject-checkboxes {
+            margin-top: 12px;
+            border-top: 1px dashed #eee;
+            padding-top: 12px;
+        }
+    
+        #map {
+            height: 0;
+            width: 0;
+            visibility: hidden;
+            position: absolute;
+        }
+    </style>
+</head>
 
-    .subject-checkboxes {
-        margin-top: 12px;
-        border-top: 1px dashed #eee;
-        padding-top: 12px;
-    }
-
-    #map {
-        height: 0;
-        width: 0;
-        visibility: hidden;
-        position: absolute;
-    }
-</style>
+<body>
 <main class="container mx-auto px-6">
     <div class="bg-white rounded-xl shadow-xl p-8 mt-10 mb-10">
         <div class="flex justify-center">
@@ -151,7 +166,6 @@
                             <option value="Diploma / Professional Certification" {% if
                                 request.user.profile.qualification == "Diploma / Professional Certification" %}selected{% endif %}>Diploma / Professional Certification</option>
                         </select>
-                        <div class="text-red-600 text-sm mt-2" id="qualificationError"></div>
                     </div>
                     <div class="mb-6">
                         <label for="priceInput" class="block text-base font-medium text-gray-700">Session Price (per
@@ -161,7 +175,7 @@
                         name="session_price"
                             class="mt-2 block w-full border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-base py-3 px-4"
                             id="priceInput" required min="100" max="5000" step="1">
-                        <div class="text-red-600 text-sm mt-2" id="priceError"></div>
+                            
                     </div>
 
                     <!-- education level -->
@@ -174,126 +188,6 @@
                             <i class="fas fa-plus mr-2"></i> Add Another Education Level
                         </button>
                     </div>
-                    
-                    <script>
-                        const subjectsByLevel = {
-                            "basic_1_5": ["Nepali", "English", "Mathematics", "Science", "Social Studies", "Creative Arts", "Local Subject"],
-                            "basic_6_8": ["Nepali", "English", "Mathematics", "Science", "Social Studies", "Health, Population, and Environment Education (HPE)", "Optional First Subject"],
-                            "secondary_9_10": ["Nepali", "English", "Mathematics", "Science", "Social Studies", "Health, Population & Environment Education (HPE)", "Occupation, Business and Technology Education (OBTE)", "Optional Mathematics", "Computer Science", "Accountancy", "Economics", "Business Studies"],
-                            "secondary_11_12": ["Mathematics", "Social Studies and Life Skills Education", "Nepali", "English", "Physics", "Chemistry", "Biology", "Computer Science", "Applied Mathematics", "Environment Science", "Accountancy", "Economics", "Business Studies", "Marketing", "Finance", "Hotel Management", "Business Mathematics", "Sociology", "Psychology", "History", "Geography", "Political Science", "Journalism / Mass Communication", "Philosophy", "Culture", "Fine Arts", "Dance", "Music"]
-                        };
-                    
-                        const educationLevels = [
-                            { value: "basic_1_5", text: "Basic Education (Grade 1-5)" },
-                            { value: "basic_6_8", text: "Basic Education (Grade 6-8)" },
-                            { value: "secondary_9_10", text: "Secondary Education (Grade 9-10)" },
-                            { value: "secondary_11_12", text: "Secondary Education (Grade 11-12)" }
-                        ];
-                    
-                        let selectedGradeLevels = new Set();
-                        let fieldCounter = 0;
-                    
-                        function updateDropdownOptions() {
-                            const allSelects = document.querySelectorAll('.education-level-select');
-                            selectedGradeLevels.clear();
-                            allSelects.forEach(select => {
-                                if (select.value) {
-                                    selectedGradeLevels.add(select.value);
-                                }
-                            });
-                            allSelects.forEach(select => {
-                                const currentValue = select.value;
-                                select.innerHTML = '<option value="" disabled>Select Grade Level</option>';
-                                educationLevels.forEach(level => {
-                                    const option = document.createElement('option');
-                                    option.value = level.value;
-                                    option.textContent = level.text;
-                                    if (selectedGradeLevels.has(level.value) && level.value !== currentValue) {
-                                        option.disabled = true;
-                                    }
-                                    select.appendChild(option);
-                                });
-                                select.value = currentValue;
-                            });
-                        }
-                    
-                        function addEducationLevelField(level = '', subjects = []) {
-                            const educationFieldsContainer = document.getElementById('education-fields-container');
-                            const formRow = document.createElement('div');
-                            formRow.classList.add('form-row');
-                            formRow.dataset.id = fieldCounter++;
-                            formRow.innerHTML = `
-                                <button type="button" class="remove-row" aria-label="Close"><i class="bi bi-x-circle-fill"></i></button>
-                                <div class="mb-6">
-                                    <label for="educationLevel_${formRow.dataset.id}" class="block text-base font-medium text-gray-700">Education Level*</label>
-                                    <select class="mt-2 block w-full border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-base py-3 px-4 education-level-select" id="educationLevel_${formRow.dataset.id}" name="educationLevels[${formRow.dataset.id}][level]" required>
-                                        <option value="" disabled>Select Grade Level</option>
-                                    </select>
-                                </div>
-                                <div class="subject-checkboxes" id="subjects_${formRow.dataset.id}"></div>
-                            `;
-                            educationFieldsContainer.appendChild(formRow);
-                    
-                            updateDropdownOptions();
-                    
-                            const selectElement = formRow.querySelector('.education-level-select');
-                            selectElement.value = level;
-                    
-                            renderSubjects(formRow.querySelector('.subject-checkboxes'), level, formRow.dataset.id, subjects);
-                    
-                            selectElement.addEventListener('change', function () {
-                                updateDropdownOptions();
-                                renderSubjects(formRow.querySelector('.subject-checkboxes'), this.value, formRow.dataset.id);
-                            });
-                    
-                            formRow.querySelector('.remove-row').addEventListener('click', function () {
-                                formRow.remove();
-                                updateDropdownOptions();
-                            });
-                        }
-                    
-                        function renderSubjects(container, level, fieldId, selectedSubjects = []) {
-                            container.innerHTML = '';
-                            if (subjectsByLevel[level]) {
-                                const heading = document.createElement('h6');
-                                heading.textContent = 'Subjects:';
-                                heading.className = 'text-base font-medium text-gray-700';
-                                container.appendChild(heading);
-                    
-                                subjectsByLevel[level].forEach(subject => {
-                                    const div = document.createElement('div');
-                                    div.className = 'inline-flex items-center mr-6 mb-2';
-                                    const inputId = `subject_${fieldId}_${subject.replace(/\s/g, '_').replace(/[^a-zA-Z0-9_]/g, '')}`;
-                                    div.innerHTML = `
-                                        <input class="mr-2 h-5 w-5 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" type="checkbox" value="${subject}" id="${inputId}" name="educationLevels[${fieldId}][subjects][]" ${selectedSubjects.includes(subject) ? 'checked' : ''}>
-                                        <label class="text-base text-gray-700" for="${inputId}">${subject}</label>
-                                    `;
-                                    container.appendChild(div);
-                                });
-                            }
-                        }
-                    
-                        // --- THIS IS THE MAGIC: get education data from Django context ---
-                        const preloadedEducationData = {{ education_data_json|safe }};
-                    
-                        // Populate fields on page load
-                        document.addEventListener('DOMContentLoaded', () => {
-                            const educationFieldsContainer = document.getElementById('education-fields-container');
-                            educationFieldsContainer.innerHTML = ''; // clear any existing fields
-                            if (preloadedEducationData.length > 0) {
-                                preloadedEducationData.forEach(item => {
-                                    addEducationLevelField(item.level, item.subjects);
-                                });
-                            } else {
-                                addEducationLevelField(); // no data, show one empty field
-                            }
-                    
-                            // Add button listener for adding new empty education level field
-                            document.getElementById('add-education-level').addEventListener('click', () => {
-                                addEducationLevelField();
-                            });
-                        });
-                    </script>
                     
                      <!-- education level ends -->
                      <div class="mb-6">
@@ -391,57 +285,140 @@
         </div>
     </div>
 </main>
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-<script>
 
-    // DOM elements
-    const educationFieldsContainer = document.getElementById('education-fields-container');
-    const addEducationLevelBtn = document.getElementById('add-education-level');
+<script>
+    const subjectsByLevel = {
+        "basic_1_5": ["Nepali", "English", "Mathematics", "Science", "Social Studies", "Creative Arts", "Local Subject"],
+        "basic_6_8": ["Nepali", "English", "Mathematics", "Science", "Social Studies", "Health, Population, and Environment Education (HPE)", "Optional First Subject"],
+        "secondary_9_10": ["Nepali", "English", "Mathematics", "Science", "Social Studies", "Health, Population & Environment Education (HPE)", "Occupation, Business and Technology Education (OBTE)", "Optional Mathematics", "Computer Science", "Accountancy", "Economics", "Business Studies"],
+        "secondary_11_12": ["Mathematics", "Social Studies and Life Skills Education", "Nepali", "English", "Physics", "Chemistry", "Biology", "Computer Science", "Applied Mathematics", "Environment Science", "Accountancy", "Economics", "Business Studies", "Marketing", "Finance", "Hotel Management", "Business Mathematics", "Sociology", "Psychology", "History", "Geography", "Political Science", "Journalism / Mass Communication", "Philosophy", "Culture", "Fine Arts", "Dance", "Music"]
+    };
+
+    const educationLevels = [
+        { value: "basic_1_5", text: "Basic Education (Grade 1-5)" },
+        { value: "basic_6_8", text: "Basic Education (Grade 6-8)" },
+        { value: "secondary_9_10", text: "Secondary Education (Grade 9-10)" },
+        { value: "secondary_11_12", text: "Secondary Education (Grade 11-12)" }
+    ];
+
+    let selectedGradeLevels = new Set();
+    let fieldCounter = 0;
+
+    function updateDropdownOptions() {
+        const allSelects = document.querySelectorAll('.education-level-select');
+        selectedGradeLevels.clear();
+        allSelects.forEach(select => {
+            if (select.value) {
+                selectedGradeLevels.add(select.value);
+            }
+        });
+        allSelects.forEach(select => {
+            const currentValue = select.value;
+            select.innerHTML = '<option value="" disabled>Select Grade Level</option>';
+            educationLevels.forEach(level => {
+                const option = document.createElement('option');
+                option.value = level.value;
+                option.textContent = level.text;
+                if (selectedGradeLevels.has(level.value) && level.value !== currentValue) {
+                    option.disabled = true;
+                }
+                select.appendChild(option);
+            });
+            select.value = currentValue;
+        });
+    }
+
+    function addEducationLevelField(level = '', subjects = []) {
+        const educationFieldsContainer = document.getElementById('education-fields-container');
+        const formRow = document.createElement('div');
+        formRow.classList.add('form-row');
+        formRow.dataset.id = fieldCounter++;
+        formRow.innerHTML = `
+            <button type="button" class="remove-row" aria-label="Close"><i class="bi bi-x-circle-fill"></i></button>
+            <div class="mb-6">
+                <label for="educationLevel_${formRow.dataset.id}" class="block text-base font-medium text-gray-700">Education Level*</label>
+                <select class="mt-2 block w-full border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-base py-3 px-4 education-level-select" id="educationLevel_${formRow.dataset.id}" name="educationLevels[${formRow.dataset.id}][level]" required>
+                    <option value="" disabled>Select Grade Level</option>
+                </select>
+            </div>
+            <div class="subject-checkboxes" id="subjects_${formRow.dataset.id}"></div>
+        `;
+        educationFieldsContainer.appendChild(formRow);
+
+        updateDropdownOptions();
+
+        const selectElement = formRow.querySelector('.education-level-select');
+        selectElement.value = level;
+
+        renderSubjects(formRow.querySelector('.subject-checkboxes'), level, formRow.dataset.id, subjects);
+
+        selectElement.addEventListener('change', function () {
+            updateDropdownOptions();
+            renderSubjects(formRow.querySelector('.subject-checkboxes'), this.value, formRow.dataset.id);
+        });
+
+        formRow.querySelector('.remove-row').addEventListener('click', function () {
+            formRow.remove();
+            updateDropdownOptions();
+        });
+    }
+
+    function renderSubjects(container, level, fieldId, selectedSubjects = []) {
+        container.innerHTML = '';
+        if (subjectsByLevel[level]) {
+            const heading = document.createElement('h6');
+            heading.textContent = 'Subjects:';
+            heading.className = 'text-base font-medium text-gray-700';
+            container.appendChild(heading);
+
+            subjectsByLevel[level].forEach(subject => {
+                const div = document.createElement('div');
+                div.className = 'inline-flex items-center mr-6 mb-2';
+                const inputId = `subject_${fieldId}_${subject.replace(/\s/g, '_').replace(/[^a-zA-Z0-9_]/g, '')}`;
+                div.innerHTML = `
+                    <input class="mr-2 h-5 w-5 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" type="checkbox" value="${subject}" id="${inputId}" name="educationLevels[${fieldId}][subjects][]" ${selectedSubjects.includes(subject) ? 'checked' : ''}>
+                    <label class="text-base text-gray-700" for="${inputId}">${subject}</label>
+                `;
+                container.appendChild(div);
+            });
+        }
+    }
+
+    // --- THIS IS THE MAGIC: get education data from Django context ---
+    const preloadedEducationData = {{ education_data_json|safe }};
+
+    // Populate fields on page load
+    document.addEventListener('DOMContentLoaded', () => {
+        const educationFieldsContainer = document.getElementById('education-fields-container');
+        educationFieldsContainer.innerHTML = ''; // clear any existing fields
+        if (preloadedEducationData.length > 0) {
+            preloadedEducationData.forEach(item => {
+                addEducationLevelField(item.level, item.subjects);
+            });
+        } else {
+            addEducationLevelField(); // no data, show one empty field
+        }
+
+        // Add button listener for adding new empty education level field
+        document.getElementById('add-education-level').addEventListener('click', () => {
+            addEducationLevelField();
+        });
+    });
+</script>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script>
     const getLocationBtn = document.getElementById('getLocationBtn');
     const denyLocationBtn = document.getElementById('denyLocationBtn');
     const locationStatus = document.getElementById('locationStatus');
     const latitudeInput = document.getElementById('latitudeInput');
     const longitudeInput = document.getElementById('longitudeInput');
-    const educationError = document.getElementById('educationError');
-    const cancelEditBtn = document.getElementById('cancelEditBtn');
 
     // Initialize Leaflet map (invisible)
     const map = L.map('map').setView([27.7, 85.3], 13);
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
 
-
-    function validateEducationLevelsAndSubjects() {
-        const educationLevelContainers = document.querySelectorAll('#education-fields-container .form-row');
-        let isValid = true;
-        let hasSubjectSelected = false;
-        educationLevelContainers.forEach(container => {
-            const levelSelect = container.querySelector('.education-level-select');
-            const subjects = container.querySelectorAll('.subject-checkboxes input[type="checkbox"]:checked');
-            if (!levelSelect.value) {
-                levelSelect.classList.add("border-red-600");
-                isValid = false;
-            } else {
-                levelSelect.classList.remove("border-red-600");
-                levelSelect.classList.add("border-green-600");
-            }
-            if (subjects.length > 0) {
-                hasSubjectSelected = true;
-            }
-        });
-        if (educationLevelContainers.length === 0) {
-            educationError.textContent = 'Please add at least one education level.';
-            educationError.style.display = 'block';
-            return false;
-        }
-        if (!hasSubjectSelected) {
-            educationError.textContent = 'Please select at least one subject for any education level.';
-            educationError.style.display = 'block';
-            return false;
-        }
-        educationError.textContent = '';
-        educationError.style.display = 'none';
-        return isValid;
-    }
 
     //image
     document.getElementById('cancelPhotoBtn').addEventListener('click', () => {
@@ -540,7 +517,21 @@ function populateEditForm() {
   }
 }
 </script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+{% if messages %}
+<script>
+    {% for message in messages %}
+        Toastify({
+            text: "{{ message|escapejs }}",
+            duration: 4000,
+            close: true,
+            gravity: "top", // top or bottom
+            position: "center", // left, center or right
+            backgroundColor: "{% if 'error' in message.tags %}#e53935{% elif 'success' in message.tags %}#43a047{% else %}#2196f3{% endif %}",
+            stopOnFocus: true, // prevent dismiss on hover
+        }).showToast();
+    {% endfor %}
+</script>
+{% endif %}
 </body>
-
 </html>
-{% endblock content %}

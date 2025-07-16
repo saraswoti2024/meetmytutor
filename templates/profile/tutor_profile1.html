@@ -52,6 +52,17 @@
 
           <li class="grid grid-cols-3 gap-4 items-center text-lg text-gray-700">
             <div class="flex items-center col-span-1">
+              <i class="bi bi-person text-blue-500 mr-3 text-xl"></i>
+              <strong class="font-semibold text-gray-800"> Username:</strong>
+            </div>
+            <div id="fullNameDisplay" class="col-span-2 text-gray-700">
+              {{ request.user.username }}
+            </div>
+          </li>
+
+
+          <li class="grid grid-cols-3 gap-4 items-center text-lg text-gray-700">
+            <div class="flex items-center col-span-1">
               <i class="bi bi-envelope text-blue-500 mr-3 text-xl"></i>
               <strong class="font-semibold text-gray-800">Email:</strong>
             </div>
@@ -134,7 +145,11 @@
               <strong class="font-semibold text-gray-800">Description:</strong>
             </div>
             <div class="col-span-2" id="descriptionDisplay">
-              {{ request.user.profile.desc }}
+              {% if request.user.profile.desc %}
+                  {{ request.user.profile.desc }}
+              {% endif %}
+              <i>no description</i>
+         
             </div>
           </li>
         </ul>

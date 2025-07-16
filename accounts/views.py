@@ -43,7 +43,7 @@ class Register(View):
                     user.full_clean() 
                     user.save()
                     messages.success(request,'Successfully Registered!')
-                    return redirect('register')
+                    return redirect('log_in')
             else:
                 messages.error(request,'password and confirm password didn\'t match!')
                 return redirect('register')
@@ -91,7 +91,9 @@ class Log_in(View):
                 login(request, authenticated_user)
                 if authenticated_user.is_superuser or authenticated_user.is_staff:
                     return redirect('/admin/')
-                elif authenticated_user.usertype in ['tutor', 'student']:
+                elif authenticated_user.usertype in ['tutor']:
+                    return redirect('edit_tutor_profile')
+                elif authenticated_user.usertype in ['student']:
                     return redirect('home')
                 else:
                   
