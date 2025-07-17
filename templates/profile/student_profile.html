@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+{% block content %}
+  {% load static %}
+
+  <script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                colors: {
+                    'custom-yellow': {
+                        50: '#FFFBEB',
+                        100: '#FEF3C7',
+                        200: '#FDE68A',
+                        300: '#FCD34D',
+                        400: '#FBBF24',
+                        500: '#F59E0B', /* Primary yellow */
+                        600: '#D97706',
+                        700: '#B45309',
+                        800: '#92400E',
+                        900: '#78350F',
+                        950: '#451A03',
+                    },
+                }
+            }
+        }
+    }
+</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+</head>
+<body class="bg-gray-100 font-sans antialiased">
+<main class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+    <div class="bg-white shadow-lg rounded-lg p-6 md:flex md:space-x-8">
+        <div class="md:w-1/3 flex flex-col items-center text-center p-4">
+            {% if request.user.student.profile_img %}
+            <img id="profileAvatarDisplay" src="{{request.user.student.profile_img.url}}"
+            alt="Student Avatar" class="rounded-full w-48 h-48 object-cover border-4 border-custom-yellow-400 shadow-md mb-4">
+            {% else %}
+            <img id="profileAvatarDisplay" src="{% static 'images/default.jpg' %}"
+            alt="Student Avatar" class="rounded-full w-48 h-48 object-cover border-4 border-custom-yellow-400 shadow-md mb-4">
+            {% endif %}
+            <h4 id="profileNameDisplay" class="text-2xl font-semibold text-gray-800 mb-1">{{request.user.first_name}} {{request.user.last_name}}</h4>
+            <p class="text-gray-500 text-sm mb-6">{{request.user.usertype}}</p>
+
+            <a href="{% url 'edit_student_profile' %}"><button class="bg-custom-yellow-500 hover:bg-custom-yellow-600 text-white font-bold py-2 px-6 rounded-md shadow-md transition duration-300 ease-in-out mb-3 w-full max-w-xs" id="editProfileBtn">
+                <i class="bi bi-pencil-square mr-2"></i>Edit Profile
+            </button></a>
+            <a href="student_changePassword.html" class="border border-gray-300 text-gray-700 hover:bg-gray-100 hover:text-gray-900 font-semibold py-2 px-6 rounded-md transition duration-300 ease-in-out w-full max-w-xs">
+                <i class="bi bi-key mr-2"></i>Change Password
+            </a>
+        </div>
+
+        <div class="md:w-2/3 p-4 border-t md:border-t-0 md:border-l border-gray-200 md:pl-8 mt-8 md:mt-0">
+            <div id="profileDisplaySection">
+                <h5 class="text-xl font-semibold text-gray-800 mb-4 pb-2 border-b border-custom-yellow-300">Personal Information</h5>
+                <div class="space-y-4">
+                    <div class="grid grid-cols-[140px_1fr] items-center gap-x-4 py-2 border-b border-gray-100 last:border-b-0">
+                        <div class="flex items-center text-gray-600">
+                            <i class="bi bi-person mr-3 text-custom-yellow-600 text-lg"></i>
+                            <span class="font-medium">Full Name:</span>
+                        </div>
+                        <span id="fullNameDisplay" class="text-gray-800 font-semibold bg-custom-yellow-50 px-3 py-1 rounded-md">{{request.user.first_name}} {{request.user.last_name}}</span>
+                    </div>
+                    <div class="grid grid-cols-[140px_1fr] items-center gap-x-4 py-2 border-b border-gray-100 last:border-b-0">
+                        <div class="flex items-center text-gray-600">
+                            <i class="bi bi-envelope mr-3 text-custom-yellow-600 text-lg"></i>
+                            <span class="font-medium">Email:</span>
+                        </div>
+                        <span id="emailDisplay" class="text-gray-800 font-semibold bg-custom-yellow-50 px-3 py-1 rounded-md">{{request.user.email}}</span>
+                    </div>
+                    <div class="grid grid-cols-[140px_1fr] items-center gap-x-4 py-2 border-b border-gray-100 last:border-b-0">
+                        <div class="flex items-center text-gray-600">
+                            <i class="bi bi-phone mr-3 text-custom-yellow-600 text-lg"></i>
+                            <span class="font-medium">Phone:</span>
+                        </div>
+                        <span id="phoneDisplay" class="text-gray-800 font-semibold bg-custom-yellow-50 px-3 py-1 rounded-md">{{request.user.student.phone}}</span>
+                    </div>
+                    <div class="grid grid-cols-[140px_1fr] items-center gap-x-4 py-2 border-b border-gray-100 last:border-b-0">
+                        <div class="flex items-center text-gray-600">
+                            <i class="bi bi-gender-ambiguous mr-3 text-custom-yellow-600 text-lg"></i>
+                            <span class="font-medium">Gender:</span>
+                        </div>
+                        <span id="genderDisplay" class="text-gray-800 font-semibold bg-custom-yellow-50 px-3 py-1 rounded-md">{{request.user.student.gender}}</span>
+                    </div>
+                    <div class="grid grid-cols-[140px_1fr] items-center gap-x-4 py-2 border-b border-gray-100 last:border-b-0">
+                        <div class="flex items-center text-gray-600">
+                            <i class="bi bi-person-bounding-box mr-3 text-custom-yellow-600 text-lg"></i>
+                            <span class="font-medium">Age:</span>
+                        </div>
+                        <span id="ageDisplay" class="text-gray-800 font-semibold bg-custom-yellow-50 px-3 py-1 rounded-md">{{request.user.student.age}}</span>
+                    </div>
+                    <div class="grid grid-cols-[140px_1fr] items-center gap-x-4 py-2 border-b border-gray-100 last:border-b-0">
+                        <div class="flex items-center text-gray-600">
+                            <i class="bi bi-award mr-3 text-custom-yellow-600 text-lg"></i>
+                            <span class="font-medium">Grade:</span>
+                        </div>
+                        <span id="gradeDisplay" class="text-gray-800 font-semibold bg-custom-yellow-50 px-3 py-1 rounded-md">{{request.user.student.grade}}th Grade</span>
+                    </div>
+                </div>
+
+                <h5 class="text-xl font-semibold text-gray-800 mb-4 mt-8 pb-2 border-b border-custom-yellow-300">Location Details</h5>
+                <div class="space-y-4">
+                    <div class="grid grid-cols-[140px_1fr] items-center gap-x-4 py-2 border-b border-gray-100 last:border-b-0">
+                        <div class="flex items-center text-gray-600">
+                            <i class="bi bi-building mr-3 text-custom-yellow-600 text-lg"></i>
+                            <span class="font-medium">District:</span>
+                        </div>
+                        <span id="districtDisplay" class="text-gray-800 font-semibold bg-custom-yellow-50 px-3 py-1 rounded-md">{{request.user.student.district}}</span>
+                    </div>
+                    <div class="grid grid-cols-[140px_1fr] items-center gap-x-4 py-2 border-b border-gray-100 last:border-b-0">
+                        <div class="flex items-center text-gray-600">
+                            <i class="bi bi-map mr-3 text-custom-yellow-600 text-lg"></i>
+                            <span class="font-medium">Address:</span>
+                        </div>
+                        <span id="streetAddressDisplay" class="text-gray-800 font-semibold bg-custom-yellow-50 px-3 py-1 rounded-md">{{request.user.student.address}}</span>
+                    </div>
+                    <div class="grid grid-cols-[140px_1fr] items-center gap-x-4 py-2 border-b border-gray-100 last:border-b-0">
+                        <div class="flex items-center text-gray-600">
+                            <i class="bi bi-map mr-3 text-custom-yellow-600 text-lg"></i>
+                            <span class="font-medium">Description:</span>
+                        </div>
+                        <span  class="text-gray-800 font-semibold bg-custom-yellow-50 px-3 py-1 rounded-md">
+                            {{request.user.student.desc}}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>  
+
+    {% endblock content %}

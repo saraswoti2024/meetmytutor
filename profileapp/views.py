@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from django.views import View
 from categories.models import districts
-from .models import Profile_Tutor
+from .models import Profile_Tutor,Profile_Student
 from django.contrib import messages
 from django.core.exceptions import ValidationError
 import json
@@ -47,7 +47,7 @@ def edit_tutor_profile(request):
                 data.profile_img = None
 
                 if request.FILES.get('profile_img'):
-                    data.profile_img = request.FILES['profile_img']
+                    data.profile_img = request.FILES['profile_img'] 
                 education_levels = []
                 i = 0
                 while True:
@@ -93,4 +93,54 @@ def edit_tutor_profile(request):
         } 
         
         return render(request,'profile/edit_tutor_profile.html',context)
+
+def student_profile_view(request):
+    return render(request,'profile/student_profile.html')
+
+def edit_student_profile(request):
+    district = districts.objects.all()
+    if not request.user.is_authenticated:
+            return redirect('log_in')
+    try:
+        data = Profile_Student.objects.get(user=request.user)
+    except Profile_Student.DoesNotExist:
+            data = None
+    if request.method == 'POST' or request.FILES :
+        try:
+            if data is None:
+                data = Profile_Student(user=request.user)
+            data.profile_img = request.FILES.get('profile_img')
+            data.age = request.POST.get('age') or data.age
+            data.gender = request.POST.get('gender') or data.gender
+            data.grade = request.POST.get('grade') or data.grade
+            data.district = request.POST.get('district') or data.district
+            data.address = request.POST.get('address') or data.address
+            data.phone = request.POST.get('phone') or data.phone
+            data.desc = request.POST.get('desc') or data.desc
+            data.full_clean()
+            data.save()  
+            messages.success(request,'updated successfully!')    
+            return redirect('student_profile')   
+        except Exception as e:
+            if hasattr(e, 'message_dict'):
+                # Get errors with field names
+                error_items = list(e.message_dict.items())  # returns list of (field, [errors])
+
+                count = 0
+                for field, errors in error_items:
+                    for error in errors:
+                        messages.error(request, f"{field}: {error}")
+                        count += 1
+                        if count == 3:
+                            break
+                    if count == 3:
+                        break
+            else:
+                messages.error(request, str(e))
+
+            return redirect('edit_student_profile')
     
+    context = {
+        'district' : district,
+    }
+    return render(request,'profile/edit_student_profile.html',context)

@@ -46,6 +46,8 @@ EXTERNAL_APPS = [
     'profileapp',
     'categories',
     'chatbot',
+    'phonenumber_field',
+
 ]
 INSTALLED_APPS.extend(EXTERNAL_APPS)
 

@@ -1,5 +1,6 @@
 from django.db import models
 from accounts.models import CustomUser
+from phonenumber_field.modelfields import PhoneNumberField
 
 # Create your models here.
 class Profile_Tutor(models.Model):
@@ -17,4 +18,14 @@ class Profile_Tutor(models.Model):
     desc = models.TextField(null=True,blank=True,default="no description")
     profile_img = models.ImageField(upload_to="profile_image_tutor",null=True,blank=True)
     education_data = models.JSONField(help_text="List of education levels and subjects.",null=False,blank=False)
-    
+
+class Profile_Student(models.Model):
+    user = models.OneToOneField(CustomUser,related_name='student',on_delete=models.CASCADE)
+    profile_img = models.ImageField(upload_to="profile_student",null=True,blank=True)
+    age = models.IntegerField(blank=False,null=False)
+    gender = models.CharField(max_length=50,blank=False,null=False)
+    district = models.CharField(max_length=100,null=False,blank=False)
+    address = models.CharField(max_length=50)
+    desc = models.TextField(null=True,blank=True,default="no description")
+    grade = models.IntegerField(null=False,blank=False)
+    phone = PhoneNumberField(region='NP',null=False,blank=False)
