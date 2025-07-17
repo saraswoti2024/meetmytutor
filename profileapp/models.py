@@ -18,6 +18,7 @@ class Profile_Tutor(models.Model):
     desc = models.TextField(null=True,blank=True,default="no description")
     profile_img = models.ImageField(upload_to="profile_image_tutor",null=True,blank=True)
     education_data = models.JSONField(help_text="List of education levels and subjects.",null=False,blank=False)
+    form_completed = models.BooleanField(default=False)
 
 class Profile_Student(models.Model):
     user = models.OneToOneField(CustomUser,related_name='student',on_delete=models.CASCADE)
@@ -29,3 +30,4 @@ class Profile_Student(models.Model):
     desc = models.TextField(null=True,blank=True,default="no description")
     grade = models.IntegerField(null=False,blank=False)
     phone = PhoneNumberField(region='NP',null=False,blank=False)
+    form_completed = models.BooleanField(default=False)

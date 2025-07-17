@@ -68,6 +68,7 @@ def edit_tutor_profile(request):
 
                 data.education_data = education_levels
                 data.full_clean()
+                data.form_completed = True
                 data.save()
                 messages.success(request,'updated successfully!')
                 return redirect('tutor_profile')
@@ -118,7 +119,8 @@ def edit_student_profile(request):
             data.phone = request.POST.get('phone') or data.phone
             data.desc = request.POST.get('desc') or data.desc
             data.full_clean()
-            data.save()  
+            data.form_completed = True
+            data.save() 
             messages.success(request,'updated successfully!')    
             return redirect('student_profile')   
         except Exception as e:
