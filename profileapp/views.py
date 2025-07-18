@@ -45,9 +45,8 @@ def edit_tutor_profile(request):
                      if data.profile_img:
                         data.profile_img.delete(save=False)  # delete file from storage
                 data.profile_img = None
-
                 if request.FILES.get('profile_img'):
-                    data.profile_img = request.FILES['profile_img'] 
+                    data.profile_img = request.FILES['profile_img']
                 education_levels = []
                 i = 0
                 while True:
