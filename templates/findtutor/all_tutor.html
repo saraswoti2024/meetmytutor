@@ -1,0 +1,191 @@
+{% extends "base.html" %}
+{% block content %}
+{% load static %}
+
+<section class="py-12 bg-gradient-to-br from-indigo-50 to-purple-50">
+  <div class="max-w-6xl mx-auto px-6">
+    <h1 class="text-4xl font-extrabold text-center text-gray-900 mb-4 animate-fade-in-down">Find Your Perfect Tutor</h1>
+    <p class="text-xl text-center text-gray-600 mb-10 animate-fade-in-down delay-100">Unlock your potential with expert guidance.</p>
+
+    <div class="bg-white rounded-xl shadow-lg p-8 mb-16 border border-gray-100 animate-slide-in-up">
+      <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Search for Tutors</h2>
+      <form class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6" method="GET" action="">
+        <div>
+          <label for="educationLevel" class="block text-sm font-medium text-gray-700 mb-2">Education Level</label>
+          <select
+            id="educationLevel"
+            name="education_level"
+            required
+            class="w-full p-3 rounded-lg border border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200 ease-in-out appearance-none bg-white pr-8"
+          >
+            <option value="" selected disabled>Select Level</option>
+            <option value="basic_1_5">Basic Education (Grade 1-5)</option>
+            <option value="basic_6_8">Basic Education (Grade 6-8)</option>
+            <option value="secondary_9_10">Secondary Education (Grade 9-10)</option>
+            <option value="secondary_11_12">Secondary Education (Grade 11-12)</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="subjectDropdown" class="block text-sm font-medium text-gray-700 mb-2">Subject</label>
+          <select
+            id="subjectDropdown"
+            name="subject"
+            required
+            class="w-full p-3 rounded-lg border border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200 ease-in-out appearance-none bg-white pr-8"
+          >
+            <option value="" selected disabled>Select Subject</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="district" class="block text-sm font-medium text-gray-700 mb-2">District</label>
+          <select
+            id="district"
+            name="district"
+            required
+            class="w-full p-3 rounded-lg border border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200 ease-in-out appearance-none bg-white pr-8"
+          >
+            <option value="" selected disabled>Select District</option>
+            {% for i in district %}
+              <option value="{{ i.name }}">{{ i.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="lg:col-span-2">
+          <label for="tutorName" class="block text-sm font-medium text-gray-700 mb-2">Tutor Name (Optional)</label>
+          <input
+            type="text"
+            id="tutorName"
+            name="tutorName"
+            placeholder="e.g., Jane Doe"
+            class="w-full p-3 rounded-lg border border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200 ease-in-out"
+          />
+        </div>
+
+        <div class="md:col-span-2 lg:col-span-5 flex justify-center mt-4">
+          <button
+            type="submit"
+            class="w-full md:w-auto bg-gradient-to-r from-indigo-600 to-purple-700 hover:from-indigo-700 hover:to-purple-800 text-white font-bold rounded-lg px-8 py-3 shadow-md hover:shadow-lg transition transform hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 flex items-center justify-center gap-2"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+            </svg>
+            Search Tutors
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section class="bg-white py-12">
+  <div class="max-w-6xl mx-auto px-6">
+    <h2 class="text-3xl font-bold text-gray-900 mb-10 text-center animate-fade-in">All Tutors</h2>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+      {% for tutor in all_tutors %}
+      <div
+        class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden transform transition-transform duration-300 hover:scale-[1.03] hover:shadow-xl group"
+      >
+        <div class="relative w-full h-48 sm:h-56 overflow-hidden">
+          {% if tutor.profile_img %}
+          <img
+            src="{{tutor.profile_img.url}}"
+            alt="{{ tutor.name }} Profile Picture"
+            class="w-full h-full object-cover object-center transform transition-transform duration-300 group-hover:scale-105"
+            loading="lazy"
+          />
+                      
+          {% endif %}
+            <span class="absolute top-3 right-3 bg-green-500 text-white text-xs font-semibold px-2 py-1 rounded-full shadow-md">Online</span>
+        </div>
+
+        <div class="p-6">
+          <h3 class="text-2xl font-extrabold text-gray-900 mb-2 truncate" title="{{ tutor.name }}">{{ tutor.name }}</h3>
+       
+          <p class="text-gray-700 mb-1">
+            <span class="font-semibold text-gray-800">Teaches:</span>
+            {% if tutor.education_data %}
+              {% for item in tutor.education_data %}
+                <span class="inline-block bg-indigo-100 text-indigo-700 text-sm font-medium px-2 py-1 rounded mr-2 mt-1">
+                  {% if item.level == 'basic_1_5' %} Basic (Grade 1–5)
+                  {% elif item.level == 'basic_6_8' %} Basic (Grade 6–8)
+                  {% elif item.level == 'secondary_9_10' %} Secondary (Grade 9–10)
+                  {% elif item.level == 'secondary_11_12' %} Secondary (Grade 11–12)
+                  {% else %} {{ item.level }}
+                  {% endif %}
+                </span>
+              {% endfor %}
+            {% else %}
+              <span class="text-indigo-600">Not specified</span>
+            {% endif %}
+          </p>
+          
+          <p class="text-gray-600 text-sm mb-2">
+            <span class="font-semibold text-gray-800">Qualification:</span> {{ tutor.qualification|default:'Not specified' }}
+          </p>
+
+          <div class="flex items-center justify-between text-base mb-3">
+            <p class="text-gray-700">
+              <span class="font-semibold text-gray-800">Rate:</span>
+              <span class="text-green-600 font-bold">Rs.{{ tutor.session_price|floatformat:"0" }}/hr</span>
+            </p>
+            <p class="text-gray-700">
+              <span class="font-semibold text-gray-800">Location:</span>
+              <span class="text-purple-600">{{ tutor.district }}, Nepal</span>
+            </p>
+          </div>
+
+          <div class="flex items-center mb-4" aria-label="Tutor rating">
+            <div class="flex text-yellow-400 mr-2">
+              {% for i in "12345" %}
+                {% if tutor.average_rating|default:0 >= forloop.counter %}
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.49 6.91l6.561-.955L10 0l2.949 5.955 6.561.955-4.755 4.635 1.123 6.545z"/></svg>
+                {% else %}
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-300 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.49 6.91l6.561-.955L10 0l2.949 5.955 6.561.955-4.755 4.635 1.123 6.545z"/></svg>
+                {% endif %}
+              {% endfor %}
+            </div>
+            <span class="text-gray-600 font-semibold text-sm">{{ tutor.average_rating|floatformat:1|default:"N/A" }} ({{ tutor.review_count|default:"0" }} Reviews)</span>
+          </div>
+
+          <a href="#" class="block w-full text-center bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-lg px-6 py-3 transition duration-300 ease-in-out transform hover:-translate-y-0.5 shadow-md">
+            View Profile
+          </a>
+        </div>
+      </div>
+      {% empty %}
+      <p class="text-center text-gray-500 col-span-full">No tutors found.</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<script>
+  const educationLevelSelect = document.getElementById('educationLevel');
+  const subjectDropdown = document.getElementById('subjectDropdown');
+
+  const subjectsByLevel = {
+    "basic_1_5": ["Nepali", "English", "Mathematics", "Science (Integrated)", "Social Studies (Integrated)", "Creative Arts", "Local Subject"],
+    "basic_6_8": ["Nepali", "English", "Mathematics", "Science", "Social Studies", "Health, Population, and Environment Education (HPE)", "Optional First Subject"],
+    "secondary_9_10": ["Nepali", "English", "Mathematics", "Science", "Social Studies", "Health, Population & Environment Education (HPE)", "Occupation, Business and Technology Education (OBTE)", "Optional Mathematics", "Computer Science", "Accountancy", "Economics", "Business Studies"],
+    "secondary_11_12": ["Mathematics", "Social Studies and Life Skills Education", "Nepali", "English", "Physics", "Chemistry", "Biology", "Computer Science", "Applied Mathematics", "Environment Science", "Accountancy", "Economics", "Business Studies", "Marketing", "Finance", "Hotel Management", "Business Mathematics", "Sociology", "Psychology", "History", "Geography", "Political Science", "Journalism / Mass Communication", "Philosophy", "Culture", "Fine Arts", "Dance", "Music"]
+  };
+
+  educationLevelSelect.addEventListener('change', function () {
+    const selectedLevel = this.value;
+    const subjects = subjectsByLevel[selectedLevel] || [];
+
+    subjectDropdown.innerHTML = '<option value="" selected disabled>Select Subject</option>';
+    subjects.forEach(subject => {
+      const option = document.createElement('option');
+      option.value = subject;
+      option.textContent = subject;
+      subjectDropdown.appendChild(option);
+    });
+  });
+</script>
+
+{% endblock content %}

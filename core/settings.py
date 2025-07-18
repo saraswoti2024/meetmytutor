@@ -47,7 +47,7 @@ EXTERNAL_APPS = [
     'categories',
     'chatbot',
     'phonenumber_field',
-
+    'findtutor',
 ]
 INSTALLED_APPS.extend(EXTERNAL_APPS)
 
