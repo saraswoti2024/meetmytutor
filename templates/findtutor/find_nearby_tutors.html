@@ -1,0 +1,77 @@
+
+  <section class="py-5">
+    <div class="container">
+      <h2 class="text-center mb-4">Search Nearest Tutors</h2>
+      <form class="row g-3 justify-content-center">
+        <div class="col-md-3">
+          <select class="form-select" id="educationLevel" required>
+            <option value="" selected>Select Level</option>
+            <option value="basic_1_5">Basic Education (Grade 1-5)</option>
+            <option value="basic_6_8">Basic Education (Grade 6-8)</option>
+            <option value="secondary_9_10">Secondary Education (Grade 9-10)</option>
+            <option value="secondary_11_12">Secondary Education (Grade 11-12)</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <select class="form-select" id="subjectDropdown" name="subject" required>
+            <option value="" selected>Select Subject</option>
+          </select>
+        </div>
+
+        <div class="col-md-3">
+          <button type="submit" class="btn btn-success w-100">Search Nearest Tutors</button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <div style="height: 450px"></div>
+
+
+
+  <script>
+    const educationLevelSelect = document.getElementById('educationLevel');
+    const subjectDropdown = document.getElementById('subjectDropdown');
+
+    const subjectsByLevel = {
+      "basic_1_5": [
+        "Nepali", "English", "Mathematics", "Science (Integrated)",
+        "Social Studies (Integrated)", "Creative Arts", "Local Subject"
+      ],
+      "basic_6_8": [
+        "Nepali", "English", "Mathematics", "Science", "Social Studies",
+        "Health, Population, and Environment Education (HPE)", "Optional First Subject"
+      ],
+      "secondary_9_10": [
+        "Nepali", "English", "Mathematics", "Science", "Social Studies",
+        "Health, Population & Environment Education (HPE)", "Occupation, Business and Technology Education (OBTE)",
+        "Optional Mathematics", "Computer Science", "Accountancy", "Economics", "Business Studies"
+      ],
+      "secondary_11_12": [
+        "Mathematics", "Social Studies and Life Skills Education", "Nepali", "English",
+        "Physics", "Chemistry", "Biology", "Computer Science", "Applied Mathematics", "Environment Science",
+        "Accountancy", "Economics", "Business Studies", "Marketing", "Finance", "Hotel Management",
+        "Business Mathematics", "Sociology", "Psychology", "History", "Geography", "Political Science",
+        "Journalism / Mass Communication", "Philosophy", "Culture", "Fine Arts", "Dance", "Music"
+      ]
+    };
+
+    educationLevelSelect.addEventListener('change', function () {
+      const selectedLevel = this.value;
+      const subjects = subjectsByLevel[selectedLevel] || [];
+
+      // Clear previous options
+      subjectDropdown.innerHTML = '<option value="" selected>Select Subject</option>';
+
+      subjects.forEach(subject => {
+        const option = document.createElement('option');
+        option.value = subject;
+        option.textContent = subject;
+        subjectDropdown.appendChild(option);
+      });
+    });
+  </script>
+
+</body>
+
+</html>
