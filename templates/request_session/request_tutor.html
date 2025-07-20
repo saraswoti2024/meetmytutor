@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% block content %}
+  {% load static %}
+    <div class="container mt-4">
+        <div class="row full-height">
+            <div class="col-lg-4 mb-4">
+                <div class="profile-section">
+                    <div class="card">
+                        <img src="https://randomuser.me/api/portraits/men/12.jpg" class="card-img-top" alt="Tutor"
+                            style="width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 10px;" />
+                        <div class="card-body" data-tutor-rate="500">
+                            <h5 class="card-title">Sagar Thapa</h5>
+                            <p><strong>Subject:</strong> Science</p>
+                            <p id="tutor_actual_rate"><strong>Rate:</strong> Rs. 500/hr</p>
+                            <p><strong>Location:</strong> Kathmandu, Nepal</p>
+                            <p class="tutor-rating">
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-half"></i> 4.7 (85 Reviews)
+                            </p>
+                            <p class="text-muted small mb-2">
+                                Experienced science tutor known for clear explanations and engaging lessons. Helps
+                                students improve and build confidence.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-8">
+                <div class="form-section">
+                    <h4 class="mb-4">Request a Tutor Session</h4>
+                    <form id="sessionForm">
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label class="form-label">Session Time From</label>
+                                <select class="form-select" name="time_from" id="time_from" required></select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Session Duration</label>
+                                <select class="form-select" name="duration" id="session_duration" required>
+                                    <option value="">-- Select Duration --</option>
+                                    <option value="1">1 hour</option>
+                                    <option value="2">2 hours</option>
+                                    <option value="3">3 hours</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Session Time To</label>
+                                <input type="text" class="form-control" id="time_to" readonly />
+                            </div>
+                        </div>
+
+                        <div class="row mb-3 align-items-end">
+                            <div class="col-md-4">
+                                <label class="form-label">Session Start Date</label>
+                                <input type="date" class="form-control" id="start_date" required />
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Session Days</label>
+                                <input type="number" class="form-control" id="session_days" min="30" value="30"
+                                    required />
+                            </div>
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-secondary" id="update_days_btn">Update</button>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Session End Date</label>
+                                <input type="date" class="form-control" id="end_date" readonly />
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label class="form-label">Your Proposed Rate (per hour)</label>
+                                <input type="number" class="form-control" id="user_rate_per_hour" min="1" step="any"
+                                    required />
+                                <div id="priceFeedback" class="price-feedback"></div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label class="form-label">Total Price</label>
+                                <input type="text" class="form-control" id="total_price" readonly />
+                            </div>
+                        </div>
+
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn btn-yellow px-5">Submit Request</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
