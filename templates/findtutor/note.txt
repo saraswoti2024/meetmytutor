@@ -1,0 +1,12 @@
+{% comment %} <div class="flex items-center mb-4" aria-label="Tutor rating">
+    <div class="flex text-yellow-400 mr-2">
+      {% for i in "12345" %}
+        {% if tutor.average_rating|default:0 >= forloop.counter %}
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.49 6.91l6.561-.955L10 0l2.949 5.955 6.561.955-4.755 4.635 1.123 6.545z"/></svg>
+        {% else %}
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-300 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.49 6.91l6.561-.955L10 0l2.949 5.955 6.561.955-4.755 4.635 1.123 6.545z"/></svg>
+        {% endif %}
+      {% endfor %}
+    </div>
+    <span class="text-gray-600 font-semibold text-sm">{{ tutor.average_rating|floatformat:1|default:"N/A" }} ({{ tutor.review_count|default:"0" }} Reviews)</span>
+  </div> {% endcomment %}
