@@ -1,5 +1,5 @@
 {% load static %}
-<nav class="bg-yellow-custom sticky top-0 z-50">
+<nav class="bg-yellow-custom sticky top-0 z-50" style="background-color: #fcd34d;">
   <div class="container mx-auto px-4 py-3 flex justify-between items-center">
     <a class="flex items-center" href="{% url 'home' %}">
       <img
@@ -11,6 +11,7 @@
     <div
       class="hidden lg:flex flex-grow justify-end items-center flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-8 absolute lg:static top-full left-0 w-full bg-yellow-custom lg:bg-transparent shadow-lg lg:shadow-none py-4 lg:py-0 rounded-b-lg lg:rounded-none"
       id="navbarNav"
+      style="background-color: #fcd34d;"
     >
       <ul
         class="flex flex-col lg:flex-row items-center space-y-1 lg:space-y-0 lg:space-x-7"
@@ -40,7 +41,7 @@
           <a
             class="text-gray-800 hover:text-white font-bold text-lg transition-colors duration-200"
             href="{% url 'home' %}"
-            >sessions</a
+            >Sessions</a
           >
         </li>
         <li>
@@ -58,20 +59,31 @@
           >
         </li>
 
-        <li class="relative group">
-          <a href="#" class="flex items-center space-x-2 cursor-pointer">
+        <!-- Profile dropdown with click toggle -->
+        <li class="relative" id="profileDropdownWrapper">
+          <button
+            id="profileDropdownBtn"
+            type="button"
+            class="flex items-center space-x-2 cursor-pointer text-gray-800 hover:text-white font-bold text-lg transition-colors duration-200 focus:outline-none"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
             {% if request.user.profile.profile_img %}
-              <img src="{{ request.user.profile.profile_img.url}}" alt="Profile"
+              <img src="{{ request.user.profile.profile_img.url }}" alt="Profile"
                 class="rounded-full w-9 h-9 object-cover ring-2 ring-blue-400 ring-offset-2 transition duration-300" />
             {% else %}
               <img src="{% static 'images/default.jpg' %}" alt="Default Profile"
                 class="rounded-full w-9 h-9 object-cover ring-2 ring-blue-400 ring-offset-2 transition duration-300" />
             {% endif %}
-            <svg class="w-4 h-4 text-gray-600 group-hover:text-blue-500 transition-transform duration-200 transform group-hover:rotate-180" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.583l3.71-4.353a.75.75 0 111.14.976l-4.25 5a.75.75 0 01-1.14 0l-4.25-5a.75.75 0 01.02-1.06z" clip-rule="evenodd" /></svg>
-          </a>
-        
-          <!-- Dropdown -->
-          <ul class="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg ring-1 ring-blue-100 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+            <svg class="w-4 h-4 text-gray-600 transition-transform duration-200 transform" fill="currentColor" viewBox="0 0 20 20" id="profileDropdownIcon">
+              <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.583l3.71-4.353a.75.75 0 111.14.976l-4.25 5a.75.75 0 01-1.14 0l-4.25-5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+            </svg>
+          </button>
+
+          <ul
+            id="profileDropdownMenu"
+            class="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg ring-1 ring-blue-100 z-50 hidden"
+          >
             <li>
               <a href="{% url 'tutor_profile' %}" class="block px-4 py-2 text-sm text-gray-800 hover:bg-blue-50 transition">Profile</a>
             </li>
@@ -83,6 +95,7 @@
             </li>
           </ul>
         </li>
+
         <li>
           <a
             class="text-gray-800 hover:text-white font-bold text-lg transition-colors duration-200"
@@ -93,4 +106,34 @@
       </ul>
     </div>
   </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const profileBtn = document.getElementById('profileDropdownBtn');
+      const profileMenu = document.getElementById('profileDropdownMenu');
+      const profileIcon = document.getElementById('profileDropdownIcon');
+
+      profileBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        profileMenu.classList.toggle('hidden');
+
+        // toggle arrow rotation
+        if (profileMenu.classList.contains('hidden')) {
+          profileIcon.classList.remove('rotate-180');
+          profileBtn.setAttribute('aria-expanded', 'false');
+        } else {
+          profileIcon.classList.add('rotate-180');
+          profileBtn.setAttribute('aria-expanded', 'true');
+        }
+      });
+
+      document.addEventListener('click', () => {
+        if (!profileMenu.classList.contains('hidden')) {
+          profileMenu.classList.add('hidden');
+          profileIcon.classList.remove('rotate-180');
+          profileBtn.setAttribute('aria-expanded', 'false');
+        }
+      });
+    });
+  </script>
 </nav>
