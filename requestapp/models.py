@@ -1,3 +1,24 @@
 from django.db import models
+from profileapp.models import Profile_Student,Profile_Tutor
+from categories.models import subjects_list
 
 # Create your models here.
+class Requesting_tutor(models.Model):
+    MODE_CHOICES = (
+        ('Online', 'Online'),
+        ('Offline', 'Offline'),
+    )
+    mode = models.CharField(max_length=10, choices=MODE_CHOICES, default='Online')
+    student_user = models.ForeignKey(Profile_Student,on_delete=models.CASCADE,related_name="sent_requests")
+    tutor_user = models.ForeignKey(Profile_Tutor,on_delete=models.CASCADE,related_name="recieve_requests")
+    subject = models.ManyToManyField(subjects_list)
+    proposed_rate = models.IntegerField()
+    session_start_date = models.DateField()
+    session_end_date = models.DateField()
+    session_time_from = models.TimeField()
+    session_time_to = models.TimeField()
+    status = models.CharField(max_length=20, default='pending') 
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.student.user.username} → {self.tutor.user.username}"    

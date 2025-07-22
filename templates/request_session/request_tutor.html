@@ -1,99 +1,117 @@
 {% extends "base.html" %}
 {% block content %}
-  {% load static %}
-    <div class="container mt-4">
-        <div class="row full-height">
-            <div class="col-lg-4 mb-4">
-                <div class="profile-section">
-                    <div class="card">
-                        <img src="https://randomuser.me/api/portraits/men/12.jpg" class="card-img-top" alt="Tutor"
-                            style="width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 10px;" />
-                        <div class="card-body" data-tutor-rate="500">
-                            <h5 class="card-title">Sagar Thapa</h5>
-                            <p><strong>Subject:</strong> Science</p>
-                            <p id="tutor_actual_rate"><strong>Rate:</strong> Rs. 500/hr</p>
-                            <p><strong>Location:</strong> Kathmandu, Nepal</p>
-                            <p class="tutor-rating">
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-half"></i> 4.7 (85 Reviews)
-                            </p>
-                            <p class="text-muted small mb-2">
-                                Experienced science tutor known for clear explanations and engaging lessons. Helps
-                                students improve and build confidence.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+{% load static %}
 
-            <div class="col-lg-8">
-                <div class="form-section">
-                    <h4 class="mb-4">Request a Tutor Session</h4>
-                    <form id="sessionForm">
-                        <div class="row mb-3">
-                            <div class="col-md-4">
-                                <label class="form-label">Session Time From</label>
-                                <select class="form-select" name="time_from" id="time_from" required></select>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label">Session Duration</label>
-                                <select class="form-select" name="duration" id="session_duration" required>
-                                    <option value="">-- Select Duration --</option>
-                                    <option value="1">1 hour</option>
-                                    <option value="2">2 hours</option>
-                                    <option value="3">3 hours</option>
-                                </select>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label">Session Time To</label>
-                                <input type="text" class="form-control" id="time_to" readonly />
-                            </div>
-                        </div>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
 
-                        <div class="row mb-3 align-items-end">
-                            <div class="col-md-4">
-                                <label class="form-label">Session Start Date</label>
-                                <input type="date" class="form-control" id="start_date" required />
-                            </div>
-                            <div class="col-md-3">
-                                <label class="form-label">Session Days</label>
-                                <input type="number" class="form-control" id="session_days" min="30" value="30"
-                                    required />
-                            </div>
-                            <div class="col-md-2">
-                                <button type="button" class="btn btn-secondary" id="update_days_btn">Update</button>
-                            </div>
-                            <div class="col-md-3">
-                                <label class="form-label">Session End Date</label>
-                                <input type="date" class="form-control" id="end_date" readonly />
-                            </div>
-                        </div>
+    <!-- Tutor Profile Card -->
+    <div class="bg-white rounded-3xl shadow-xl p-6 flex flex-col items-center text-center">
+      {% if tutor.profile_img %}
+        <img src="{{tutor.profile_img.url}}" alt="Tutor" class="w-48 h-48 rounded-full object-cover shadow-md border-4 border-yellow-400">
+      {% else %}
+        <img src="{% static 'images/default.jpg' %}" alt="Tutor" class="w-48 h-48 rounded-full object-cover shadow-md border-4 border-yellow-400">
+      {% endif %}
 
-                        <div class="row mb-3">
-                            <div class="col-md-4">
-                                <label class="form-label">Your Proposed Rate (per hour)</label>
-                                <input type="number" class="form-control" id="user_rate_per_hour" min="1" step="any"
-                                    required />
-                                <div id="priceFeedback" class="price-feedback"></div>
-                            </div>
-                        </div>
+      <div class="mt-6 space-y-2">
+        <h2 class="text-2xl font-bold text-gray-900">{{tutor.user.first_name}} {{tutor.user.last_name}}</h2>
+        <p class="text-lg text-gray-700"><strong>Rate:</strong> Rs. {{tutor.session_price}}/hr</p>
+        <p class="text-gray-600"><strong>Location:</strong> {{tutor.district}}, Nepal</p>
 
-                        <div class="row mb-3">
-                            <div class="col-md-4">
-                                <label class="form-label">Total Price</label>
-                                <input type="text" class="form-control" id="total_price" readonly />
-                            </div>
-                        </div>
-
-                        <div class="text-center mt-4">
-                            <button type="submit" class="btn btn-yellow px-5">Submit Request</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
+        <div class="flex justify-center items-center space-x-1 text-yellow-500">
+          <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-half"></i>
+          <span class="text-sm text-gray-600 ml-2">4.7 (85 Reviews)</span>
         </div>
+
+        <p class="text-sm text-gray-500 mt-2 leading-relaxed">
+          {{tutor.desc}}
+        </p>
+      </div>
     </div>
+
+    <!-- Form Section -->
+    <div class="lg:col-span-2 bg-white rounded-3xl shadow-xl p-8 space-y-8">
+      <h3 class="text-3xl font-semibold text-gray-800 border-b pb-2">Request a Tutor Session</h3>
+      
+      <form id="sessionForm" class="space-y-8" method="post">
+        {% csrf_token %}
+
+        <!-- Subject selection -->
+        <div class="mb-6">
+          <h4 class="text-lg font-semibold mb-3">Choose Subject(s) You Want Help With:</h4>
+          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+            {% for subject in subjects %}
+              <label class="flex items-center space-x-2 bg-gray-50 shadow-sm rounded-lg px-4 py-2 border hover:bg-gray-100 cursor-pointer">
+                <input type="checkbox" name="subjects" value="{{ subject.id }}" class="form-checkbox" />
+                <span class="text-gray-800">{{ subject.subject_name }}</span>
+              </label>
+            {% empty %}
+              <p class="text-gray-500">No subjects found for this tutor.</p>
+            {% endfor %}
+          </div>
+          <p class="text-sm text-gray-500 mt-2">You can select multiple subjects you want to learn from this tutor.</p>
+        </div>
+
+        <!-- Time selection -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div>
+            <label class="block font-medium text-gray-700 mb-1">Session Time From</label>
+            <input type="time" name="time_from" class="w-full border border-gray-300 rounded-lg px-4 py-2 bg-gray-100" id="time_from" required />
+          </div>
+
+          <div>
+            <label class="block font-medium text-gray-700 mb-1">Session Time To</label>
+            <input type="time" name="time_to" class="w-full border border-gray-300 rounded-lg px-4 py-2 bg-gray-100" id="time_to" required />
+          </div>
+        </div>
+
+        <!-- Date selection -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div>
+            <label class="block font-medium text-gray-700 mb-1">Session Start Date</label>
+            <input type="date" name="date_start" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-yellow-500 focus:border-yellow-500" id="start_date" required />
+          </div>
+
+          <div>
+            <label class="block font-medium text-gray-700 mb-1">Session End Date</label>
+            <input type="date" name="date_end" class="w-full border border-gray-300 rounded-lg px-4 py-2 bg-gray-100" id="end_date" required />
+          </div>
+        </div>
+
+        <!-- Rate input -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 items-end">
+          <div>
+            <label class="block font-medium text-gray-700 mb-1">Your Proposed Rate (per hour)</label>
+            <input type="number" name="perhour" min="1" step="any" id="user_rate_per_hour" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-yellow-500 focus:border-yellow-500" required />
+            <p id="priceFeedback" class="text-sm text-red-600 mt-1"></p>
+          </div>
+
+          <!-- Mode Selection (Online/Offline) -->
+        <div class="mt-6">
+          <label class="block font-medium text-gray-700 mb-2">Preferred Mode</label>
+          <div class="flex items-center space-x-6">
+            <label class="inline-flex items-center">
+              <input type="radio" name="mode" value="Online" class="form-radio text-yellow-500" required>
+              <span class="ml-2 text-gray-700">Online</span>
+            </label>
+            <label class="inline-flex items-center">
+              <input type="radio" name="mode" value="Offline" class="form-radio text-yellow-500" required>
+              <span class="ml-2 text-gray-700">Offline</span>
+            </label>
+          </div>
+        </div>
+
+          <div class="text-center">
+            <button type="submit"
+              class="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-3 px-6 rounded-full shadow-md transition-transform transform hover:scale-105">
+              Submit Request
+            </button>
+          </div>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>
+
 {% endblock content %}
