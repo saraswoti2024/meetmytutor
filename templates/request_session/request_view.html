@@ -19,7 +19,7 @@
             <tr>
               <th scope="col" class="px-6 py-4 font-semibold">S.NO</th>
               <th scope="col" class="px-6 py-4 font-semibold">Tutor</th>
-              <th scope="col" class="px-6 py-4 font-semibold">Subject</th>
+              <th scope="col" class="px-6 py-4 font-semibold">Subjects you choosed</th>
               <th scope="col" class="px-6 py-4 font-semibold">Requested Date/Time</th>
               <th scope="col" class="px-6 py-4 font-semibold">Status</th>
               <th scope="col" class="px-6 py-4 font-semibold">Actions</th>
@@ -45,14 +45,44 @@
               </td>
               <td class="px-6 py-4">{{i.session_start_date}}, {{i.session_time_from}}</td>
               <td class="px-6 py-4">
-                <span class="inline-block bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-medium">{{i.status}}</span>
+                {% if i.status == "accepted" %}
+                  <span class="inline-block bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-medium">
+                    {{ i.status|title }}
+                  </span>
+                {% elif i.status == "rejected" %}
+                  <span class="inline-block bg-red-100 text-red-700 px-3 py-1 rounded-full text-xs font-medium">
+                    {{ i.status|title }}
+                  </span>
+                {% elif i.status == "counter offered" %}
+                  <span class="inline-block bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-xs font-medium">
+                    {{ i.status|title }}
+                  </span>
+                {% else %}
+                  <span class="inline-block bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-xs font-medium">
+                    {{ i.status|title }}
+                  </span>
+                {% endif %}
               </td>
               {% if i.status == 'accepted' %}
               <td class="px-6 py-5">
+              <a href="student_payment.html" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-semibold shadow">message      
+               </a>
               <a href="student_payment.html" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-semibold shadow">Make Payment      
                </a>
             </td>
-               {% else %}
+             
+            {% elif i.status == 'counter offered' %}
+            <td class="px-6 py-5">
+              <a href="{% url 'counter_offer_view' i.id %}" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-semibold shadow">Response to counter      
+               </a>
+            </td>
+
+            {% elif i.status == 'rejected' %}
+            <td class="px-6 py-5">
+              <a href="{% url 'counter_offer_view' i.id %}"><i class="text-gray-400">no action needed</i>  
+               </a>
+            </td>
+             {% else %}
                <td class="px-6 py-5">
                 <i >waiting for tutor      
                 </i>

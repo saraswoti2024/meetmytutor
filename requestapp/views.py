@@ -109,10 +109,9 @@ def accept_request(request,id):
         data2 =get_object_or_404(Requesting_tutor,id=id)
         if value == 'accepted':
             data2.status = 'accepted'
-            data2.save()
         else:
             data2.status = 'rejected'
-            data2.save()
+        data2.save()
         messages.success(request,'accepted successfully!')
         return redirect('request_list_tutor')
     
@@ -123,11 +122,10 @@ def edit_accept_request(request,id):
         if value == 'accepted':
             data2.status = 'accepted'
             data2.is_edit = True
-            data2.save()
         else:
             data2.status = 'rejected'
             data2.is_edit = True
-            data2.save()
+        data2.save()
         messages.success(request,'accepted successfully!')
         return redirect('request_list_tutor')
 
@@ -151,3 +149,24 @@ def edit_request(request,id):
         'data2' : data2,
     }
     return render(request,'request_session/edit_request.html',context)
+
+def counter_offer_view(request,id):
+    data2 = get_object_or_404(Requesting_tutor,id=id)
+    data = data2.student_user
+    if request.method == 'POST':
+        value = request.POST.get('submit_btn')
+        data2 = get_object_or_404(Requesting_tutor,id=id)
+        data = data2.student_user
+        if value == 'accepted':
+            data2.status = 'accepted'
+        else:
+            data2.status = 'rejected'
+        data2.save()
+        messages.success(request,'offer successfully!')
+        return redirect('request_list')
+    context = {
+        'data' : data,
+        'data2' : data2,
+    }
+        
+    return render(request,'request_session/counter_offer_view.html',context)

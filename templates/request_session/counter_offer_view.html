@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+{% block content %}
+{% load static %}
+
+<div class="max-w-7xl mx-auto px-4 py-12">
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+
+    <!-- Tutor Profile Card -->
+    <div class="bg-white rounded-2xl shadow-xl p-6 transition-transform hover:scale-[1.01]">
+      {% if data.profile_img %}
+      <img src="{{data.profile_img.url}}" alt="student_profile"
+           class="w-full aspect-square object-cover rounded-xl shadow-md mb-5">
+      {% else %}
+      <img src="{% static 'images/default.jpg' %}" alt="student"
+           class="w-full aspect-square object-cover rounded-xl shadow-md mb-5">
+      {% endif %}
+
+      <h3 class="text-2xl font-bold text-gray-800 mb-1">{{data.user.first_name}} {{data.user.last_name}}</h3>
+      <p class="text-gray-700" id="tutor_actual_rate"><span class="font-semibold">Grade:</span> {{data.grade}}</p>
+      <p class="text-gray-700"><span class="font-semibold">Location:</span> {{data.district}}, Nepal</p>
+      <p class="text-sm text-gray-600 mt-4">{{data.desc}}</p>
+    </div>
+
+    <!-- Forms Section -->
+    <div class="lg:col-span-2 space-y-12">
+
+      <!-- Student Request Form -->
+      <div class="bg-white rounded-2xl shadow-md p-6">
+        <h2 class="text-2xl font-semibold mb-6 text-gray-800">My Request</h2>
+        <form id="sessionForm" class="space-y-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="block font-medium text-gray-700 mb-1">Session Time From</label>
+              <input type="text" class="w-full border rounded-md p-2" value="{{data2.session_time_from}}" readonly />
+            </div>
+            <div>
+              <label class="block font-medium text-gray-700 mb-1">Session Time To</label>
+              <input type="text" class="w-full border rounded-md p-2" value="{{data2.session_time_to}}" readonly />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="block font-medium text-gray-700 mb-1">Session Start Date</label>
+              <input type="date" class="w-full border rounded-md p-2"
+                     value="{{ data2.session_start_date|date:'Y-m-d' }}" disabled />
+            </div>
+            <div>
+              <label class="block font-medium text-gray-700 mb-1">Session End Date</label>
+              <input type="date" class="w-full border rounded-md p-2"
+                     value="{{ data2.session_end_date|date:'Y-m-d' }}" readonly />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="block font-medium text-gray-700 mb-1">Proposed Rate (per hour)</label>
+              <input type="number" min="1" step="any" value="{{data2.proposed_rate}}"
+                     class="w-full border rounded-md p-2" disabled />
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- Tutor Counter Offer Form -->
+      <div class="bg-white rounded-2xl shadow-md p-6">
+        <h2 class="text-2xl font-semibold mb-6 text-gray-800">Tutor's Counter Offer</h2>
+        <form id="counterSessionForm" class="space-y-6" >
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="block font-medium text-gray-700 mb-1">Counter Session Time From</label>
+              <input type="time" class="w-full border rounded-md p-2"
+                     name="counter_time_from" value="{{data2.counter_time_from}}" readonly />
+            </div>
+            <div>
+              <label class="block font-medium text-gray-700 mb-1">Counter Session Time To</label>
+              <input type="time" class="w-full border rounded-md p-2"
+                     name="counter_time_to" value="{{data2.counter_time_to}}" readonly/>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="block font-medium text-gray-700 mb-1">Counter Start Date</label>
+              <input type="date" value="{{data2.counter_start_date|date:'Y-m-d' }}"
+                     class="w-full border rounded-md p-2" name="counter_start_date" readonly />
+            </div>
+            <div>
+              <label class="block font-medium text-gray-700 mb-1">Counter End Date</label>
+              <input type="date" class="w-full border rounded-md p-2"
+                     value="{{data2.counter_end_date|date:'Y-m-d' }}" name="counter_end_date" readonly />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="block font-medium text-gray-700 mb-1">Counter Proposed Rate (per hour)</label>
+              <input type="number" min="50" step="any" value="{{data2.counter_proposed_rate}}"
+                     class="w-full border rounded-md p-2" name="counter_proposed_rate" readonly />
+            </div>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- accept, reject -->
+ <form method="post" action="{% url 'counter_offer_view' data2.id %}">
+    {% csrf_token %}
+<div class="text-center pt-6">
+    <button type="submit" name="submit_btn" value="accepted"
+      class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-md transition duration-200"
+      onclick="return confirmAction('Are you sure you want to ACCEPT this request? This action cannot be edited later.')">
+      Accept Request
+    </button>
+    <button type="submit" name="submit_btn" value="rejected"
+      class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-md transition duration-200"
+      onclick="return confirmAction('Are you sure you want to REJECT this request? This action cannot be undone.')">
+      Reject Request
+    </button>
+  </div>
+</form>
+
+<!-- JavaScript for confirmation dialogs -->
+<script>
+  function confirmAction(message) {
+    return confirm(message);
+  }
+</script>
+
+{% endblock content %}

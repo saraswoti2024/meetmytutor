@@ -1,0 +1,154 @@
+
+    <div class="page-header">
+        <div class="container">
+            <h1>Tutor Sessions</h1>
+            <p class="lead">Manage your scheduled, ongoing, and completed tutoring sessions.</p>
+        </div>
+    </div>
+
+    <main class="container">
+        <div class="content-section">
+            <ul class="nav nav-tabs mb-4" id="sessionTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="scheduled-tab" data-bs-toggle="tab" data-bs-target="#scheduled"
+                        type="button" role="tab" aria-controls="scheduled" aria-selected="true">Scheduled Sessions</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="running-tab" data-bs-toggle="tab" data-bs-target="#running"
+                        type="button" role="tab" aria-controls="running" aria-selected="false">Running Sessions</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="completed-tab" data-bs-toggle="tab" data-bs-target="#completed"
+                        type="button" role="tab" aria-controls="completed" aria-selected="false">Completed Sessions</button>
+                </li>
+            </ul>
+
+            <div class="tab-content" id="sessionTabsContent">
+                <div class="tab-pane fade show active" id="scheduled" role="tabpanel" aria-labelledby="scheduled-tab">
+                    <h2 class="mb-4">Scheduled Sessions</h2>
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Student Name</th>
+                                    <th>Subject</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                    <th>Session Time</th>
+                                    <th>Total Session Days</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Binod Sharma</td>
+                                    <td>Physics</td>
+                                    <td>2025-07-15</td>
+                                    <td>2025-08-15</td>
+                                    <td>6:00 PM - 7:00 PM</td>
+                                    <td>31 Days</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p class="mt-4 text-center text-muted">No upcoming sessions? <a href="tutor_students.html">Check your student list</a> to manage requests.</p>
+                </div>
+
+                <div class="tab-pane fade" id="running" role="tabpanel" aria-labelledby="running-tab">
+                    <h2 class="mb-4">Running Sessions</h2>
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Student Name</th>
+                                    <th>Subject</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                    <th>Session Time</th>
+                                    <th>Remaining Session Days</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Mina Thapa</td>
+                                    <td>English</td>
+                                    <td>2025-06-01</td>
+                                    <td>2025-07-30</td>
+                                    <td>5:00 PM - 6:00 PM</td>
+                                    <td>16 Days Remaining</td>
+                                </tr>
+                                <tr>
+                                    <td>Ram Shrestha</td>
+                                    <td>Science</td>
+                                    <td>2025-06-15</td>
+                                    <td>2025-08-15</td>
+                                    <td>7:00 AM - 8:00 AM</td>
+                                    <td>32 Days Remaining</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p class="mt-4 text-center text-muted">Track session progress or <a href="tutor_messages.html">message your students</a> for updates.</p>
+                </div>
+
+                <div class="tab-pane fade" id="completed" role="tabpanel" aria-labelledby="completed-tab">
+                    <h2 class="mb-4">Completed Sessions</h2>
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Student Name</th>
+                                    <th>Subject</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                    <th>Session Time</th>
+                                    <th>Total Session Days</th>
+                                    <th>Student Feedback</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Priya Dahal</td>
+                                    <td>English</td>
+                                    <td>2025-01-10</td>
+                                    <td>2025-02-10</td>
+                                    <td>2:00 PM - 3:00 PM</td>
+                                    <td>31 Days</td>
+                                    <td><a href="#" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#feedbackModal" data-student="Priya Dahal" data-rating="5" data-review="Great tutor, very clear explanations!">View Feedback</a></td>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p class="mt-4 text-center text-muted">View past session details or <a href="tutor_earnings.html">check your earnings</a>.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Feedback Modal -->
+    <div class="modal fade" id="feedbackModal" tabindex="-1" aria-labelledby="feedbackModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="feedbackModalLabel">Student Feedback</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3 text-center">
+                        <label class="form-label">Student Rating</label>
+                        <div class="star-rating" id="feedbackRating">
+                            <i class="bi bi-star-fill" data-value="1"></i>
+                            <i class="bi bi-star-fill" data-value="2"></i>
+                            <i class="bi bi-star-fill" data-value="3"></i>
+                            <i class="bi bi-star-fill" data-value="4"></i>
+                            <i class="bi bi-star-fill" data-value="5"></i>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Student Review</label>
+                        <p class="review-text" id="feedbackReview"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
