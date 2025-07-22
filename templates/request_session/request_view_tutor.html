@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+{% block content %}
+{% load static %}
+
+<div class="bg-gradient-to-br from-yellow-50 to-white py-12">
+  <div class="max-w-7xl mx-auto px-6">
+    
+    <!-- Header -->
+    <div class="text-center mb-12">
+      <h1 class="text-4xl font-bold text-gray-800 mb-2">My Tutoring Requests</h1>
+      <p class="text-lg text-gray-600">Track your requests, updates, and tutor responses.</p>
+    </div>
+
+    <!-- Requests Table -->
+    <div class="bg-white shadow-xl rounded-3xl overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="min-w-full text-sm text-left text-gray-700">
+          <thead class="bg-yellow-100 text-gray-900 text-base">
+            <tr>
+              <th scope="col" class="px-6 py-4 font-semibold">S.NO</th>
+              <th scope="col" class="px-6 py-4 font-semibold">Student</th>
+              <th scope="col" class="px-6 py-4 font-semibold">Subject</th>
+              <th scope="col" class="px-6 py-4 font-semibold">Starting Date/Time</th>
+              <th scope="col" class="px-6 py-4 font-semibold">Status</th>
+              <th scope="col" class="px-6 py-4 font-semibold">Actions</th>
+              <th scope="col" class="px-6 py-4 font-semibold">Edit</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200 text-sm">
+
+           {% for i in req_list  %}
+            <tr class="hover:bg-gray-50 transition">
+              <td class="px-6 py-4">{{forloop.counter}}</td>
+
+              <td class="px-6 py-4">{{i.student_user.user.first_name}} {{i.student_user.user.last_name}}</td>
+              
+              <td>
+                {% for subject in i.subject.all %}
+                  <span class="inline-block bg-gray-200 text-gray-800 text-xs font-medium px-2 py-1 rounded mr-1">
+                    {{ subject.subject_name }}
+                  </span>
+                {% empty %}
+                  <span class="text-gray-400 italic">No subjects</span>
+                {% endfor %}
+              </td>
+              <td class="px-6 py-4">{{i.session_start_date}}, {{i.session_time_from}}</td>
+              
+              <td class="px-6 py-4">
+                {% if i.status == "accepted" %}
+                  <span class="inline-block bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-medium">
+                    {{ i.status|title }}
+                  </span>
+                {% elif i.status == "rejected" %}
+                  <span class="inline-block bg-red-100 text-red-700 px-3 py-1 rounded-full text-xs font-medium">
+                    {{ i.status|title }}
+                  </span>
+                {% elif i.status == "counter offered" %}
+                  <span class="inline-block bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-xs font-medium">
+                    {{ i.status|title }}
+                  </span>
+                {% else %}
+                  <span class="inline-block bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-xs font-medium">
+                    {{ i.status|title }}
+                  </span>
+                {% endif %}
+              </td>
+              
+
+
+              {% if i.status == 'accepted' %}
+              <td class="px-6 py-5">
+              <a href="student_payment.html" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-semibold shadow">view session      
+               </a>
+            </td>
+            {% endif %}
+
+            {% if i.status == 'counter offered' %}
+            <td class="px-6 py-5">
+              <a href="student_payment.html" class="text-gray-400" ><i>waiting for Response</i>  
+               </a>
+            </td>
+            {% endif %}
+
+            {% if i.status == 'rejected' %}
+            <td class="px-6 py-5">
+              <a href="student_payment.html" class="text-gray-400"><i> No action needed </i>   
+               </a>
+            </td>
+            {% endif %}
+             
+            {% if i.status == 'pending' %}
+            <td class="px-6 py-5">
+              <a href="{% url 'counter_offer' i.id %}" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-semibold shadow">View Request     
+              </a>
+            </td>
+            {% endif %}
+            <td class="px-6 py-5">
+              {% if i.is_edit %}
+                   <i>cannot edit</i>
+              {% else %}
+                <a href="{% url 'edit_request' i.id %}"><i class="fa-solid fa-pen-to-square"></i>
+                </a>
+              {% endif %}
+            </td> 
+            </tr>
+            {% endfor %}
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}

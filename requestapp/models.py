@@ -19,6 +19,13 @@ class Requesting_tutor(models.Model):
     session_time_to = models.TimeField()
     status = models.CharField(max_length=20, default='pending') 
     timestamp = models.DateTimeField(auto_now_add=True)
-
+    
+    # Fields for counter offer
+    counter_time_from = models.CharField(max_length=100, null=True, blank=True)
+    counter_time_to = models.CharField(max_length=100, null=True, blank=True)
+    counter_start_date = models.DateField(null=True, blank=True)
+    counter_end_date = models.DateField(null=True, blank=True)
+    counter_proposed_rate = models.IntegerField(null=True,blank=True)
+    is_edit = models.BooleanField(default=False)
     def __str__(self):
-        return f"{self.student.user.username} → {self.tutor.user.username}"    
+        return f"{self.student_user.user.username} → {self.tutor_user.user.username}"    

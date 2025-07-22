@@ -17,7 +17,6 @@
         <table class="min-w-full text-sm text-left text-gray-700">
           <thead class="bg-yellow-100 text-gray-900 text-base">
             <tr>
-
               <th scope="col" class="px-6 py-4 font-semibold">S.NO</th>
               <th scope="col" class="px-6 py-4 font-semibold">Tutor</th>
               <th scope="col" class="px-6 py-4 font-semibold">Subject</th>
@@ -44,17 +43,22 @@
                   <span class="text-gray-400 italic">No subjects</span>
                 {% endfor %}
               </td>
-
               <td class="px-6 py-4">{{i.session_start_date}}, {{i.session_time_from}}</td>
               <td class="px-6 py-4">
                 <span class="inline-block bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-medium">{{i.status}}</span>
               </td>
-              <td class="px-6 py-4">
-              {% if i.status == 'Accepted' %}
+              {% if i.status == 'accepted' %}
+              <td class="px-6 py-5">
               <a href="student_payment.html" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-semibold shadow">Make Payment      
                </a>
-               {% endif %}
+            </td>
+               {% else %}
+               <td class="px-6 py-5">
+                <i >waiting for tutor      
+                </i>
               </td>
+               {% endif %}
+           
             </tr>
             {% endfor %}
 

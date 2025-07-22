@@ -65,10 +65,89 @@ def tutor_session_request(request, id):
     }
     return render(request, 'request_session/request_tutor.html', context)
 
-def request_list(request):
+def tutor_request(request):
+    tutor = Profile_Tutor.objects.get(user=request.user)
+    if tutor:
+        list_req_tutor = Requesting_tutor.objects.filter(tutor_user=tutor)
+    context = {
+        'req_list' : list_req_tutor,
+    } 
+    return render(request,'request_session/request_view_tutor.html',context)
+    
+def student_request(request):
     student = Profile_Student.objects.get(user=request.user)
-    list_req = Requesting_tutor.objects.filter(student_user=student)
+    if student:
+        list_req = Requesting_tutor.objects.filter(student_user_id=student)
     context = {
         'list_req' : list_req,
     } 
     return render(request,'request_session/request_view.html',context)
+
+def counter_offer_view(request,id):
+    data2 = get_object_or_404(Requesting_tutor,id=id)
+    data = data2.student_user
+    if request.method == 'POST':
+        data2.counter_start_date = request.POST.get('counter_start_date')
+        data2.counter_end_date = request.POST.get('counter_end_date')
+        data2.counter_time_from = request.POST.get('counter_time_from')
+        data2.counter_time_to = request.POST.get('counter_time_to')
+        data2.counter_proposed_rate = request.POST.get('counter_proposed_rate')
+        data2.status = 'counter offered'
+        data2.save()
+        messages.success(request,'counter offer sent succesfully!')
+        return redirect('request_list_tutor')
+        
+    context = {
+        'data': data,
+        'data2' : data2,
+    }
+    return render(request,'request_session/counter_offer.html',context)
+
+def accept_request(request,id):
+    if request.method == 'POST':
+        value = request.POST.get('submit_btn')
+        data2 =get_object_or_404(Requesting_tutor,id=id)
+        if value == 'accepted':
+            data2.status = 'accepted'
+            data2.save()
+        else:
+            data2.status = 'rejected'
+            data2.save()
+        messages.success(request,'accepted successfully!')
+        return redirect('request_list_tutor')
+    
+def edit_accept_request(request,id):
+    if request.method == 'POST':
+        value = request.POST.get('submit_btn')
+        data2 =get_object_or_404(Requesting_tutor,id=id)
+        if value == 'accepted':
+            data2.status = 'accepted'
+            data2.is_edit = True
+            data2.save()
+        else:
+            data2.status = 'rejected'
+            data2.is_edit = True
+            data2.save()
+        messages.success(request,'accepted successfully!')
+        return redirect('request_list_tutor')
+
+def edit_request(request,id):
+    data2 = get_object_or_404(Requesting_tutor,id=id)
+    data = data2.student_user
+    if request.method == 'POST':
+        data2.counter_start_date = request.POST.get('counter_start_date')
+        data2.counter_end_date = request.POST.get('counter_end_date')
+        data2.counter_time_from = request.POST.get('counter_time_from')
+        data2.counter_time_to = request.POST.get('counter_time_to')
+        data2.counter_proposed_rate = request.POST.get('counter_proposed_rate')
+        data2.status = 'counter offered'
+        data2.is_edit = True
+        data2.save()
+        messages.success(request,'counter offer sent succesfully!')
+        return redirect('request_list_tutor')
+        
+    context = {
+        'data': data,
+        'data2' : data2,
+    }
+    return render(request,'request_session/edit_request.html',context)

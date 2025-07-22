@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block content %}
+  {% load static %}
+  <div class="bg-gradient-to-r from-indigo-50 to-purple-100 py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- Header -->
+      <div class="text-center mb-10">
+        <h1 class="text-4xl font-bold text-gray-800">My Students</h1>
+        <p class="text-lg text-gray-600 mt-2">View and manage your accepted students.</p>
+      </div>
+  
+      <!-- Table Section -->
+      {% if data %}
+      <div class="overflow-x-auto">
+        <table class="min-w-full bg-white shadow-md rounded-xl overflow-hidden">
+          <thead class="bg-indigo-100 text-gray-700 text-sm uppercase tracking-wider">
+            <tr>
+              <th class="px-6 py-3 text-left">Profile</th>
+              <th class="px-6 py-3 text-left">Student Name</th>
+              <th class="px-6 py-3 text-left">Subjects</th>
+              <th class="px-6 py-3 text-left">Session Start</th>
+              <th class="px-6 py-3 text-left">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200 text-sm text-gray-700">
+            {% for i in data %}
+            <tr class="hover:bg-indigo-50 transition duration-150">
+              <!-- Profile image -->
+              <td class="px-6 py-4">
+                {% if i.profile_img %}
+                <img class="w-12 h-12 rounded-full object-cover border" src="{{ i.profile_img.url }}" alt="student image">
+                {% else %}
+                <img class="w-12 h-12 rounded-full object-cover border" src="{% static 'images/default.jpg' %}" alt="default image">
+                {% endif %}
+              </td>
+  
+              <!-- Name -->
+              <td class="px-6 py-4 font-semibold">
+                {{ i.student_user.user.first_name }}
+              </td>
+  
+              <!-- Subjects -->
+              <td class="px-6 py-4">
+                {% for subject in i.subject.all %}
+                  <span class="inline-block bg-purple-100 text-purple-700 text-xs px-2 py-1 rounded-full mr-1">{{ subject.subject_name }}</span>
+                {% empty %}
+                  <span class="text-gray-400 italic">No subjects</span>
+                {% endfor %}
+              </td>
+  
+              <!-- Session Date -->
+              <td class="px-6 py-4">
+                {{ i.session_start_date }}
+              </td>
+  
+              <!-- Actions -->
+              <td class="px-6 py-4 space-x-2">
+                <a href="tutor_messages.html" class="inline-block bg-blue-600 text-white px-4 py-2 rounded-md text-xs hover:bg-blue-700">Message</a>
+                <a href="tutor_sessions.html" class="inline-block border border-blue-600 text-blue-600 px-4 py-2 rounded-md text-xs hover:bg-blue-50">View Sessions</a>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+        <p class="text-center text-gray-500 mt-8">No students available.</p>
+      {% endif %}
+  
+      <!-- Footer -->
+      <p class="mt-10 text-center text-gray-600">
+        Want to accept new students? 
+        <a href="tutor_requests.html" class="text-blue-600 font-medium hover:underline">Check pending requests</a>.
+      </p>
+    </div>
+  </div>
+  
+  
+{% endblock content %}

@@ -29,4 +29,5 @@ urlpatterns = [
     path('chatbot/', include('chatbot.urls')),
     path('findtutor/', include('findtutor.urls')),
     path('requests/', include('requestapp.urls')),
+    path('mystudents/', include('mystudentsapp.urls')),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
