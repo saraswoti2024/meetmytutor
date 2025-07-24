@@ -30,4 +30,5 @@ urlpatterns = [
     path('findtutor/', include('findtutor.urls')),
     path('requests/', include('requestapp.urls')),
     path('mystudents/', include('mystudentsapp.urls')),
+    path('mytutors/', include('mytutorapp.urls')),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

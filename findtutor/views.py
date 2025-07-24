@@ -1,8 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect,get_object_or_404
 from profileapp.models import Profile_Tutor
 from categories.models import districts,subjects_list
 from django.db.models import Q 
 from django.contrib.auth.decorators import login_required
+from requestapp.models import Requesting_tutor
 
 
 def all_tutor_view(request):
@@ -47,8 +48,17 @@ def nearby_tutor_view(request):
 
 @login_required(login_url='log_in')
 def view_tutor_profile_view(request,id):
-    profile_id = Profile_Tutor.objects.get(id=id)
+    profile_id = get_object_or_404(Profile_Tutor,id=id)
     context = {
-        'profile_id' : profile_id
+        'profile_id' : profile_id,
     }
     return render(request,'profile_detail/tutor_view_profile.html',context)
+
+@login_required(login_url='log_in')
+def view_tutor_profile_view2(request,id):
+    profile_id2 = get_object_or_404(Requesting_tutor,id=id)
+    profile2 = profile_id2.tutor_user
+    context = {
+        'profile_id' : profile2,
+    }
+    return render(request,'profile_detail/tutor_view_profile2.html',context)

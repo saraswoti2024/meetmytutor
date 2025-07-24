@@ -18,6 +18,7 @@
           <thead class="bg-yellow-100 text-gray-900 text-base">
             <tr>
               <th scope="col" class="px-6 py-4 font-semibold">S.NO</th>
+              <th scope="col" class="px-6 py-4 font-semibold">Profile</th>
               <th scope="col" class="px-6 py-4 font-semibold">Student</th>
               <th scope="col" class="px-6 py-4 font-semibold">Subject</th>
               <th scope="col" class="px-6 py-4 font-semibold">Starting Date/Time</th>
@@ -31,7 +32,13 @@
            {% for i in req_list  %}
             <tr class="hover:bg-gray-50 transition">
               <td class="px-6 py-4">{{forloop.counter}}</td>
-
+              <td class="px-6 py-4">
+                {% if i.student_userprofile_img %}
+                <img class="w-12 h-12 rounded-full object-cover border" src="{{ i.student_user.profile_img.url }}" alt="student image">
+                {% else %}
+                <img class="w-12 h-12 rounded-full object-cover border" src="{% static 'images/default.jpg' %}" alt="default image">
+                {% endif %}
+              </td> 
               <td class="px-6 py-4">{{i.student_user.user.first_name}} {{i.student_user.user.last_name}}</td>
               
               <td>
@@ -67,7 +74,7 @@
               
               {% if i.status == 'accepted' %}
               <td class="px-6 py-5">
-              <a href="{% url 'tutor_session' %}" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-semibold shadow">view session      
+              <a href="{% url 'mystudents' %}" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-semibold shadow">view session      
                </a>
             </td>
             {% endif %}

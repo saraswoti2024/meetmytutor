@@ -28,7 +28,7 @@ def is_complete_view(request,id):
 
 #completed session 
 def completed_view(request):
-    value = Requesting_tutor.objects.filter(is_complete=True)
+    value = Requesting_tutor.objects.filter(status='accepted',is_complete=True)
     context = {
         'value' : value,
         'active_tab': 'completed'
@@ -37,7 +37,7 @@ def completed_view(request):
 
 #all_students
 def all_students(request):
-    value = Requesting_tutor.objects.all()
+    value = Requesting_tutor.objects.filter(status='accepted')
     context = {
         'value' : value,
         'active_tab': 'all_students',

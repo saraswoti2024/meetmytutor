@@ -37,6 +37,7 @@ def tutor_session_request(request, id):
             start_date = request.POST.get('date_start')
             end_date = request.POST.get('date_end')
             priceperhour = request.POST.get('perhour')
+            desc = request.POST.get('desc')
 
             data = Requesting_tutor(
                 proposed_rate=priceperhour,
@@ -46,6 +47,7 @@ def tutor_session_request(request, id):
                 session_time_to=time_to,
                 student_user=student,
                 tutor_user=tutor,
+                desc = desc,
                 mode = mode,
             )
             data.full_clean()  # Validate before saving
@@ -92,6 +94,7 @@ def counter_offer(request,id):
         data2.counter_time_from = request.POST.get('counter_time_from')
         data2.counter_time_to = request.POST.get('counter_time_to')
         data2.counter_proposed_rate = request.POST.get('counter_proposed_rate')
+        data2.desc = request.POST.get('desc')
         data2.status = 'counter offered'
         data2.save()
         messages.success(request,'counter offer sent succesfully!')
@@ -138,6 +141,7 @@ def edit_request(request,id):
         data2.counter_time_from = request.POST.get('counter_time_from')
         data2.counter_time_to = request.POST.get('counter_time_to')
         data2.counter_proposed_rate = request.POST.get('counter_proposed_rate')
+        data2.desc = request.POST.get('desc')
         data2.status = 'counter offered'
         data2.is_edit = True
         data2.save()
