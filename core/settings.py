@@ -51,7 +51,6 @@ EXTERNAL_APPS = [
     'findtutor',
     'requestapp',
     'mystudentsapp',
-    'sessionsapp'
 ]
 INSTALLED_APPS.extend(EXTERNAL_APPS)
 

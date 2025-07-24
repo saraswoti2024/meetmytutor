@@ -27,5 +27,6 @@ class Requesting_tutor(models.Model):
     counter_end_date = models.DateField(null=True, blank=True)
     counter_proposed_rate = models.IntegerField(null=True,blank=True)
     is_edit = models.BooleanField(default=False)
+    is_complete = models.BooleanField(default=False)
     def __str__(self):
         return f"{self.student_user.user.username} → {self.tutor_user.user.username}"    

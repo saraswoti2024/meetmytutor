@@ -83,7 +83,7 @@ def student_request(request):
     } 
     return render(request,'request_session/request_view.html',context)
 
-def counter_offer_view(request,id):
+def counter_offer(request,id):
     data2 = get_object_or_404(Requesting_tutor,id=id)
     data = data2.student_user
     if request.method == 'POST':
