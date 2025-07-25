@@ -4,6 +4,8 @@ from categories.models import districts,subjects_list
 from django.db.models import Q 
 from django.contrib.auth.decorators import login_required
 from requestapp.models import Requesting_tutor
+from django.contrib import messages
+from geopy.distance import geodesic
 
 
 def all_tutor_view(request):
@@ -43,9 +45,53 @@ def all_tutor_view(request):
     return render(request, 'findtutor/all_tutor.html', context)
 
 @login_required(login_url='log_in')
-def nearby_tutor_view(request):
-    return render(request,'findtutor/nearby_tutor.html')
+def nearest_tutors_list_view(request):
+    try:
+        user_lat = request.GET.get("lat")
+        user_lng = request.GET.get("lng")
 
+        if not user_lat or not user_lng:
+            messages.error(request, "Latitude and Longitude are required.")
+            return redirect('home')
+
+        user_location = (float(user_lat), float(user_lng))
+        tutors = Profile_Tutor.objects.filter(latitude__isnull=False, longitude__isnull=False)
+
+        tutor_list = []
+        for tutor in tutors:
+            try:
+                tutor_location = (float(tutor.latitude), float(tutor.longitude))
+                distance = geodesic(user_location, tutor_location).km
+
+                # Only add if within 5km
+                if distance <= 5.0:
+                    tutor_list.append({
+                        "id": tutor.id,
+                        "first_name": tutor.user.first_name,
+                        "last_name": tutor.user.last_name,
+                        "qualification": tutor.qualification,
+                        "session_price": tutor.session_price,
+                        "district": tutor.district,
+                        "education_data": tutor.education_data,
+                        "profile_img": tutor.profile_img,
+                        "latitude": float(tutor.latitude),
+                        "longitude": float(tutor.longitude),
+                        "distance": round(distance, 3),
+                    })
+            except Exception:
+                continue  # Skip tutor with invalid lat/lng
+
+        sorted_nearby = sorted(tutor_list, key=lambda x: x["distance"])
+
+        return render(request, 'findtutor/nearby_tutor.html', {
+            'nearest': sorted_nearby,
+            'user_lat': user_lat,
+            'user_lng': user_lng
+        })
+
+    except Exception as e:
+        messages.error(request, f'Error: {str(e)}')
+        return redirect('home')
 @login_required(login_url='log_in')
 def view_tutor_profile_view(request,id):
     profile_id = get_object_or_404(Profile_Tutor,id=id)
@@ -62,3 +108,7 @@ def view_tutor_profile_view2(request,id):
         'profile_id' : profile2,
     }
     return render(request,'profile_detail/tutor_view_profile2.html',context)
+
+@login_required(login_url='log_in')
+def detect_location_view(request):
+    return render(request, 'findtutor/detect_location.html')
