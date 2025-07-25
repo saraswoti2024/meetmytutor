@@ -88,7 +88,10 @@ class Log_in(View):
             authenticated_user = authenticate(request, username=user_obj.username, password=password)
             if authenticated_user is not None:
                 login(request, authenticated_user)
-
+                next_url = request.POST.get('next')
+                if next_url and authenticated_user.usertype == 'student':
+                    return redirect(next_url)
+                
                 if authenticated_user.is_superuser or authenticated_user.is_staff:
                     return redirect('/admin/')
                 
@@ -120,8 +123,9 @@ class Log_in(View):
             messages.error(request, f"An unexpected error occurred: {str(e)}")
             return redirect('log_in')
 
-    def get(self,request):     
-         return render(request,'login/login.html')
+    def get(self,request): 
+        next_url = request.GET.get('next')    
+        return render(request,'login/login.html',{'next': next_url})
 
 def log_out(request):
     # ActivityLog.objects.create(user=request.user,action =f'logged out')

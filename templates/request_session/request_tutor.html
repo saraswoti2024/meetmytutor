@@ -66,29 +66,73 @@
         </div>
 
         <!-- Date selection -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label class="block font-medium text-gray-700 mb-1">Session Start Date</label>
-            <input type="date" name="date_start" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-yellow-500 focus:border-yellow-500" id="start_date" required />
+            <label class="block font-medium text-gray-700 mb-1">Counter Start Date</label>
+            <input type="date" class="w-full border rounded-md p-2" name="date_start" id="counter_start_date" required />
           </div>
-
           <div>
-            <label class="block font-medium text-gray-700 mb-1">Session End Date</label>
-            <input type="date" name="date_end" class="w-full border border-gray-300 rounded-lg px-4 py-2 bg-gray-100" id="end_date" required />
+            <label class="block font-medium text-gray-700 mb-1">Counter End Date</label>
+            <input type="date" class="w-full border rounded-md p-2" name="date_end" id="counter_end_date" required />
           </div>
         </div>
+        
+        <script>
+          // Get today's date in YYYY-MM-DD format
+          const today = new Date().toISOString().split('T')[0];
+          document.getElementById("counter_start_date").setAttribute('min', today);
+          document.getElementById("counter_end_date").setAttribute('min', today);
+        </script>
+        
 
         <!-- Rate input -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 items-end">
           <div>
             <label class="block font-medium text-gray-700 mb-1">Your Proposed Rate (per hour)</label>
-            <input type="number" name="perhour" min="1" step="any" id="user_rate_per_hour" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-yellow-500 focus:border-yellow-500" required />
+            <div class="mb-4">
+              <input type="number" 
+                     name="perhour" 
+                     min="50" 
+                     step="any" 
+                     id="user_rate_per_hour" 
+                     class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-yellow-500 focus:border-yellow-500" 
+                     required />
+              <p id="rate_error" class="text-red-500 text-sm mt-1 hidden">Rate must be at least 50</p>
+            </div>
+            
+            <script>
+              const rateInput = document.getElementById('user_rate_per_hour');
+              const errorText = document.getElementById('rate_error');
+              let debounceTimer;
+            
+              rateInput.addEventListener('input', function() {
+                clearTimeout(debounceTimer);
+                debounceTimer = setTimeout(() => {
+                  const rateValue = parseFloat(this.value);
+                  if (this.value !== '' && rateValue < 50) {
+                    errorText.classList.remove('hidden');
+                  } else {
+                    errorText.classList.add('hidden');
+                  }
+                }, 300); // Delay after typing stops
+              });
+            
+              rateInput.addEventListener('blur', function() {
+                const rateValue = parseFloat(this.value);
+                if (this.value === '' || rateValue < 50) {
+                  this.value = 50;
+                  errorText.classList.add('hidden');
+                }
+              });
+            </script>
+                   
+     
             <p id="priceFeedback" class="text-sm text-red-600 mt-1"></p>
           </div>
           <div>
             <label class="block font-medium text-gray-700 mb-1">Leave a Message</label>
-            <input type="text" name="desc" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-yellow-500 focus:border-yellow-500" required />
-            <p id="priceFeedback" class="text-sm text-red-600 mt-1"></p>
+            <textarea type="text" name="desc" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-yellow-500 focus:border-yellow-500" required /></textarea>
+
           </div>
 
           <!-- Mode Selection (Online/Offline) -->

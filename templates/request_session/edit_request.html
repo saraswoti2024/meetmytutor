@@ -105,21 +105,36 @@
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label class="block font-medium text-gray-700 mb-1">Counter Start Date</label>
-              <input type="date" value="{{data2.counter_start_date}}"
-                     class="w-full border rounded-md p-2" name="counter_start_date" required />
+              <input type="date" class="w-full border rounded-md p-2" name="counter_start_date" id="counter_start_date" required />
             </div>
             <div>
               <label class="block font-medium text-gray-700 mb-1">Counter End Date</label>
-              <input type="date" class="w-full border rounded-md p-2"
-                     value="{{data2.counter_end_date}}" name="counter_end_date" required />
+              <input type="date" class="w-full border rounded-md p-2" name="counter_end_date" id="counter_end_date" required />
             </div>
           </div>
+          
+          <script>
+            // Get today's date in YYYY-MM-DD format
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById("counter_start_date").setAttribute('min', today);
+            document.getElementById("counter_end_date").setAttribute('min', today);
+          </script>
+          
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label class="block font-medium text-gray-700 mb-1">Counter Proposed Rate (per hour)</label>
-              <input type="number" min="50" step="any" value="{{data2.counter_proposed_rate}}"
-                     class="w-full border rounded-md p-2" name="counter_proposed_rate" required />
+              <div class="mb-4">
+                <input type="number" 
+                       name="counter_proposed_rate" 
+                       min="50" 
+                       step="any" 
+                       value="{{data2.counter_proposed_rate}}"
+                       id="user_rate_per_hour" 
+                       class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-yellow-500 focus:border-yellow-500" 
+                       required />
+                <p id="rate_error" class="text-red-500 text-sm mt-1 hidden">Rate must be at least 50</p>
+              </div>
             </div>
           </div>
 

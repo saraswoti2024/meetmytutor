@@ -2,168 +2,156 @@
 {% block content %}
 {% load static %}
 
-<section class="py-12 bg-gradient-to-br from-indigo-50 to-purple-50">
-  <div class="max-w-6xl mx-auto px-6">
-    <h1 class="text-4xl font-extrabold text-center text-gray-900 mb-4 animate-fade-in-down">Find Your Perfect Tutor</h1>
-    <p class="text-xl text-center text-gray-600 mb-10 animate-fade-in-down delay-100">Unlock your potential with expert guidance.</p>
+<section class="py-6 bg-gradient-to-br from-pink-50 to-yellow-50 overflow-hidden relative"> {# Reduced overall section padding #}
+  <div class="absolute inset-0 z-0 opacity-20">
+    {# Subtle background pattern for aesthetic depth #}
+    <svg class="w-full h-full" fill="none" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice">
+      <defs>
+        <pattern id="pattern-cubes" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse">
+          <path d="M0 0h5v5H0zM5 5h5v5H5z" fill="#fef08a" opacity="0.4"></path>
+          <path d="M5 0h5v5H5zM0 5h5v5H0z" fill="#fbcfe8" opacity="0.4"></path>
+        </pattern>
+      </defs>
+      <rect x="0" y="0" width="100%" height="100%" fill="url(#pattern-cubes)"></rect>
+    </svg>
+  </div>
+  <div class="max-w-6xl mx-auto px-4 sm:px-1 lg:px-8 relative z-10">
+    <div class="bg-white rounded-2xl shadow-xl p-4 md:p-5 border border-gray-100 mb-8 transform transition-all duration-300 hover:shadow-lg">
+      <h2 class="text-xl md:text-2xl font-semibold text-gray-800 mb-4 text-center">Search for Tutors</h2>
 
-    <div class="bg-white rounded-xl shadow-lg p-8 mb-16 border border-gray-100 animate-slide-in-up">
-      <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Search for Tutors</h2>
-
-
-      <form class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6" method="GET" action="">
+      <form class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-x-3 gap-y-3 items-end" method="GET" action=""> 
         {% csrf_token %} 
-        <div>
-          <label  class="block text-sm font-medium text-gray-700 mb-2">Education Level</label>
-          <select
-            name="education_level"
-            class="w-full p-3 rounded-lg border border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200 ease-in-out appearance-none bg-white pr-8"
-          >
-            <option value="" {% if not selected_education_level %}selected{% endif %} disabled>Select Level</option>
-            <option value="basic_1_5" {% if selected_education_level == 'basic_1_5' %}selected{% endif %}>Basic Education (Grade 1-5)</option>
-            <option value="basic_6_8" {% if selected_education_level == 'basic_6_8' %}selected{% endif %}>Basic Education (Grade 6-8)</option>
-            <option value="secondary_9_10" {% if selected_education_level == 'secondary_9_10' %}selected{% endif %}>Secondary Education (Grade 9-10)</option>
-            <option value="secondary_11_12" {% if selected_education_level == 'secondary_11_12' %}selected{% endif %}>Secondary Education (Grade 11-12)</option>
-          </select>
+        <div class="lg:col-span-1">
+          <label class="block text-xs font-medium text-gray-700 mb-1">Education Level</label> 
+          <div class="relative">
+            <select name="education_level" class="w-full p-1.5 text-sm rounded-md border border-gray-300 focus:ring-pink-300 focus:border-pink-300 appearance-none bg-white shadow-sm transition duration-150 ease-in-out pr-8"> {# Smaller padding, text, and right padding #}
+              <option value="" {% if not selected_education_level %}selected{% endif %} disabled>Select Level</option>
+              <option value="basic_1_5" {% if selected_education_level == 'basic_1_5' %}selected{% endif %}>Basic (Grade 1-5)</option>
+              <option value="basic_6_8" {% if selected_education_level == 'basic_6_8' %}selected{% endif %}>Basic (Grade 6-8)</option>
+              <option value="secondary_9_10" {% if selected_education_level == 'secondary_9_10' %}selected{% endif %}>Secondary (Grade 9-10)</option>
+              <option value="secondary_11_12" {% if selected_education_level == 'secondary_11_12' %}selected{% endif %}>Secondary (Grade 11-12)</option>
+            </select>
+            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-1.5 text-gray-700"> {# Smaller px #}
+              <svg class="fill-current h-3.5 w-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 6.757 7.586 5.343 9z"/></svg> {# Smaller icon #}
+            </div>
+          </div>
         </div>
 
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2">Subject</label>
-          <select
-            name="subject"
-            class="w-full p-3 rounded-lg border border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200 ease-in-out appearance-none bg-white pr-8"
-          >
-            <option value="" {% if not selected_subject %}selected{% endif %} disabled>Select Level</option>
-
-            {% for i in all_subjects  %}
-            <option value="{{i.subject_name}}" {% if selected_subject == i.subject_name %}selected{% endif %}>{{i.subject_name}}</option>
-            {% endfor %}
-
-          </select>
+        <div class="lg:col-span-1">
+          <label class="block text-xs font-medium text-gray-700 mb-1">Subject</label>
+          <div class="relative">
+            <select name="subject" class="w-full p-1.5 text-sm rounded-md border border-gray-300 focus:ring-pink-300 focus:border-pink-300 appearance-none bg-white shadow-sm transition duration-150 ease-in-out pr-8">
+              <option value="" {% if not selected_subject %}selected{% endif %} disabled>Select Subject</option>
+              {% for i in all_subjects %}
+                <option value="{{i.subject_name}}" {% if selected_subject == i.subject_name %}selected{% endif %}>{{i.subject_name}}</option>
+              {% endfor %}
+            </select>
+            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-1.5 text-gray-700">
+              <svg class="fill-current h-3.5 w-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 6.757 7.586 5.343 9z"/></svg>
+            </div>
+          </div>
         </div>
 
-        <div>
-          <label for="district" class="block text-sm font-medium text-gray-700 mb-2">District</label>
-          <select
-            id="district"
-            name="district"
-            class="w-full p-3 rounded-lg border border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200 ease-in-out appearance-none bg-white pr-8"
-          >
-            <option value="" {% if not selected_district %}selected{% endif %} disabled>Select District</option>
-            {% for i in district %}
-              <option value="{{ i.name }}" {% if selected_district == i.name %}selected{% endif %}>{{ i.name }}</option>
-            {% endfor %}
-          </select>
+        <div class="lg:col-span-1">
+          <label for="district" class="block text-xs font-medium text-gray-700 mb-1">District</label>
+          <div class="relative">
+            <select id="district" name="district" class="w-full p-1.5 text-sm rounded-md border border-gray-300 focus:ring-pink-300 focus:border-pink-300 appearance-none bg-white shadow-sm transition duration-150 ease-in-out pr-8">
+              <option value="" {% if not selected_district %}selected{% endif %} disabled>Select District</option>
+              {% for i in district %}
+                <option value="{{ i.name }}" {% if selected_district == i.name %}selected{% endif %}>{{ i.name }}</option>
+              {% endfor %}
+            </select>
+            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-1.5 text-gray-700">
+              <svg class="fill-current h-3.5 w-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 6.757 7.586 5.343 9z"/></svg>
+            </div>
+          </div>
         </div>
 
         <div class="lg:col-span-2">
-          <label for="tutorName" class="block text-sm font-medium text-gray-700 mb-2">Tutor Name (Optional)</label>
-          <input
-            type="text"
-            id="tutorName"
-            name="tutorname"
-            placeholder="e.g., Jane Doe"
-            class="w-full p-3 rounded-lg border border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200 ease-in-out"
-            value="{{ searched_tutor_name|default:'' }}"
-          />
+          <label for="tutorName" class="block text-xs font-medium text-gray-700 mb-1">Tutor Name (Optional)</label>
+          <input type="text" id="tutorName" name="tutorname" placeholder="e.g., Jane Doe" value="{{ searched_tutor_name|default:'' }}" class="w-full p-1.5 text-sm rounded-md border border-gray-300 focus:ring-pink-300 focus:border-pink-300 shadow-sm transition duration-150 ease-in-out" />
         </div>
 
-        <div class="md:col-span-2 lg:col-span-5 flex justify-center mt-4 space-x-4"> {# Added space-x-4 for button spacing #}
-          <button
-            type="submit"
-            class="w-full md:w-auto bg-gradient-to-r from-indigo-600 to-purple-700 hover:from-indigo-700 hover:to-purple-800 text-white font-bold rounded-lg px-8 py-3 shadow-md hover:shadow-lg transition transform hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 flex items-center justify-center gap-2"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-              <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
-            </svg>
+        <div class="sm:col-span-2 lg:col-span-5 flex flex-wrap gap-2 justify-center mt-3"> {# Reduced gap and mt #}
+          <button type="submit" class="flex items-center justify-center bg-pink-500 hover:bg-pink-600 text-white font-semibold rounded-full px-5 py-2.5 shadow-md transition transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-pink-300 focus:ring-offset-2 text-sm group"> {# Smaller button padding and text #}
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5 transition-transform duration-300 group-hover:scale-110" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" /></svg>
             Search Tutors
           </button>
-          <a
-            href="{% url 'all_tutor' %}"
-            class="w-full md:w-auto bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold rounded-lg px-8 py-3 shadow-md hover:shadow-lg transition transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 flex items-center justify-center gap-2"
-          >
+          <a href="{% url 'all_tutor' %}" class="flex items-center justify-center bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold rounded-full px-5 py-2.5 shadow-md transition transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2 text-sm">
             Reset Search / All Tutors
           </a>
         </div>
       </form>
-
-
     </div>
   </div>
 </section>
 
-<section class="bg-white py-12">
-  <div class="max-w-6xl mx-auto px-6">
-    <h2 class="text-3xl font-bold text-gray-900 mb-10 text-center animate-fade-in">All Tutors</h2>
+---
+
+<section class="bg-white py-8"> {# Reduced vertical padding here to bring tutors up #}
+  <div class="mx-auto px-4 sm:px-6 md:px-8">
+    <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-6 text-center">All Tutors</h2>
 
     {% if tutorlist %}
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 justify-items-center"> {# Slightly reduced gap to increase density #}
             {% for tutor in tutorlist %}
-            <div
-                class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden transform transition-transform duration-300 hover:scale-[1.03] hover:shadow-xl group"
-            >
-                <div class="relative w-full h-48 sm:h-56 overflow-hidden">
+            <div class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden transform transition-transform duration-300 hover:scale-[1.02] hover:shadow-xl group w-full max-w-xs flex flex-col"> {# Restored to original shadow for consistency and slightly less rounded corners #}
+                <div class="relative w-full h-44 overflow-hidden bg-gray-100 rounded-t-xl"> {# Reduced image height again #}
                     {% if tutor.profile_img %}
-                    <img
-                        src="{{tutor.profile_img.url}}"
-                        alt="{{ tutor.name }} Profile Picture"
-                        class="w-full h-full object-cover object-center transform transition-transform duration-300 group-hover:scale-105"
-                        loading="lazy"
-                    />
+                    <img src="{{tutor.profile_img.url}}" alt="{{ tutor.name }} Profile Picture" class="w-full h-full object-cover transform transition-transform duration-300 group-hover:scale-105" loading="lazy" />
                     {% else %}
-                    <img
-                    src="{% static 'images/default.jpg' %}"
-                    alt="{{ tutor.name }} Profile Picture"
-                    class="w-full h-full object-cover object-center transform transition-transform duration-300 group-hover:scale-105"
-                    loading="lazy"
-                    />
+                    <img src="{% static 'images/default.jpg' %}" alt="{{ tutor.name }} Profile Picture" class="w-full h-full object-cover transform transition-transform duration-300 group-hover:scale-105" loading="lazy" />
                     {% endif %}
                 </div>
 
-                <div class="p-6">
-                    <h3 class="text-2xl font-extrabold text-gray-900 mb-2 truncate" title="{{ tutor.user.first_name }} {{ tutor.user.last_name }}">{{tutor.user.first_name}} {{tutor.user.last_name}}</h3>
-                
-                    <p class="text-gray-700 mb-1">
-                        <span class="font-semibold text-gray-800">Teaches:</span>
-                        {% if tutor.education_data %}
-                        {% for item in tutor.education_data %}
-                            <span class="inline-block bg-indigo-100 text-indigo-700 text-sm font-medium px-2 py-1 rounded mr-2 mt-1">
-                                {% if item.level == 'basic_1_5' %} Basic (Grade 1–5)
-                                {% elif item.level == 'basic_6_8' %} Basic (Grade 6–8)
-                                {% elif item.level == 'secondary_9_10' %} Secondary (Grade 9–10)
-                                {% elif item.level == 'secondary_11_12' %} Secondary (Grade 11–12)
-                                {% else %} {{ item.level }}
-                                {% endif %}
-                            </span>
-                        {% endfor %}
-                        {% else %}
-                        <span class="text-indigo-600">Not specified</span>
-                        {% endif %}
-                    </p>
-                    
-                    <p class="text-gray-600 text-sm mb-2">
-                        <span class="font-semibold text-gray-800">Qualification:</span> {{ tutor.qualification }}
-                    </p>
-
-                    <div class="flex items-center justify-between text-base mb-3">
-                        <p class="text-gray-700">
-                            <span class="font-semibold text-gray-800">Rate:</span>
-                            <span class="text-green-600 font-bold">Rs.{{ tutor.session_price}}/hr</span>
-                        </p>
-                        <p class="text-gray-700">
-                            <span class="font-semibold text-gray-800">Location:</span>
-                            <span class="text-purple-600">{{ tutor.district }}, Nepal</span>
-                        </p>
+                <div class="p-4 flex-grow flex flex-col justify-between"> {# Reduced padding #}
+                    <div>
+                      <h3 class="text-lg font-bold text-gray-900 mb-1.5 truncate" title="{{ tutor.user.first_name }} {{ tutor.user.last_name }}">{{tutor.user.first_name}} {{tutor.user.last_name}}</h3>
+                  
+                      <p class="text-gray-700 text-xs mb-1.5">
+                          <span class="font-semibold text-gray-800">Teaches:</span>
+                          {% if tutor.education_data %}
+                          {% for item in tutor.education_data %}
+                              <span class="inline-block bg-yellow-100 text-yellow-700 text-xs font-medium px-2 py-0.5 rounded-full mr-1 mt-0.5">
+                                  {% if item.level == 'basic_1_5' %} Basic (1–5)
+                                  {% elif item.level == 'basic_6_8' %} Basic (6–8)
+                                  {% elif item.level == 'secondary_9_10' %} Sec (9–10)
+                                  {% elif item.level == 'secondary_11_12' %} Sec (11–12)
+                                  {% else %} {{ item.level }}
+                                  {% endif %}
+                              </span>
+                          {% endfor %}
+                          {% else %}
+                          <span class="text-yellow-600">Not specified</span>
+                          {% endif %}
+                      </p>
+                      
+                      <p class="text-gray-600 text-xs mb-2">
+                          <span class="font-semibold text-gray-800">Qualification:</span> {{ tutor.qualification }}
+                      </p>
                     </div>
-                    <a href="{% url 'view_tutor_profile' tutor.id %}" class="block w-full text-center bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-lg px-6 py-3 transition duration-300 ease-in-out transform hover:-translate-y-0.5 shadow-md">
-                        View Profile
-                    </a>
+
+                    <div>
+                      <div class="flex items-center justify-between text-sm mb-3">
+                          <p class="text-gray-700">
+                              <span class="font-semibold text-gray-800">Rate:</span>
+                              <span class="text-green-600 font-bold">Rs.{{ tutor.session_price }}/hr</span>
+                          </p>
+                          <p class="text-gray-700">
+                              <span class="font-semibold text-gray-800">Location:</span>
+                              <span class="text-pink-600">{{ tutor.district }}</span>
+                          </p>
+                      </div>
+                      <a href="{% url 'view_tutor_profile' tutor.id %}" class="block w-full text-center bg-pink-500 hover:bg-pink-600 text-white font-bold rounded-full px-4 py-2 transition duration-300 transform hover:-translate-y-0.5 shadow-md focus:outline-none focus:ring-2 focus:ring-pink-300 focus:ring-offset-2 text-sm">
+                          View Profile
+                      </a>
+                    </div>
                 </div>
             </div>
             {% endfor %}
         </div>
     {% else %}
-        <p class="text-center text-gray-600 text-lg">No tutors found !</p>
+        <p class="text-center text-gray-600 text-xl py-10">No tutors found matching your criteria!</p>
     {% endif %}
   </div>
 </section>
