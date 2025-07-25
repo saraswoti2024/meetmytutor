@@ -25,13 +25,13 @@ class Register(View):
                     validate_password(password)
                     if password == username:
                         messages.error(request,'password and uname shouldn\'t be same')
-                        return redirect('register')
+                        return render(request, 'registration/register.html')
                     if CustomUser.objects.filter(email=email).exists():
                         messages.error(request,'email already exists!')
-                        return redirect('register')
+                        return render(request, 'registration/register.html')
                     if CustomUser.objects.filter(username=username).exists():
                         messages.error(request,'username already exists!')
-                        return redirect('register')
+                        return render(request, 'registration/register.html')
                     user = CustomUser(
                         first_name = firstname,
                         last_name = lastname,
@@ -46,12 +46,12 @@ class Register(View):
                     return redirect('log_in')
             else:
                 messages.error(request,'password and confirm password didn\'t match!')
-                return redirect('register')
+                return render(request, 'registration/register.html')
         
         except Exception as e:
             for m in e:
               messages.error(request,f'{str(m)}')
-            return redirect('register')
+            return render(request, 'registration/register.html')
 
 class Log_in(View):
     def post(self,request):
@@ -66,7 +66,7 @@ class Log_in(View):
 
             if not username_or_email or not password:
                 messages.error(request, 'Please enter both username/email and password.')
-                return redirect('log_in')
+                return render(request, 'login/login.html')
 
             user_obj = None
             if '@' in username_or_email:
@@ -83,15 +83,12 @@ class Log_in(View):
 
             if not user_obj:
                 messages.error(request, 'Invalid credentials.')
-                return redirect('log_in')
+                return render(request, 'login/login.html')
 
             authenticated_user = authenticate(request, username=user_obj.username, password=password)
             if authenticated_user is not None:
                 login(request, authenticated_user)
-                next_url = request.POST.get('next')
-                if next_url and authenticated_user.usertype == 'student':
-                    return redirect(next_url)
-                
+                next_url = request.POST.get('next') 
                 if authenticated_user.is_superuser or authenticated_user.is_staff:
                     return redirect('/admin/')
                 
@@ -105,6 +102,9 @@ class Log_in(View):
                     return redirect('home') 
                 
                 elif authenticated_user.usertype == 'student':
+                      # Handle 'next' only for student
+                    if next_url and next_url != 'None':
+                        return redirect(next_url)
                     try:
                         profile = Profile_Student.objects.get(user=request.user)
                         if not profile.form_completed:
@@ -118,10 +118,10 @@ class Log_in(View):
                     return redirect('some_default_dashboard') 
             else:
                 messages.error(request, 'Invalid credentials.')
-                return redirect('log_in')
+                return render(request, 'login/login.html')
         except Exception as e:
             messages.error(request, f"An unexpected error occurred: {str(e)}")
-            return redirect('log_in')
+            return render(request, 'login/login.html')
 
     def get(self,request): 
         next_url = request.GET.get('next')    
