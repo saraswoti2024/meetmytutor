@@ -148,23 +148,14 @@
                         <select
                             class="mt-2 block w-full border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-base py-3 px-4"
                             id="qualificationInput" name="qualification" required>
-                            <option value="" disabled {% if not request.user.profile.qualification %}selected{% endif
-                                %}>Select your highest qualification</option>
-                            <option value="SEE / SLC" {% if request.user.profile.qualification == "SEE / SLC" %}selected{%
-                                endif %}>SEE / SLC</option>
-                            <option value="+2 / A-Levels / High School" {% if
-                                request.user.profile.qualification == "+2 / A-Levels / High School" %}selected{% endif %}>
-                                +2 / A-Levels / High School</option>
-                            <option value="Bachelor's Degree" {% if
-                                request.user.profile.qualification == "Bachelor's Degree" %}selected{% endif %}>Bachelor's
-                                Degree</option>
-                            <option value="Master’s Degree" {% if request.user.profile.qualification == "Master’s Degree"%} selected {% endif %}>Master's Degree</option>
-                            <option value="MPhil" {% if request.user.profile.qualification == "MPhil" %}selected{% endif
-                                %}>MPhil</option>
-                            <option value="PhD" {% if request.user.profile.qualification == "PhD" %}selected{% endif %}>
-                                PhD</option>
-                            <option value="Diploma / Professional Certification" {% if
-                                request.user.profile.qualification == "Diploma / Professional Certification" %}selected{% endif %}>Diploma / Professional Certification</option>
+                            <option value="" disabled {% if not request.user.profile.qualification %}selected{% endif %}>Select your highest qualification</option>
+                            <option value = "SEE / SLC" {% if request.user.profile.qualification == "SEE / SLC" %} selected {% endif %}>SEE / SLC</option>
+                            <option value="+2 / A-Levels / High School" {% if request.user.profile.qualification == "+2 / A-Levels / High School" %} selected {% endif %}> +2 / A-Levels / High School</option>
+                            <option value="Bachelor's Degree" {% if request.user.profile.qualification == "Bachelor's Degree" %} selected {% endif %}>Bachelor's Degree</option>
+                            <option value="Master's Degree" {% if request.user.profile.qualification == "Master's Degree"%} selected {% endif %}>Master's Degree</option>
+                            <option value="MPhil" {% if request.user.profile.qualification == "MPhil" %}selected{% endif %}>MPhil</option>
+                            <option value="PhD" {% if request.user.profile.qualification == "PhD" %}selected{% endif %}>PhD</option>
+                            <option value="Diploma / Professional Certification" {% if request.user.profile.qualification == "Diploma / Professional Certification" %}selected{% endif %}>Diploma / Professional Certification</option>
                         </select>
                     </div>
                     <div class="mb-6">

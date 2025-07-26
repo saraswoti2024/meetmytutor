@@ -44,9 +44,7 @@ def edit_tutor_profile(request):
                 if request.POST.get('remove_profile_img') == 'on':
                      if data.profile_img:
                         data.profile_img.delete(save=False)  # delete file from storage
-                data.profile_img = None
-                if request.FILES.get('profile_img'):
-                    data.profile_img = request.FILES['profile_img']
+                data.profile_img = request.FILES.get('profile_img') or data.profile_img 
                 education_levels = []
                 i = 0
                 while True:
@@ -109,7 +107,6 @@ def edit_student_profile(request):
         try:
             if data is None:
                 data = Profile_Student(user=request.user)
-            data.profile_img = request.FILES.get('profile_img')
             data.age = request.POST.get('age') or data.age
             data.gender = request.POST.get('gender') or data.gender
             data.grade = request.POST.get('grade') or data.grade
@@ -117,6 +114,10 @@ def edit_student_profile(request):
             data.address = request.POST.get('address') or data.address
             data.phone = request.POST.get('phone') or data.phone
             data.desc = request.POST.get('desc') or data.desc
+            if request.POST.get('remove_profile_img') == 'on':
+                if data.profile_img:
+                    data.profile_img.delete(save=False)  # delete file from storage
+            data.profile_img = request.FILES.get('profile_img') or data.profile_img 
             data.full_clean()
             data.form_completed = True
             data.save() 

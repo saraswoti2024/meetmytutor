@@ -22,7 +22,7 @@
            class="inline-flex items-center 
            {% if active_tab == 'incomplete' %}bg-indigo-600 text-white{% else %}bg-green-600 text-white hover:bg-green-700{% endif %}
            text-sm font-medium px-5 py-2 rounded-lg shadow-md transition duration-150">
-          View Incomplete Sessions
+          View Ongoing Sessions
         </a>
         <a href="{% url 'completed' %}"
            class="inline-flex items-center 
@@ -44,6 +44,7 @@
               <th class="px-6 py-3 text-left">Subjects</th>
               <th class="px-6 py-3 text-left">Session Date</th>
               <th class="px-6 py-3 text-left">Session Time</th>
+              <th class="px-6 py-3 text-left">Feedback</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-200 text-sm text-gray-700">
@@ -55,9 +56,9 @@
                </td>
               <td class="px-6 py-4">
                 {% if i.profile_img %}
-                <img class="w-12 h-12 rounded-full object-cover border" src="{{ i.profile_img.url }}" alt="student image">
+                <a href="{% url 'view_student_profile' i.id %}"><img class="w-12 h-12 rounded-full object-cover border" src="{{ i.profile_img.url }}" alt="student image"></a>
                 {% else %}
-                <img class="w-12 h-12 rounded-full object-cover border" src="{% static 'images/default.jpg' %}" alt="default image">
+                <a href="{% url 'view_student_profile' i.id %}"><img class="w-12 h-12 rounded-full object-cover border" src="{% static 'images/default.jpg' %}" alt="default image"></a>
                 {% endif %}
               </td>
   
@@ -91,6 +92,16 @@
                    {{i.session_time_from}} - {{i.session_time_to}}
                  {% endif %}
              </td>
+             {% if i.feedback_given %}
+             <td class="px-6 py-4">
+              <a href="{% url 'feedback_view_tutor' i.id %}"><button>view feedback</button></a>
+            </td>
+            {% else %}
+            <td class="px-6 py-4">
+             <i>no feedback</i>
+            </td>
+             {% endif %}
+      
             </tr>
             {% endfor %}
           </tbody>

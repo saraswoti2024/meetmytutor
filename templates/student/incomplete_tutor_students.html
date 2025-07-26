@@ -22,7 +22,7 @@
                class="inline-flex items-center 
                {% if active_tab == 'incomplete' %}bg-indigo-600 text-white{% else %}bg-green-600 text-white hover:bg-green-700{% endif %}
                text-sm font-medium px-5 py-2 rounded-lg shadow-md transition duration-150">
-              View Incomplete Sessions
+              View Ongoing Sessions
             </a>
             <a href="{% url 'completed' %}"
                class="inline-flex items-center 
@@ -58,9 +58,9 @@
               <!-- Profile image -->
               <td class="px-6 py-4">
                 {% if i.profile_img %}
-                <img class="w-12 h-12 rounded-full object-cover border" src="{{ i.profile_img.url }}" alt="student image">
+                <a href="{% url 'view_student_profile' i.id %}"><img class="w-12 h-12 rounded-full object-cover border" src="{{ i.profile_img.url }}" alt="student image"></a>
                 {% else %}
-                <img class="w-12 h-12 rounded-full object-cover border" src="{% static 'images/default.jpg' %}" alt="default image">
+                <a href="{% url 'view_student_profile' i.id %}"><img class="w-12 h-12 rounded-full object-cover border" src="{% static 'images/default.jpg' %}" alt="default image"></a>
                 {% endif %}
               </td>
   

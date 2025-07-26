@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+{% block content %}
+{% load static %}
+
+<script>
+  tailwind.config = {
+      theme: {
+          extend: {
+              colors: {
+                  'soft-blue': { /* A calm, clean blue */
+                      50: '#F0F8FF',
+                      100: '#E0F2FE',
+                      200: '#BFEDFF',
+                      300: '#99E2FF',
+                      400: '#6AD3FF',
+                      500: '#3EC4FF', /* Primary accent blue */
+                      600: '#23A0E5',
+                      700: '#1A7BB0',
+                      800: '#13587A',
+                      900: '#0C354A',
+                      950: '#07202C',
+                  },
+                  'light-gray': { /* A very light, neutral background */
+                      50: '#F8F8F8',
+                      100: '#F0F0F0',
+                      200: '#E8E8E8',
+                      300: '#D0D0D0',
+                      400: '#B8B8B8',
+                      500: '#A0A0A0',
+                      600: '#888888',
+                      700: '#707070',
+                      800: '#585858',
+                      900: '#404040',
+                      950: '#282828',
+                  },
+              },
+              keyframes: {
+                  fadeInUp: {
+                      '0%': { opacity: '0', transform: 'translateY(10px)' },
+                      '100%': { opacity: '1', transform: 'translateY(0)' },
+                  },
+              },
+              animation: {
+                  'fade-in-up': 'fadeInUp 0.6s ease-out forwards',
+              }
+          }
+      }
+  }
+</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+
+<main class="min-h-screen bg-light-gray-50 py-10 px-4 sm:px-6 lg:px-8 font-sans flex items-center justify-center">
+    <div class="max-w-6xl w-full bg-white rounded-xl shadow-lg overflow-hidden border border-light-gray-200 animate-fade-in-up">
+
+        <div class="flex flex-col items-center text-center p-8 bg-soft-blue-600 text-white relative">
+            {% if student_id.profile_img %}
+            <img src="{{ student_id.profile_img.url }}"
+                 alt="Student Profile Picture" class="w-32 h-32 rounded-full object-cover border-4 border-white shadow-md mb-4 hover:scale-105 transition-transform duration-200">
+            {% else %}
+            <img src="{% static 'images/default.jpg' %}"
+                 alt="Student Profile Picture" class="w-32 h-32 rounded-full object-cover border-4 border-white shadow-md mb-4 hover:scale-105 transition-transform duration-200">
+            {% endif %}
+
+            <h1 class="text-3xl font-bold mb-1">{{ student_id.user.first_name }} {{ student_id.user.last_name }}</h1>
+            <p class="text-soft-blue-100 text-lg">{{ student_id.user.usertype }}</p>
+
+            <div class="absolute -bottom-6 left-1/2 transform -translate-x-1/2 bg-white rounded-full px-5 py-2 shadow-md border border-soft-blue-200 text-soft-blue-700 text-lg font-semibold flex items-center space-x-2">
+                <i class="bi bi-mortarboard-fill text-soft-blue-500 text-xl"></i>
+                <span>Grade: {{ student_id.grade }}</span>
+            </div>
+        </div>
+
+        <div class="p-8 pt-10 space-y-7"> {# Adjusted padding-top to give space for the grade callout #}
+
+            <div class="bg-light-gray-100 rounded-lg p-5 border border-light-gray-200 shadow-sm">
+                <h2 class="text-xl font-semibold text-soft-blue-800 flex items-center mb-3">
+                    <i class="bi bi-info-circle-fill text-soft-blue-500 mr-3 text-2xl"></i> About Me
+                </h2>
+                <p class="text-light-gray-700 text-base leading-relaxed pl-9"> {# Added left padding to align with icon #}
+                    {% if student_id.desc %}
+                        {{ student_id.desc }}
+                    {% else %}
+                        <i class="text-light-gray-500">No description provided by this student yet.</i>
+                    {% endif %}
+                </p>
+            </div>
+
+            <div class="bg-light-gray-100 rounded-lg p-5 border border-light-gray-200 shadow-sm">
+                <h2 class="text-xl font-semibold text-soft-blue-800 flex items-center mb-3">
+                    <i class="bi bi-person-fill text-soft-blue-500 mr-3 text-2xl"></i> Personal & Contact Info
+                </h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-light-gray-700 text-base">
+                    <div class="flex items-center space-x-3">
+                        <i class="bi bi-envelope-fill text-soft-blue-400 text-xl"></i>
+                        <div>
+                            <span class="font-medium block">Email:</span>
+                            <span class="break-words">{{ student_id.user.email }}</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <i class="bi bi-gender-ambiguous text-soft-blue-400 text-xl"></i>
+                        <div>
+                            <span class="font-medium block">Gender:</span>
+                            <span>{{ student_id.gender }}</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <i class="bi bi-person-bounding-box text-soft-blue-400 text-xl"></i>
+                        <div>
+                            <span class="font-medium block">Age:</span>
+                            <span>{{ student_id.age }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-light-gray-100 rounded-lg p-5 border border-light-gray-200 shadow-sm">
+                <h2 class="text-xl font-semibold text-soft-blue-800 flex items-center mb-3">
+                    <i class="bi bi-geo-alt-fill text-soft-blue-500 mr-3 text-2xl"></i> Location
+                </h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-light-gray-700 text-base">
+                    <div class="flex items-center space-x-3">
+                        <i class="bi bi-building-fill text-soft-blue-400 text-xl"></i>
+                        <div>
+                            <span class="font-medium block">District:</span>
+                            <span>{{ student_id.district }}</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-3 sm:col-span-2"> {# Full width on small screens, too #}
+                        <i class="bi bi-map-fill text-soft-blue-400 text-xl"></i>
+                        <div>
+                            <span class="font-medium block">Full Address:</span>
+                            <span>{{ student_id.address }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</main>
+{% endblock content %}

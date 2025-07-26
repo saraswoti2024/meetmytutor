@@ -2,6 +2,8 @@ from django.shortcuts import render,redirect
 from profileapp.models import *
 from requestapp.models import Requesting_tutor
 from django.contrib import messages
+from mytutorapp.models import Feedback
+from django.db.models import Exists, OuterRef
 # Create your views here.
 
 #incomplete students
@@ -28,7 +30,16 @@ def is_complete_view(request,id):
 
 #completed session 
 def completed_view(request):
+    tutor = Profile_Tutor.objects.get(user=request.user)
     value = Requesting_tutor.objects.filter(status='accepted',is_complete=True)
+    value = value.annotate(
+        feedback_given=Exists(
+            Feedback.objects.filter(
+                req_tutor=OuterRef('pk'),
+                tutor_user=tutor
+            )
+        )
+    )
     context = {
         'value' : value,
         'active_tab': 'completed'

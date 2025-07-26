@@ -99,13 +99,18 @@
                 {% endif %}
                </td>
                <td class="px-6 py-4">
-                <button class="bg-yellow-300 py-1 px-1">message</button>
-                <button class="bg-yellow-300 py-1 px-1 ">make payment</button>
+                  <button class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-full text-xs font-semibold shadow">message</button>
                </td>
+
+               {% if i.feedback_given %}
                <td class="px-6 py-4">
-                <button class="bg-yellow-300 py-1 px-1 ">Give Feedback</button>
+                  <a href="{% url 'feedback_view_student' i.id %}"><button class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded-full text-xs font-semibold shadow">View Feedback</button></a>
+                 </td>
+               {% else %}
+               <td class="px-6 py-4">
+                <a href="{% url 'feedback_form' i.id %}"><button class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded-full text-xs font-semibold shadow">Give Feedback</button></a>
                </td>
-  
+               {% endif %}
             </tr>
             {% endfor %}
           </tbody>

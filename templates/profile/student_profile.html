@@ -1,131 +1,164 @@
 {% extends "base.html" %}
 {% block content %}
-  {% load static %}
+{% load static %}
 
-  <script>
-    tailwind.config = {
-        theme: {
-            extend: {
-                colors: {
-                    'custom-yellow': {
-                        50: '#FFFBEB',
-                        100: '#FEF3C7',
-                        200: '#FDE68A',
-                        300: '#FCD34D',
-                        400: '#FBBF24',
-                        500: '#F59E0B', /* Primary yellow */
-                        600: '#D97706',
-                        700: '#B45309',
-                        800: '#92400E',
-                        900: '#78350F',
-                        950: '#451A03',
-                    },
-                }
-            }
-        }
-    }
+<script>
+  tailwind.config = {
+      theme: {
+          extend: {
+              colors: {
+                  'vibrant-yellow': { /* Renamed for clarity */
+                      50: '#FFFDE7',
+                      100: '#FFF9C4',
+                      200: '#FFF59D',
+                      300: '#FFF176',
+                      400: '#FFEE58',
+                      500: '#FFEB3B', /* Primary yellow */
+                      600: '#FDD835',
+                      700: '#FBC02D',
+                      800: '#F9A825',
+                      900: '#F57F17',
+                      950: '#4F3500',
+                  },
+                  'subtle-gray': { /* Renamed for clarity */
+                      50: '#F9FAFB',
+                      100: '#F3F4F6',
+                      200: '#E5E7EB',
+                      300: '#D1D5DB',
+                      400: '#9CA3AF',
+                      500: '#6B7280',
+                      600: '#4B5563',
+                      700: '#374151',
+                      800: '#1F2937',
+                      900: '#111827',
+                      950: '#030712',
+                  }
+              },
+              keyframes: {
+                  fadeIn: {
+                      '0%': { opacity: '0', transform: 'translateY(10px)' },
+                      '100%': { opacity: '1', transform: 'translateY(0)' },
+                  },
+                  slideInRight: {
+                      '0%': { transform: 'translateX(20px)', opacity: '0' },
+                      '100%': { transform: 'translateX(0)', opacity: '1' },
+                  }
+              },
+              animation: {
+                  'fade-in': 'fadeIn 0.5s ease-out forwards',
+                  'slide-in-right': 'slideInRight 0.6s ease-out forwards',
+              }
+          }
+      }
+  }
 </script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-</head>
-<body class="bg-gray-100 font-sans antialiased">
-<main class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
-    <div class="bg-white shadow-lg rounded-lg p-6 md:flex md:space-x-8">
-        <div class="md:w-1/3 flex flex-col items-center text-center p-4">
-            {% if request.user.student.profile_img %}
-            <img id="profileAvatarDisplay" src="{{request.user.student.profile_img.url}}"
-            alt="Student Avatar" class="rounded-full w-48 h-48 object-cover border-4 border-custom-yellow-400 shadow-md mb-4">
-            {% else %}
-            <img id="profileAvatarDisplay" src="{% static 'images/default.jpg' %}"
-            alt="Student Avatar" class="rounded-full w-48 h-48 object-cover border-4 border-custom-yellow-400 shadow-md mb-4">
-            {% endif %}
-            <h4 id="profileNameDisplay" class="text-2xl font-semibold text-gray-800 mb-1">{{request.user.first_name}} {{request.user.last_name}}</h4>
-            <p class="text-gray-500 text-sm mb-6">{{request.user.usertype}}</p>
 
-            <a href="{% url 'edit_student_profile' %}"><button class="bg-custom-yellow-500 hover:bg-custom-yellow-600 text-white font-bold py-2 px-6 rounded-md shadow-md transition duration-300 ease-in-out mb-3 w-full max-w-xs" id="editProfileBtn">
-                <i class="bi bi-pencil-square mr-2"></i>Edit Profile
-            </button></a>
-            <a href="student_changePassword.html" class="border border-gray-300 text-gray-700 hover:bg-gray-100 hover:text-gray-900 font-semibold py-2 px-6 rounded-md transition duration-300 ease-in-out w-full max-w-xs">
-                <i class="bi bi-key mr-2"></i>Change Password
-            </a>
-        </div>
+<main class="min-h-screen bg-subtle-gray-50 py-8 px-4 sm:px-6 lg:px-8 font-sans flex items-center justify-center">
+  <div class="max-w-6xl w-full bg-white rounded-xl shadow-lg overflow-hidden md:flex transform transition-all duration-300 hover:scale-[1.005] hover:shadow-xl">
+    <div class="md:w-1/3 p-6 bg-gradient-to-br from-yellow-500 to-yellow-700 text-white flex flex-col items-center  space-y-3 relative overflow-hidden">
+      <div class="absolute -top-6 -left-6 w-28 h-28 bg-yellow-400 rounded-full opacity-15"></div>
+      <div class="absolute -bottom-6 -right-6 w-28 h-28 bg-yellow-800 rounded-full opacity-15"></div>
 
-        <div class="md:w-2/3 p-4 border-t md:border-t-0 md:border-l border-gray-200 md:pl-8 mt-8 md:mt-0">
-            <div id="profileDisplaySection">
-                <h5 class="text-xl font-semibold text-gray-800 mb-4 pb-2 border-b border-custom-yellow-300">Personal Information</h5>
-                <div class="space-y-4">
-                    <div class="grid grid-cols-[140px_1fr] items-center gap-x-4 py-2 border-b border-gray-100 last:border-b-0">
-                        <div class="flex items-center text-gray-600">
-                            <i class="bi bi-person mr-3 text-custom-yellow-600 text-lg"></i>
-                            <span class="font-medium">Full Name:</span>
-                        </div>
-                        <span id="fullNameDisplay" class="text-gray-800 font-semibold bg-custom-yellow-50 px-3 py-1 rounded-md">{{request.user.first_name}} {{request.user.last_name}}</span>
-                    </div>
-                    <div class="grid grid-cols-[140px_1fr] items-center gap-x-4 py-2 border-b border-gray-100 last:border-b-0">
-                        <div class="flex items-center text-gray-600">
-                            <i class="bi bi-envelope mr-3 text-custom-yellow-600 text-lg"></i>
-                            <span class="font-medium">Email:</span>
-                        </div>
-                        <span id="emailDisplay" class="text-gray-800 font-semibold bg-custom-yellow-50 px-3 py-1 rounded-md">{{request.user.email}}</span>
-                    </div>
-                    <div class="grid grid-cols-[140px_1fr] items-center gap-x-4 py-2 border-b border-gray-100 last:border-b-0">
-                        <div class="flex items-center text-gray-600">
-                            <i class="bi bi-phone mr-3 text-custom-yellow-600 text-lg"></i>
-                            <span class="font-medium">Phone:</span>
-                        </div>
-                        <span id="phoneDisplay" class="text-gray-800 font-semibold bg-custom-yellow-50 px-3 py-1 rounded-md">{{request.user.student.phone}}</span>
-                    </div>
-                    <div class="grid grid-cols-[140px_1fr] items-center gap-x-4 py-2 border-b border-gray-100 last:border-b-0">
-                        <div class="flex items-center text-gray-600">
-                            <i class="bi bi-gender-ambiguous mr-3 text-custom-yellow-600 text-lg"></i>
-                            <span class="font-medium">Gender:</span>
-                        </div>
-                        <span id="genderDisplay" class="text-gray-800 font-semibold bg-custom-yellow-50 px-3 py-1 rounded-md">{{request.user.student.gender}}</span>
-                    </div>
-                    <div class="grid grid-cols-[140px_1fr] items-center gap-x-4 py-2 border-b border-gray-100 last:border-b-0">
-                        <div class="flex items-center text-gray-600">
-                            <i class="bi bi-person-bounding-box mr-3 text-custom-yellow-600 text-lg"></i>
-                            <span class="font-medium">Age:</span>
-                        </div>
-                        <span id="ageDisplay" class="text-gray-800 font-semibold bg-custom-yellow-50 px-3 py-1 rounded-md">{{request.user.student.age}}</span>
-                    </div>
-                    <div class="grid grid-cols-[140px_1fr] items-center gap-x-4 py-2 border-b border-gray-100 last:border-b-0">
-                        <div class="flex items-center text-gray-600">
-                            <i class="bi bi-award mr-3 text-custom-yellow-600 text-lg"></i>
-                            <span class="font-medium">Grade:</span>
-                        </div>
-                        <span id="gradeDisplay" class="text-gray-800 font-semibold bg-custom-yellow-50 px-3 py-1 rounded-md">{{request.user.student.grade}}th Grade</span>
-                    </div>
-                </div>
+      {% if request.user.student.profile_img %}
+      <img id="profileAvatarDisplay" src="{{request.user.student.profile_img.url}}"
+        alt="Student Avatar" class="w-32 h-32 rounded-full object-cover border-4 border-yellow-200 shadow-md ring-2 ring-yellow-100 ring-offset-2 ring-offset-yellow-600 transition-transform duration-300 hover:scale-105 animate-fade-in">
+      {% else %}
+      <img id="profileAvatarDisplay" src="{% static 'images/default.jpg' %}"
+        alt="Student Avatar" class="w-32 h-32 rounded-full object-cover border-4 border-yellow-200 shadow-md ring-2 ring-yellow-100 ring-offset-2 ring-offset-yellow-600 transition-transform duration-300 hover:scale-105 animate-fade-in">
+      {% endif %}
 
-                <h5 class="text-xl font-semibold text-gray-800 mb-4 mt-8 pb-2 border-b border-custom-yellow-300">Location Details</h5>
-                <div class="space-y-4">
-                    <div class="grid grid-cols-[140px_1fr] items-center gap-x-4 py-2 border-b border-gray-100 last:border-b-0">
-                        <div class="flex items-center text-gray-600">
-                            <i class="bi bi-building mr-3 text-custom-yellow-600 text-lg"></i>
-                            <span class="font-medium">District:</span>
-                        </div>
-                        <span id="districtDisplay" class="text-gray-800 font-semibold bg-custom-yellow-50 px-3 py-1 rounded-md">{{request.user.student.district}}</span>
-                    </div>
-                    <div class="grid grid-cols-[140px_1fr] items-center gap-x-4 py-2 border-b border-gray-100 last:border-b-0">
-                        <div class="flex items-center text-gray-600">
-                            <i class="bi bi-map mr-3 text-custom-yellow-600 text-lg"></i>
-                            <span class="font-medium">Address:</span>
-                        </div>
-                        <span id="streetAddressDisplay" class="text-gray-800 font-semibold bg-custom-yellow-50 px-3 py-1 rounded-md">{{request.user.student.address}}</span>
-                    </div>
-                    <div class="grid grid-cols-[140px_1fr] items-center gap-x-4 py-2 border-b border-gray-100 last:border-b-0">
-                        <div class="flex items-center text-gray-600">
-                            <i class="bi bi-map mr-3 text-custom-yellow-600 text-lg"></i>
-                            <span class="font-medium">Description:</span>
-                        </div>
-                        <span  class="text-gray-800 font-semibold bg-custom-yellow-50 px-3 py-1 rounded-md">
-                            {{request.user.student.desc}}
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </div>
+      <h4 id="profileNameDisplay" class="text-xl font-bold mt-2 text-center">{{request.user.first_name}} {{request.user.last_name}}</h4>
+      <p class="text-vibrant-yellow-100 text-sm font-medium mt-0.5">{{request.user.usertype}}</p>
+
+      <a href="{% url 'edit_student_profile' %}" class="w-full mt-4">
+        <button class="w-full max-w-xs bg-white hover:bg-subtle-gray-100 text-vibrant-yellow-700 font-semibold py-2 px-4 rounded-full flex items-center justify-center gap-2 transition duration-300 ease-in-out transform hover:scale-105 shadow-md text-sm">
+          <i class="bi bi-pencil-square text-base"></i>Edit Profile
+        </button>
+      </a>
+      <a href="student_changePassword.html" class="w-full max-w-xs border border-vibrant-yellow-300 hover:border-vibrant-yellow-200 text-vibrant-yellow-100 hover:text-white font-semibold py-2 px-4 rounded-full flex items-center justify-center gap-2 transition duration-300 ease-in-out transform hover:scale-105 shadow-md mt-2">
+        <i class="bi bi-key text-base"></i>Change Password
+      </a>
     </div>
-</main>  
 
-    {% endblock content %}
+    <div class="md:w-2/3 p-6 space-y-5">
+        <h5 class="text-xl font-semibold text-subtle-gray-800 border-b-2 pb-2 mb-4 border-vibrant-yellow-500 animate-slide-in-right">Personal Information</h5>
+        <ul class="space-y-3">
+            <li class="grid grid-cols-2 sm:grid-cols-[120px_1fr] items-center gap-x-4 py-2 px-3 bg-subtle-gray-50 rounded-lg border border-subtle-gray-100 text-sm animate-slide-in-right">
+                <div class="flex items-center text-subtle-gray-600">
+                    <i class="bi bi-person mr-2 text-vibrant-yellow-600 text-base"></i>
+                    <strong class="font-medium">Full Name:</strong>
+                </div>
+                <span id="fullNameDisplay" class="text-subtle-gray-800 font-medium">{{request.user.first_name}} {{request.user.last_name}}</span>
+            </li>
+            <li class="grid grid-cols-2 sm:grid-cols-[120px_1fr] items-center gap-x-4 py-2 px-3 bg-subtle-gray-50 rounded-lg border border-subtle-gray-100 text-sm animate-slide-in-right delay-75">
+                <div class="flex items-center text-subtle-gray-600">
+                    <i class="bi bi-envelope mr-2 text-vibrant-yellow-600 text-base"></i>
+                    <strong class="font-medium">Email:</strong>
+                </div>
+                <span id="emailDisplay" class="text-subtle-gray-800 font-medium break-words">{{request.user.email}}</span>
+            </li>
+            <li class="grid grid-cols-2 sm:grid-cols-[120px_1fr] items-center gap-x-4 py-2 px-3 bg-subtle-gray-50 rounded-lg border border-subtle-gray-100 text-sm animate-slide-in-right delay-100">
+                <div class="flex items-center text-subtle-gray-600">
+                    <i class="bi bi-phone mr-2 text-vibrant-yellow-600 text-base"></i>
+                    <strong class="font-medium">Phone:</strong>
+                </div>
+                <span id="phoneDisplay" class="text-subtle-gray-800 font-medium">{{request.user.student.phone}}</span>
+            </li>
+            <li class="grid grid-cols-2 sm:grid-cols-[120px_1fr] items-center gap-x-4 py-2 px-3 bg-subtle-gray-50 rounded-lg border border-subtle-gray-100 text-sm animate-slide-in-right delay-125">
+                <div class="flex items-center text-subtle-gray-600">
+                    <i class="bi bi-gender-ambiguous mr-2 text-vibrant-yellow-600 text-base"></i>
+                    <strong class="font-medium">Gender:</strong>
+                </div>
+                <span id="genderDisplay" class="text-subtle-gray-800 font-medium">{{request.user.student.gender}}</span>
+            </li>
+            <li class="grid grid-cols-2 sm:grid-cols-[120px_1fr] items-center gap-x-4 py-2 px-3 bg-subtle-gray-50 rounded-lg border border-subtle-gray-100 text-sm animate-slide-in-right delay-150">
+                <div class="flex items-center text-subtle-gray-600">
+                    <i class="bi bi-person-bounding-box mr-2 text-vibrant-yellow-600 text-base"></i>
+                    <strong class="font-medium">Age:</strong>
+                </div>
+                <span id="ageDisplay" class="text-subtle-gray-800 font-medium">{{request.user.student.age}}</span>
+            </li>
+            <li class="grid grid-cols-2 sm:grid-cols-[120px_1fr] items-center gap-x-4 py-2 px-3 bg-subtle-gray-50 rounded-lg border border-subtle-gray-100 text-sm animate-slide-in-right delay-175">
+                <div class="flex items-center text-subtle-gray-600">
+                    <i class="bi bi-award mr-2 text-vibrant-yellow-600 text-base"></i>
+                    <strong class="font-medium">Grade:</strong>
+                </div>
+                <span id="gradeDisplay" class="text-subtle-gray-800 font-medium">{{request.user.student.grade}}th Grade</span>
+            </li>
+        </ul>
+
+        <h5 class="text-xl font-semibold text-subtle-gray-800 border-b-2 pb-2 mb-4 mt-6 border-vibrant-yellow-500 animate-slide-in-right delay-200">Location Details</h5>
+        <ul class="space-y-3">
+            <li class="grid grid-cols-2 sm:grid-cols-[120px_1fr] items-center gap-x-4 py-2 px-3 bg-subtle-gray-50 rounded-lg border border-subtle-gray-100 text-sm animate-slide-in-right delay-225">
+                <div class="flex items-center text-subtle-gray-600">
+                    <i class="bi bi-building mr-2 text-vibrant-yellow-600 text-base"></i>
+                    <strong class="font-medium">District:</strong>
+                </div>
+                <span id="districtDisplay" class="text-subtle-gray-800 font-medium">{{request.user.student.district}}</span>
+            </li>
+            <li class="grid grid-cols-2 sm:grid-cols-[120px_1fr] items-center gap-x-4 py-2 px-3 bg-subtle-gray-50 rounded-lg border border-subtle-gray-100 text-sm animate-slide-in-right delay-250">
+                <div class="flex items-center text-subtle-gray-600">
+                    <i class="bi bi-map mr-2 text-vibrant-yellow-600 text-base"></i>
+                    <strong class="font-medium">Address:</strong>
+                </div>
+                <span id="streetAddressDisplay" class="text-subtle-gray-800 font-medium">{{request.user.student.address}}</span>
+            </li>
+            <li class="grid grid-cols-2 sm:grid-cols-[120px_1fr] items-center gap-x-4 py-2 px-3 bg-subtle-gray-50 rounded-lg border border-subtle-gray-100 text-sm animate-slide-in-right delay-275">
+                <div class="flex items-center text-subtle-gray-600">
+                    <i class="bi bi-info-circle mr-2 text-vibrant-yellow-600 text-base"></i>
+                    <strong class="font-medium">Description:</strong>
+                </div>
+                <span class="text-subtle-gray-800 font-medium">
+                    {% if request.user.student.desc %}
+                        {{request.user.student.desc}}
+                    {% else %}
+                        <i class="text-subtle-gray-500">No description provided.</i>
+                    {% endif %}
+                </span>
+            </li>
+        </ul>
+    </div>
+  </div>
+</main>
+{% endblock content %}

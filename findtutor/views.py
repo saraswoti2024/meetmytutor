@@ -110,5 +110,14 @@ def view_tutor_profile_view2(request,id):
     return render(request,'profile_detail/tutor_view_profile2.html',context)
 
 @login_required(login_url='log_in')
+def view_student_profile(request,id):
+    student_id2 = get_object_or_404(Requesting_tutor,id=id)
+    student_id = student_id2.student_user
+    context = {
+        'student_id' : student_id
+    }
+    return render(request,'profile_detail/student_view_profile.html',context)
+
+@login_required(login_url='log_in')
 def detect_location_view(request):
     return render(request, 'findtutor/detect_location.html')

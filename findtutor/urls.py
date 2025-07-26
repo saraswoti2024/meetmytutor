@@ -7,4 +7,5 @@ urlpatterns = [
     path('detect-location/', views.detect_location_view, name="detect_location"),     
     path('view_profile/<int:id>',views.view_tutor_profile_view,name="view_tutor_profile"),       
     path('view_profile2/<int:id>',views.view_tutor_profile_view2,name="view_tutor_profile2"),       
+    path('view_student_profile/<int:id>',views.view_student_profile,name="view_student_profile"),       
 ]
