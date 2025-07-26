@@ -5,12 +5,21 @@ from .models import Profile_Tutor,Profile_Student
 from django.contrib import messages
 from django.core.exceptions import ValidationError
 import json
+from mytutorapp.models import Feedback
+from django.db.models import Avg
 # Create your views here.
 
 
 class tutor_profile_view(View):
     def get(self,request):
-        return render(request,'profile/tutor_profile1.html')
+        tutor_profile = Profile_Tutor.objects.get(user=request.user)
+        avg_rating = Feedback.objects.filter(tutor_user=tutor_profile).aggregate(Avg('rating'))['rating__avg']
+        if avg_rating is None:
+                avg_rating = 0  # Hand
+        context = {
+            'avg_rating': round(avg_rating, 1),
+        }
+        return render(request,'profile/tutor_profile1.html',context)
     
 def edit_tutor_profile(request):
         if not request.user.is_authenticated:

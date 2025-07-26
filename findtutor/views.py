@@ -6,6 +6,8 @@ from django.contrib.auth.decorators import login_required
 from requestapp.models import Requesting_tutor
 from django.contrib import messages
 from geopy.distance import geodesic
+from mytutorapp.models import Feedback
+from django.db.models import Avg
 
 
 def all_tutor_view(request):
@@ -92,20 +94,35 @@ def nearest_tutors_list_view(request):
     except Exception as e:
         messages.error(request, f'Error: {str(e)}')
         return redirect('home')
+    
 @login_required(login_url='log_in')
 def view_tutor_profile_view(request,id):
     profile_id = get_object_or_404(Profile_Tutor,id=id)
+    feedbacks = Feedback.objects.filter(tutor_user=profile_id).order_by('-created_at')
+    avg_rating = feedbacks.aggregate(Avg('rating'))['rating__avg'] or 0
+    avg_rating = round(avg_rating, 1)
+    
+    # Calculate average rating (optional)
+    avg_rating = feedbacks.aggregate(Avg('rating'))['rating__avg'] or 0
+    avg_rating = round(avg_rating, 1)
     context = {
         'profile_id' : profile_id,
+        'feedbacks': feedbacks,
+        'avg_rating': avg_rating,
     }
     return render(request,'profile_detail/tutor_view_profile.html',context)
 
 @login_required(login_url='log_in')
 def view_tutor_profile_view2(request,id):
     profile_id2 = get_object_or_404(Requesting_tutor,id=id)
+    feedbacks = Feedback.objects.filter(tutor_user=profile_id2.tutor_user).order_by('-created_at')
+    avg_rating = feedbacks.aggregate(Avg('rating'))['rating__avg'] or 0
+    avg_rating = round(avg_rating, 1)
     profile2 = profile_id2.tutor_user
     context = {
-        'profile_id' : profile2,
+        'profile_id2' : profile2,
+        'feedbacks': feedbacks,
+        'avg_rating': avg_rating,
     }
     return render(request,'profile_detail/tutor_view_profile2.html',context)
 

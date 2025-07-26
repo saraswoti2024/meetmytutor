@@ -72,10 +72,23 @@
             {{ request.user.last_name }}</h4>
           <p class="text-true-yellow-100 text-sm font-medium mt-0.5">{{ request.user.usertype }}</p>
 
-          <div class="flex items-center text-base space-x-1 mt-2">
-            <span id="ratingDisplay" class="text-true-yellow-200">★★★★☆</span>
-            <span id="ratingValue" class="text-true-yellow-100">(4.5)</span>
+          <div class="flex items-center space-x-1 text-yellow-400 text-2xl">
+            {% for i in "12345" %}
+              {% if avg_rating >= forloop.counter %}
+                <!-- full star -->
+                <span>★</span>
+              {% elif avg_rating >= forloop.counter|floatformat:"1"|add:"-0.5" %}
+                <!-- half star -->
+                <span class="text-yellow-300">★</span>
+              {% else %}
+                <!-- empty star -->
+                <span class="text-gray-300">★</span>
+              {% endif %}
+            {% endfor %}
+            <span class="ml-2 text-gray-700 text-base">({{ avg_rating|floatformat:1 }})</span>
           </div>
+          
+        
 
           <a href="{% url 'edit_tutor_profile' %}" class="w-full mt-5">
             <button

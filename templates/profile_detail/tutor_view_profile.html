@@ -1,18 +1,20 @@
 {% extends "base.html" %}
 {% block content %}
+  
 {% load static %}
+{% load humanize %}
 
 <script>
   tailwind.config = {
       theme: {
           extend: {
               colors: {
-                  'sun-yellow': { /* A bright, cheerful yellow */
+                  'sun-yellow': {
                       50: '#FFFCE0',
                       100: '#FFF8B3',
                       200: '#FFF070',
                       300: '#FFE633',
-                      400: '#FFD700', /* Primary bright yellow */
+                      400: '#FFD700',
                       500: '#F5C400',
                       600: '#DBAD00',
                       700: '#C29700',
@@ -20,7 +22,7 @@
                       900: '#8F6B00',
                       950: '#694F00',
                   },
-                  'calm-gray': { /* A very soft, warm gray */
+                  'calm-gray': {
                       50: '#FDFDFD',
                       100: '#F7F7F7',
                       200: '#EEEEEE',
@@ -55,145 +57,159 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
 
 <main class="min-h-screen bg-calm-gray-100 py-10 px-4 sm:px-6 lg:px-8 font-sans flex items-center justify-center">
-    <div class="max-w-6xl w-full bg-white rounded-xl shadow-lg overflow-hidden animate-fade-in-scale">
+  <div class="max-w-6xl w-full bg-white rounded-xl shadow-lg overflow-hidden animate-fade-in-scale">
 
-        <div class="relative bg-yellow-100 p-8 pt-12 text-center overflow-hidden">
-            <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/clean-textile.png')] opacity-20 z-0"></div>
+    <!-- Tutor Header -->
+    <div class="relative bg-yellow-100 p-8 pt-12 text-center overflow-hidden">
+      <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/clean-textile.png')] opacity-20 z-0"></div>
 
-            <div class="relative z-10 flex flex-col items-center">
-                {% if profile_id.profile_img %}
-                <img src="{{ profile_id.profile_img.url }}"
-                     alt="{{ profile_id.user.first_name }} {{ profile_id.user.last_name }}'s Profile Picture"
-                     class="w-32 h-32 rounded-full object-cover border-4 border-white shadow-md mb-4 transition-transform duration-200 hover:scale-105">
-                {% else %}
-                <img src="{% static 'images/default.jpg' %}"
-                     alt="Tutor Profile Picture"
-                     class="w-32 h-32 rounded-full object-cover border-4 border-white shadow-md mb-4 transition-transform duration-200 hover:scale-105">
-                {% endif %}
+      <div class="relative z-10 flex flex-col items-center">
+        {% if profile_id.profile_img %}
+          <img src="{{ profile_id.profile_img.url }}" alt="{{ profile_id.user.first_name }} {{ profile_id.user.last_name }}'s Profile Picture"
+               class="w-32 h-32 rounded-full object-cover border-4 border-white shadow-md mb-4 transition-transform duration-200 hover:scale-105">
+        {% else %}
+          <img src="{% static 'images/default.jpg' %}" alt="Tutor Profile Picture"
+               class="w-32 h-32 rounded-full object-cover border-4 border-white shadow-md mb-4 transition-transform duration-200 hover:scale-105">
+        {% endif %}
 
-                <h1 class="text-4xl font-extrabold text-gray-800 leading-tight">{{ profile_id.user.first_name }} {{ profile_id.user.last_name }}</h1>
-                <p class="text-sun-yellow-900 text-lg font-semibold mt-1 mb-4">Tutor</p>
+        <h1 class="text-4xl font-extrabold text-gray-800 leading-tight">{{ profile_id.user.first_name }} {{ profile_id.user.last_name }}</h1>
+        <p class="text-sun-yellow-900 text-lg font-semibold mt-1 mb-4">Tutor</p>
 
-                <div class="flex flex-wrap justify-center gap-x-6 gap-y-2 text-gray-700 text-base font-medium">
-                    <span class="flex items-center"><i class="bi bi-geo-alt-fill text-sun-yellow-600 mr-2 text-lg"></i> {{ profile_id.district }}, Nepal</span>
-                    <span class="flex items-center"><i class="bi bi-star-fill text-sun-yellow-600 mr-2 text-lg"></i> 4.7 (85 Reviews)</span>
-                    <span class="flex items-center"><i class="bi bi-currency-dollar text-sun-yellow-600 mr-2 text-lg"></i> NPR {{ profile_id.session_price }}/hr</span>
-                </div>
-            </div>
+        <div class="flex flex-wrap justify-center gap-x-6 gap-y-2 text-gray-700 text-base font-medium">
+          <span class="flex items-center"><i class="bi bi-geo-alt-fill text-sun-yellow-600 mr-2 text-lg"></i> {{ profile_id.district }}, Nepal</span>
+
+          <span class="flex items-center">
+            <i class="bi bi-star-fill text-sun-yellow-600 mr-2 text-lg"></i> 
+            {{ avg_rating }} ({{ feedbacks.count }} Reviews)
+          </span>
+
+          <span class="flex items-center"><i class="bi bi-currency-dollar text-sun-yellow-600 mr-2 text-lg"></i> NPR {{ profile_id.session_price }}/hr</span>
         </div>
-
-        <div class="px-8 py-6 bg-white border-b border-calm-gray-200 text-center shadow-sm">
-            <a href="{% url 'tutor_session_request' profile_id.id %}"
-               class="inline-flex items-center justify-center bg-sun-yellow-500 text-white font-bold py-3.5 px-8 rounded-full text-lg shadow-lg hover:bg-sun-yellow-600 transition duration-300 transform hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-sun-yellow-300">
-                <i class="bi bi-chat-dots-fill mr-3 text-2xl"></i> Request a Session
-            </a>
-        </div>
-
-        <div class="p-8 space-y-8 bg-white">
-
-            <div class="bg-calm-gray-50 rounded-lg p-6 border border-calm-gray-200 shadow-sm animate-slide-in-left">
-                <h2 class="text-2xl font-bold text-gray-800 flex items-center mb-4 pb-2 border-b-2 border-sun-yellow-300">
-                    <i class="bi bi-info-circle-fill text-sun-yellow-600 mr-3 text-2xl"></i> About Me
-                </h2>
-                <p class="text-calm-gray-800 leading-relaxed text-base">
-                    {{ profile_id.desc|default:"This tutor hasn't added a description yet. Feel free to request a session to learn more about their teaching style and experience!" }}
-                </p>
-            </div>
-
-            <div class="bg-calm-gray-50 rounded-lg p-6 border border-calm-gray-200 shadow-sm animate-slide-in-left delay-100">
-                <h2 class="text-2xl font-bold text-gray-800 flex items-center mb-4 pb-2 border-b-2 border-sun-yellow-300">
-                    <i class="bi bi-book-fill text-sun-yellow-600 mr-3 text-2xl"></i> Subjects & Levels
-                </h2>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                    {% for education_entry in profile_id.education_data %}
-                    <div class="bg-white p-4 rounded-lg shadow-xs border border-calm-gray-100">
-                        <h3 class="font-bold text-lg text-sun-yellow-700 mb-2">{{ education_entry.level }}</h3>
-                        <ul class="space-y-1 text-calm-gray-700 text-sm">
-                            {% for subject in education_entry.subjects %}
-                            <li class="flex items-center">
-                                <span class="w-2 h-2 bg-sun-yellow-500 rounded-full mr-2 flex-shrink-0"></span>
-                                <span>{{ subject }}</span>
-                            </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                    {% empty %}
-                    <p class="text-calm-gray-600 col-span-full italic text-base">This tutor has not specified the subjects and levels they teach yet.</p>
-                    {% endfor %}
-                </div>
-            </div>
-
-            <div class="bg-calm-gray-50 rounded-lg p-6 border border-calm-gray-200 shadow-sm animate-slide-in-left delay-200">
-                <h2 class="text-2xl font-bold text-gray-800 flex items-center mb-4 pb-2 border-b-2 border-sun-yellow-300">
-                    <i class="bi bi-award-fill text-sun-yellow-600 mr-3 text-2xl"></i> Qualifications
-                </h2>
-                <div>
-                    {% if profile_id.qualification %}
-                    <p class="text-calm-gray-800 leading-relaxed text-base">{{ profile_id.qualification }}</p>
-                    {% else %}
-                    <p class="text-calm-gray-600 italic text-base">No specific qualifications listed yet.</p>
-                    {% endif %}
-
-                    {% if profile_id.cv %}
-                    <p class="text-calm-gray-700 mt-4 flex items-center">
-                        <i class="bi bi-file-earmark-arrow-down-fill text-sun-yellow-600 mr-2 text-xl"></i>
-                        <a href="{{ profile_id.cv.url }}" target="_blank" class="text-sun-yellow-700 hover:underline font-semibold text-base">
-                            View Tutor's CV / Documents
-                        </a>
-                    </p>
-                    {% else %}
-                    <p class="text-calm-gray-600 italic mt-4 text-base">No CV or supporting documents uploaded.</p>
-                    {% endif %}
-                </div>
-            </div>
-
-            <div class="bg-calm-gray-50 rounded-lg p-6 border border-calm-gray-200 shadow-sm animate-slide-in-left delay-300">
-                <h2 class="text-2xl font-bold text-gray-800 flex items-center mb-4 pb-2 border-b-2 border-sun-yellow-300">
-                    <i class="bi bi-chat-right-text-fill text-sun-yellow-600 mr-3 text-2xl"></i> Student Reviews
-                </h2>
-
-                <div class="space-y-6">
-                    {# Example Review 1 #}
-                    <div class="bg-white p-5 rounded-lg shadow-xs border border-calm-gray-100">
-                        <div class="flex flex-wrap items-center justify-between mb-3">
-                            <h4 class="font-semibold text-lg text-calm-gray-900">Bishal Gurung</h4>
-                            <div class="flex items-center text-sun-yellow-500 text-xl">
-                                <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
-                                <span class="ml-2 text-calm-gray-600 text-sm">(5.0)</span>
-                            </div>
-                        </div>
-                        <p class="text-calm-gray-700 italic leading-relaxed text-base">
-                            "Sagar Sir is an exceptional tutor! He made complex physics concepts
-                            easy to understand. My grades have improved significantly since I started taking classes
-                            with him."
-                        </p>
-                        <div class="pt-4 mt-4 border-t border-dashed border-calm-gray-300 flex items-center text-sm text-calm-gray-500">
-                            <i class="bi bi-calendar mr-2"></i>
-                            <span>Reviewed 2 weeks ago</span>
-                        </div>
-                    </div>
-
-                    {# Example Review 2 #}
-                    <div class="bg-white p-5 rounded-lg shadow-xs border border-calm-gray-100">
-                        <div class="flex flex-wrap items-center justify-between mb-3">
-                            <h4 class="font-semibold text-lg text-calm-gray-900">Priya Sharma</h4>
-                            <div class="flex items-center text-sun-yellow-500 text-xl">
-                                <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-half"></i>
-                                <span class="ml-2 text-calm-gray-600 text-sm">(4.5)</span>
-                            </div>
-                        </div>
-                        <p class="text-calm-gray-700 italic leading-relaxed text-base">
-                            "Highly recommended! The tutor is patient and explains concepts clearly. I've gained a lot of confidence in Maths."
-                        </p>
-                        <div class="pt-4 mt-4 border-t border-dashed border-calm-gray-300 flex items-center text-sm text-calm-gray-500">
-                            <i class="bi bi-calendar mr-2"></i>
-                            <span>Reviewed 1 month ago</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
+      </div>
     </div>
+
+    <!-- Request Session Button -->
+    <div class="px-8 py-6 bg-white border-b border-calm-gray-200 text-center shadow-sm">
+      <a href="{% url 'tutor_session_request' profile_id.id %}"
+         class="inline-flex items-center justify-center bg-sun-yellow-500 text-white font-bold py-3.5 px-8 rounded-full text-lg shadow-lg hover:bg-sun-yellow-600 transition duration-300 transform hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-sun-yellow-300">
+        <i class="bi bi-chat-dots-fill mr-3 text-2xl"></i> Request a Session
+      </a>
+    </div>
+
+    <div class="p-8 space-y-8 bg-white">
+
+      <!-- About Me Section -->
+      <div class="bg-calm-gray-50 rounded-lg p-6 border border-calm-gray-200 shadow-sm animate-slide-in-left">
+        <h2 class="text-2xl font-bold text-gray-800 flex items-center mb-4 pb-2 border-b-2 border-sun-yellow-300">
+          <i class="bi bi-info-circle-fill text-sun-yellow-600 mr-3 text-2xl"></i> About Me
+        </h2>
+        <p class="text-calm-gray-800 leading-relaxed text-base">
+          {{ profile_id.desc|default:"This tutor hasn't added a description yet. Feel free to request a session to learn more about their teaching style and experience!" }}
+        </p>
+      </div>
+
+      <!-- Subjects & Levels Section -->
+      <div class="bg-calm-gray-50 rounded-lg p-6 border border-calm-gray-200 shadow-sm animate-slide-in-left delay-100">
+        <h2 class="text-2xl font-bold text-gray-800 flex items-center mb-4 pb-2 border-b-2 border-sun-yellow-300">
+          <i class="bi bi-book-fill text-sun-yellow-600 mr-3 text-2xl"></i> Subjects & Levels
+        </h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          {% for education_entry in profile_id.education_data %}
+            <div class="bg-white p-4 rounded-lg shadow-xs border border-calm-gray-100">
+              <h3 class="font-bold text-lg text-sun-yellow-700 mb-2">{{ education_entry.level }}</h3>
+              <ul class="space-y-1 text-calm-gray-700 text-sm">
+                {% for subject in education_entry.subjects %}
+                  <li class="flex items-center">
+                    <span class="w-2 h-2 bg-sun-yellow-500 rounded-full mr-2 flex-shrink-0"></span>
+                    <span>{{ subject }}</span>
+                  </li>
+                {% endfor %}
+              </ul>
+            </div>
+          {% empty %}
+            <p class="text-calm-gray-600 col-span-full italic text-base">This tutor has not specified the subjects and levels they teach yet.</p>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Qualifications Section -->
+      <div class="bg-calm-gray-50 rounded-lg p-6 border border-calm-gray-200 shadow-sm animate-slide-in-left delay-200">
+        <h2 class="text-2xl font-bold text-gray-800 flex items-center mb-4 pb-2 border-b-2 border-sun-yellow-300">
+          <i class="bi bi-award-fill text-sun-yellow-600 mr-3 text-2xl"></i> Qualifications
+        </h2>
+        <div>
+          {% if profile_id.qualification %}
+            <p class="text-calm-gray-800 leading-relaxed text-base">{{ profile_id.qualification }}</p>
+          {% else %}
+            <p class="text-calm-gray-600 italic text-base">No specific qualifications listed yet.</p>
+          {% endif %}
+
+          {% if profile_id.cv %}
+            <p class="text-calm-gray-700 mt-4 flex items-center">
+              <i class="bi bi-file-earmark-arrow-down-fill text-sun-yellow-600 mr-2 text-xl"></i>
+              <a href="{{ profile_id.cv.url }}" target="_blank" class="text-sun-yellow-700 hover:underline font-semibold text-base">
+                View Tutor's CV / Documents
+              </a>
+            </p>
+          {% else %}
+            <p class="text-calm-gray-600 italic mt-4 text-base">No CV or supporting documents uploaded.</p>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Student Reviews Section -->
+      <div class="bg-calm-gray-50 rounded-lg p-6 border border-calm-gray-200 shadow-sm animate-slide-in-left delay-300">
+        <h2 class="text-2xl font-bold text-gray-800 flex items-center mb-4 pb-2 border-b-2 border-sun-yellow-300">
+          <i class="bi bi-chat-right-text-fill text-sun-yellow-600 mr-3 text-2xl"></i> Student Reviews
+        </h2>
+
+        <!-- Average Rating -->
+        <div class="flex items-center text-sun-yellow-600 text-2xl mb-6">
+          {% for i in "12345" %}
+            {% if avg_rating >= forloop.counter %}
+              <i class="bi bi-star-fill"></i>
+            {% elif avg_rating >= forloop.counter|add:"-0.5" %}
+              <i class="bi bi-star-half"></i>
+            {% else %}
+              <i class="bi bi-star"></i>
+            {% endif %}
+          {% endfor %}
+          <span class="ml-2 text-gray-700 text-base font-semibold">({{ avg_rating }})</span>
+          <span class="ml-4 text-gray-500 text-base">({{ feedbacks.count }} Reviews)</span>
+        </div>
+
+        <!-- Individual Feedbacks -->
+        <div class="space-y-6">
+          {% for fb in feedbacks %}
+            <div class="bg-white p-5 rounded-lg shadow-xs border border-calm-gray-100">
+              <div class="flex flex-wrap items-center justify-between mb-3">
+                <h4 class="font-semibold text-lg text-calm-gray-900">{{ fb.student_user.user.get_full_name }}</h4>
+                <div class="flex items-center text-sun-yellow-500 text-xl">
+                  {% for i in "12345" %}
+                    {% if fb.rating >= forloop.counter %}
+                      <i class="bi bi-star-fill"></i>
+                    {% else %}
+                      <i class="bi bi-star"></i>
+                    {% endif %}
+                  {% endfor %}
+                  <span class="ml-2 text-calm-gray-600 text-sm">({{ fb.rating }})</span>
+                </div>
+              </div>
+              <p class="text-calm-gray-700 italic leading-relaxed text-base">
+                "{{ fb.comment|default:'No comment provided.' }}"
+              </p>
+              <div class="pt-4 mt-4 border-t border-dashed border-calm-gray-300 flex items-center text-sm text-calm-gray-500">
+                <i class="bi bi-calendar mr-2"></i>
+                <span>Reviewed {{ fb.created_at|timesince }} ago</span>
+              </div>
+            </div>
+          {% empty %}
+            <p class="text-gray-500 italic text-center">No reviews yet. Be the first to review this tutor!</p>
+          {% endfor %}
+        </div>
+      </div>
+
+    </div>
+  </div>
 </main>
 {% endblock content %}

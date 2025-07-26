@@ -52,6 +52,7 @@ EXTERNAL_APPS = [
     'requestapp',
     'mystudentsapp',
     'mytutorapp',
+    'django.contrib.humanize',
 ]
 INSTALLED_APPS.extend(EXTERNAL_APPS)
 
