@@ -33,10 +33,11 @@
             <tr class="hover:bg-gray-50 transition">
               <td class="px-6 py-4">{{forloop.counter}}</td>
               <td class="px-6 py-4">
-                {% if i.student_userprofile_img %}
-                <img class="w-12 h-12 rounded-full object-cover border" src="{{ i.student_user.profile_img.url }}" alt="student image">
+                {% if i.student_user.profile_img %}
+                <a href="{% url 'view_student_profile' i.id %}"><img class="w-12 h-12 rounded-full object-cover border" src="{{ i.student_user.profile_img.url }}" alt="student image"></a>
                 {% else %}
-                <img class="w-12 h-12 rounded-full object-cover border" src="{% static 'images/default.jpg' %}" alt="default image">
+                <a href="{% url 'view_student_profile' i.id %}">
+                <img class="w-12 h-12 rounded-full object-cover border" src="{% static 'images/default.jpg' %}" alt="default image"></a>
                 {% endif %}
               </td> 
               <td class="px-6 py-4">{{i.student_user.user.first_name}} {{i.student_user.user.last_name}}</td>

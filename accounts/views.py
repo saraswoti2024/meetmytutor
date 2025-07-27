@@ -99,7 +99,7 @@ class Log_in(View):
                             return redirect('edit_tutor_profile')  
                     except Profile_Tutor.DoesNotExist:
                         return redirect('edit_tutor_profile')  
-                    return redirect('home') 
+                    return redirect('index_tutor') 
                 
                 elif authenticated_user.usertype == 'student':
                       # Handle 'next' only for student

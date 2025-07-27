@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block content %}
+{% load static %}
+
+<!-- Hero Welcome Section -->
+<section class="relative bg-cover bg-center text-white py-32 text-center"
+    style="background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1607746882042-944635dfe10e');">
+    <div class="container mx-auto px-4">
+        <h1 class="text-5xl font-extrabold mb-4">Welcome to Your Tutor Space</h1>
+        <p class="text-xl mb-8">Empower students. Share your knowledge. Build your tutoring career with us.</p>
+        <a href="{% url 'request_list_tutor' %}" class="bg-yellow-400 text-black font-bold py-3 px-8 rounded-full text-lg hover:bg-yellow-500 transition">Get Started</a>
+    </div>
+</section>
+
+<!-- Why Join as Tutor Section -->
+<section class="py-16 bg-gray-50">
+    <div class="container mx-auto px-4 text-center">
+        <h2 class="text-3xl font-bold text-gray-800 mb-6">Why Join as a Tutor?</h2>
+        <p class="text-gray-600 max-w-2xl mx-auto mb-12">Becoming a tutor on our platform allows you to reach students in your locality, manage your own schedule, and earn while making a difference.</p>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
+                <i class="bi bi-clock-history text-yellow-500 text-5xl mb-4"></i>
+                <h4 class="text-xl font-semibold text-gray-700 mb-2">Flexible Timings</h4>
+                <p class="text-gray-500">Choose when you want to teach. Your schedule is fully in your hands.</p>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
+                <i class="bi bi-cash-coin text-orange-500 text-5xl mb-4"></i>
+                <h4 class="text-xl font-semibold text-gray-700 mb-2">Earn More</h4>
+                <p class="text-gray-500">Get paid directly by students. Set your own teaching rates and negotiate freely.</p>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
+                <i class="bi bi-geo-alt text-rose-500 text-5xl mb-4"></i>
+                <h4 class="text-xl font-semibold text-gray-700 mb-2">Teach Locally</h4>
+                <p class="text-gray-500">Connect with students near you for offline or online tutoring sessions.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How to Get Started -->
+<section class="py-16 bg-white">
+    <div class="container mx-auto px-4 text-center">
+        <h2 class="text-3xl font-bold text-gray-800 mb-6">Get Started in 3 Simple Steps</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
+            <div class="p-6 flex flex-col items-center">
+                <div class="w-16 h-16 flex items-center justify-center bg-yellow-100 rounded-full mb-4">
+                    <i class="bi bi-person-plus text-yellow-500 text-3xl"></i>
+                </div>
+                <h4 class="text-xl font-semibold text-gray-700 mb-2">Step 1: Create Profile</h4>
+                <p class="text-gray-500">Complete your tutor profile with your subjects and availability.</p>
+            </div>
+            <div class="p-6 flex flex-col items-center">
+                <div class="w-16 h-16 flex items-center justify-center bg-orange-100 rounded-full mb-4">
+                    <i class="bi bi-check-circle text-orange-500 text-3xl"></i>
+                </div>
+                <h4 class="text-xl font-semibold text-gray-700 mb-2">Step 2: Recieve Requests</h4>
+                <p class="text-gray-500">Receive requests from student </p>
+            </div>
+            <div class="p-6 flex flex-col items-center">
+                <div class="w-16 h-16 flex items-center justify-center bg-rose-100 rounded-full mb-4">
+                    <i class="bi bi-mortarboard text-rose-500 text-3xl"></i>
+                </div>
+                <h4 class="text-xl font-semibold text-gray-700 mb-2">Step 3: Start Teaching</h4>
+                <p class="text-gray-500">manage sessions, and grow your tutoring network.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                colors: {
+                    'yellow-50': '#fffef0',
+                    'orange-100': '#ffedd5',
+                    'rose-100': '#ffe4e6',
+                    'yellow-100': '#fffacd',
+                }
+            }
+        }
+    };
+</script>
+
+{% endblock %}
